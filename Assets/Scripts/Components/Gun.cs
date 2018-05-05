@@ -41,6 +41,7 @@ public class Gun : NetworkBehaviour
                     float calculatedDamage = damage * (Mathf.Pow(bulletPenetration, i));
                     hits[i].transform.gameObject.GetComponent<Zombie_Network>().TakeDamage(calculatedDamage);
                     Debug.Log(hits[i].transform.name + "hit for " + calculatedDamage);
+                    Debug.Log(hits[i].transform.gameObject.GetComponent<Zombie_Network>().health);
                 }
             }
         }

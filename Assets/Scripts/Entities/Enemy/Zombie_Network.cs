@@ -140,7 +140,7 @@ public class Zombie_Network : NetworkBehaviour
     {
         animator.SetTrigger("FallBack");
         agent.isStopped = true;
-        //gameObject.GetComponent<Rigidbody>().isKinematic = false;
+        gameObject.GetComponent<CapsuleCollider>().enabled = false;
         despawnTimer = UpdateTimer(despawnTimer, despawnInterval);
         if (despawnTimer == 0)
         {
