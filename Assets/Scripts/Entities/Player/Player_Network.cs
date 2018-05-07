@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityStandardAssets.Characters.FirstPerson;
 
+[RequireComponent(typeof(Health))]
 public class Player_Network : NetworkBehaviour
 {
     public GameObject firstPersonCharacter;

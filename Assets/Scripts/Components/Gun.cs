@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Networking;
 
+[RequireComponent(typeof(Health))]
 public class Gun : NetworkBehaviour
 {
     public float bulletSpeed;
@@ -41,7 +42,7 @@ public class Gun : NetworkBehaviour
                     float calculatedDamage = damage * (Mathf.Pow(bulletPenetration, i));
                     CmdDealDamage(hits[i].transform.gameObject, calculatedDamage);
                     Debug.Log(hits[i].transform.name + "hit for " + calculatedDamage);
-                    Debug.Log(hits[i].transform.gameObject.GetComponent<Zombie_Network>().health);
+                    Debug.Log(hits[i].transform.gameObject.GetComponent<Health>().currentHealth);
                 }
             }
         }
@@ -50,6 +51,6 @@ public class Gun : NetworkBehaviour
     [Command]
     public void CmdDealDamage(GameObject enemy, float damage)
     {
-        enemy.GetComponent<Zombie_Network>().TakeDamage(damage);
+        enemy.GetComponent<Health>().TakeDamage(damage);
     }
 }

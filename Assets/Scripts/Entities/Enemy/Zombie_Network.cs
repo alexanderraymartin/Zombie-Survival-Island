@@ -4,15 +4,13 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.AI;
 
-[RequireComponent(typeof(Animator))]
-[RequireComponent(typeof(NetworkAnimator))]
 [RequireComponent(typeof(NavMeshAgent))]
+[RequireComponent(typeof(Health))]
+[RequireComponent(typeof(Animate))]
 public class Zombie_Network : NetworkBehaviour
 {
     public GameObject target;
-
-    [SyncVar]
-    public float health;
+    
     public float damage;
     public float attackRadius;
     public float movementSpeed;
@@ -20,50 +18,29 @@ public class Zombie_Network : NetworkBehaviour
     public float findTargetInterval;
     public float despawnInterval;
     public float attackInterval;
-
-    private Animator animator;
-    private NetworkAnimator networkAnimator;
+    
     private NavMeshAgent agent;
     private float findTargetTimer;
     private float attackTimer;
     private float despawnTimer;
-    private bool isAlive;
-
-    [ServerCallback]
-    public void TakeDamage(float damage)
-    {
-        if (!isServer)
-        {
-            return;
-        }
-
-        health -= damage;
-
-        if (health <= 0)
-        {
-            isAlive = false;
-        }
-    }
+    private Animate animate;
+    private Health health;
 
     [ServerCallback]
     void Start()
     {
-        animator = GetComponent<Animator>();
-        networkAnimator = GetComponent<NetworkAnimator>();
-
-        SetAnimatorTrigger("Idle");
-
+        animate = GetComponent<Animate>();
+        health = GetComponent<Health>();
         agent = GetComponent<NavMeshAgent>();
         findTargetTimer = 0;
         attackTimer = 0;
         despawnTimer = 0;
-        isAlive = true;
     }
 
     [ServerCallback]
     void Update()
     {
-        if (isAlive)
+        if (health.isAlive)
         {
             AcquireTarget();
 
@@ -82,19 +59,13 @@ public class Zombie_Network : NetworkBehaviour
             }
             else
             {
-                SetAnimatorTrigger("Idle");
+                animate.SetAnimatorTrigger("Idle");
             }
         }
         else
         {
             Death();
         }
-    }
-
-    void SetAnimatorTrigger(string name)
-    {
-        animator.SetTrigger(name);
-        networkAnimator.SetTrigger(name);
     }
 
     void AcquireTarget()
@@ -129,7 +100,7 @@ public class Zombie_Network : NetworkBehaviour
         agent.isStopped = false;
         agent.speed = movementSpeed;
         agent.SetDestination(target.transform.position);
-        SetAnimatorTrigger("Move");
+        animate.SetAnimatorTrigger("Move");
     }
 
     void Attack()
@@ -138,19 +109,19 @@ public class Zombie_Network : NetworkBehaviour
         attackTimer = UpdateTimer(attackTimer, attackInterval);
         if (attackTimer == 0)
         {
-            SetAnimatorTrigger("Attack");
+            animate.SetAnimatorTrigger("Attack");
             Debug.Log("Attack");
             // if collision do damage
         }
         else
         {
-            SetAnimatorTrigger("Idle");
+            animate.SetAnimatorTrigger("Idle");
         }
     }
 
     void Death()
     {
-        SetAnimatorTrigger("FallBack");
+        animate.SetAnimatorTrigger("FallBack");
         agent.isStopped = true;
         gameObject.GetComponent<CapsuleCollider>().enabled = false;
         despawnTimer = UpdateTimer(despawnTimer, despawnInterval);
