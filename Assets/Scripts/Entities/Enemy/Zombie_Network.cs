@@ -28,6 +28,7 @@ public class Zombie_Network : NetworkBehaviour
     private float despawnTimer;
     private bool isAlive;
 
+    [ServerCallback]
     public void TakeDamage(float damage)
     {
         if (!isServer)
@@ -41,12 +42,6 @@ public class Zombie_Network : NetworkBehaviour
         {
             isAlive = false;
         }
-    }
-
-    void SetAnimatorTrigger(string name)
-    {
-        animator.SetTrigger(name);
-        networkAnimator.SetTrigger(name);
     }
 
     [ServerCallback]
@@ -93,6 +88,12 @@ public class Zombie_Network : NetworkBehaviour
         {
             Death();
         }
+    }
+
+    void SetAnimatorTrigger(string name)
+    {
+        animator.SetTrigger(name);
+        networkAnimator.SetTrigger(name);
     }
 
     void AcquireTarget()
