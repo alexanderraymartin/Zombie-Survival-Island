@@ -5,6 +5,7 @@ using UnityEngine.Networking;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(NetworkAnimator))]
 [RequireComponent(typeof(NavMeshAgent))]
 public class Zombie_Network : NetworkBehaviour
 {
@@ -20,6 +21,7 @@ public class Zombie_Network : NetworkBehaviour
     public float attackInterval;
 
     private Animator animator;
+    private NetworkAnimator networkAnimator;
     private NavMeshAgent agent;
     private float findTargetTimer;
     private float attackTimer;
@@ -41,12 +43,20 @@ public class Zombie_Network : NetworkBehaviour
         }
     }
 
+    void SetAnimatorTrigger(string name)
+    {
+        animator.SetTrigger(name);
+        networkAnimator.SetTrigger(name);
+    }
 
     [ServerCallback]
     void Start()
     {
         animator = GetComponent<Animator>();
-        animator.SetTrigger("Idle");
+        networkAnimator = GetComponent<NetworkAnimator>();
+
+        SetAnimatorTrigger("Idle");
+
         agent = GetComponent<NavMeshAgent>();
         findTargetTimer = 0;
         attackTimer = 0;
@@ -76,7 +86,7 @@ public class Zombie_Network : NetworkBehaviour
             }
             else
             {
-                animator.SetTrigger("Idle");
+                SetAnimatorTrigger("Idle");
             }
         }
         else
@@ -117,7 +127,7 @@ public class Zombie_Network : NetworkBehaviour
         agent.isStopped = false;
         agent.speed = movementSpeed;
         agent.SetDestination(target.transform.position);
-        animator.SetTrigger("Move");
+        SetAnimatorTrigger("Move");
     }
 
     void Attack()
@@ -126,19 +136,19 @@ public class Zombie_Network : NetworkBehaviour
         attackTimer = UpdateTimer(attackTimer, attackInterval);
         if (attackTimer == 0)
         {
-            animator.SetTrigger("Attack");
+            SetAnimatorTrigger("Attack");
             Debug.Log("Attack");
             // if collision do damage
         }
         else
         {
-            animator.SetTrigger("Idle");
+            SetAnimatorTrigger("Idle");
         }
     }
 
     void Death()
     {
-        animator.SetTrigger("FallBack");
+        SetAnimatorTrigger("FallBack");
         agent.isStopped = true;
         gameObject.GetComponent<CapsuleCollider>().enabled = false;
         despawnTimer = UpdateTimer(despawnTimer, despawnInterval);
