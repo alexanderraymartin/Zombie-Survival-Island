@@ -11,6 +11,7 @@ public class Zombie_Network : NetworkBehaviour
 {
     public GameObject target;
 
+    [SyncVar]
     public float health;
     public float damage;
     public float attackRadius;
