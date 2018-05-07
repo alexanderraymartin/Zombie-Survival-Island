@@ -51,5 +51,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3435e7ef96afc5342a150c3c3b83c63f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  players: []
-  enemies: []
