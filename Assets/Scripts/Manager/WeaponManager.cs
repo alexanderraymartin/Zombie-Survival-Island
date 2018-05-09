@@ -43,10 +43,15 @@ public class WeaponManager : NetworkBehaviour
             return;
         }
 
-        if (Input.GetButtonDown("Fire2"))
+        if (Input.GetButtonDown("Fire2") && weaponHolder.transform.childCount == 0)
         {
             Debug.Log("Attemping to equip...");
             CmdEquipWeapon(GameObject.Find("Gun"));
+        }
+        else if (Input.GetButtonDown("Fire2") && weaponHolder.transform.childCount != 0)
+        {
+            Debug.Log("Attemping to unequip...");
+            CmdUnequipWeapon(GameObject.Find("Gun"));
         }
     }
 }
