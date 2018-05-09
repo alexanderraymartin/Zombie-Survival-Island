@@ -2,26 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.Networking;
 
-[RequireComponent(typeof(Health))]
-public class Gun : NetworkBehaviour
+public class Gun : MonoBehaviour
 {
+    public WeaponManager weaponManager;
+
     public float bulletSpeed;
     public float rateOfFire;
     public float damage;
     public float range;
-    public float bulletPenetration; // 0 - 1
-
-    public Camera cam;
+    public float bulletPenetration; // 0 - 100
+    
+    public GameObject firePoint;
 
     void Update()
     {
-        if (!isLocalPlayer)
-        {
-            return;
-        }
-
         if (Input.GetButtonDown("Fire1"))
         {
             Shoot();
@@ -30,27 +25,22 @@ public class Gun : NetworkBehaviour
 
     void Shoot()
     {
-        RaycastHit[] hits = Physics.RaycastAll(cam.transform.position, cam.transform.forward, range);
+        Debug.Log("Shooting!");
+        RaycastHit[] hits = Physics.RaycastAll(firePoint.transform.position, firePoint.transform.forward, range);
         {
             // Sort hits
-            hits = hits.OrderBy(x => Vector2.Distance(cam.transform.position, x.transform.position)).ToArray();
+            hits = hits.OrderBy(x => Vector2.Distance(firePoint.transform.position, x.transform.position)).ToArray();
 
             for (int i = 0; i < hits.Length; i++)
             {
                 if (hits[i].transform.gameObject.tag == "Enemy")
                 {
-                    float calculatedDamage = damage * (Mathf.Pow(bulletPenetration, i));
-                    CmdDealDamage(hits[i].transform.gameObject, calculatedDamage);
+                    float calculatedDamage = damage * (Mathf.Pow(bulletPenetration / 100, i));
+                    weaponManager.CmdDealDamage(hits[i].transform.gameObject, calculatedDamage);
                     Debug.Log(hits[i].transform.name + "hit for " + calculatedDamage);
                     Debug.Log(hits[i].transform.gameObject.GetComponent<Health>().currentHealth);
                 }
             }
         }
-    }
-
-    [Command]
-    public void CmdDealDamage(GameObject enemy, float damage)
-    {
-        enemy.GetComponent<Health>().TakeDamage(damage);
     }
 }
