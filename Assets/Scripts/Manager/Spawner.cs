@@ -9,6 +9,7 @@ public class Spawner : NetworkBehaviour
 
     public GameObject playerPrefab;
     public GameObject zombiePrefab;
+    public GameObject gunPrefab;
    
     [ServerCallback]
     void Start()
@@ -37,6 +38,12 @@ public class Spawner : NetworkBehaviour
     void SpawnZombie(Vector3 position)
     {
         GameObject instance = Instantiate(zombiePrefab, position, Quaternion.identity);
+        NetworkServer.Spawn(instance);
+    }
+
+    void SpawnGun(Vector3 position)
+    {
+        GameObject instance = Instantiate(gunPrefab, position, Quaternion.identity);
         NetworkServer.Spawn(instance);
     }
 }

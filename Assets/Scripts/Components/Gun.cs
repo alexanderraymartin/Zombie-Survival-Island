@@ -2,18 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class Gun : MonoBehaviour
+public class Gun : NetworkBehaviour
 {
-    public WeaponManager weaponManager;
-
     public float bulletSpeed;
     public float rateOfFire;
     public float damage;
     public float range;
     public float bulletPenetration; // 0 - 100
-    
-    public GameObject firePoint;
+
+    [HideInInspector]
+    public GameObject cam;
 
     void Update()
     {
@@ -25,22 +25,28 @@ public class Gun : MonoBehaviour
 
     void Shoot()
     {
-        Debug.Log("Shooting!");
-        RaycastHit[] hits = Physics.RaycastAll(firePoint.transform.position, firePoint.transform.forward, range);
+        RaycastHit[] hits = Physics.RaycastAll(cam.transform.position, cam.transform.forward, range);
+        Debug.DrawRay(cam.transform.position, cam.transform.forward * 25, Color.red, 1); // TODO remove later
         {
             // Sort hits
-            hits = hits.OrderBy(x => Vector2.Distance(firePoint.transform.position, x.transform.position)).ToArray();
+            hits = hits.OrderBy(x => Vector2.Distance(cam.transform.position, x.transform.position)).ToArray();
 
             for (int i = 0; i < hits.Length; i++)
             {
                 if (hits[i].transform.gameObject.tag == "Enemy")
                 {
                     float calculatedDamage = damage * (Mathf.Pow(bulletPenetration / 100, i));
-                    weaponManager.CmdDealDamage(hits[i].transform.gameObject, calculatedDamage);
+                    CmdDealDamage(hits[i].transform.gameObject, calculatedDamage);
                     Debug.Log(hits[i].transform.name + "hit for " + calculatedDamage);
                     Debug.Log(hits[i].transform.gameObject.GetComponent<Health>().currentHealth);
                 }
             }
         }
+    }
+
+    [Command]
+    void CmdDealDamage(GameObject enemy, float damage)
+    {
+        enemy.GetComponent<Health>().TakeDamage(damage);
     }
 }

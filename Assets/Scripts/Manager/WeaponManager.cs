@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
+[RequireComponent(typeof(Player_Network))]
 public class WeaponManager : NetworkBehaviour
 {
     public GameObject primaryWeapon;
@@ -13,26 +14,6 @@ public class WeaponManager : NetworkBehaviour
     private bool primarySelected;
     private bool hasPrimaryWeapon;
     private bool hasSecondaryWeapon;
-
-    [Command]
-    public void CmdDealDamage(GameObject enemy, float damage)
-    {
-        enemy.GetComponent<Health>().TakeDamage(damage);
-    }
-
-    void EquipWeapon(GameObject weapon)
-    {
-        //TODO
-        CmdCreateWeapon(weapon);
-    }
-
-    [Command]
-    void CmdCreateWeapon(GameObject weapon)
-    {
-        GameObject instance = Instantiate(weapon, weaponHolder.transform.position, weaponHolder.transform.rotation);
-        NetworkServer.Spawn(instance);
-        instance.transform.parent = weaponHolder.transform;
-    }
 
     void CheckForWeapons()
     {
@@ -62,7 +43,6 @@ public class WeaponManager : NetworkBehaviour
 
         primarySelected = true;
         CheckForWeapons();
-        //EquipWeapon(primaryWeapon);
     }
 
     // Update is called once per frame

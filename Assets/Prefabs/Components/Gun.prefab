@@ -20,8 +20,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4209915676718024}
   - component: {fileID: 114601176150191960}
-  - component: {fileID: 114758873005897548}
-  - component: {fileID: 114627868464270466}
+  - component: {fileID: 114468341636012898}
+  - component: {fileID: 114839809768351542}
   m_Layer: 0
   m_Name: Gun
   m_TagString: Untagged
@@ -102,7 +102,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1154259467138764}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.119, z: 0.413}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4556057846165190}
@@ -206,38 +206,7 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1589143745497546}
   m_Mesh: {fileID: 4300000, guid: fb98406df768fd347a74f32a4a7504cf, type: 3}
---- !u!114 &114601176150191960
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1154259467138764}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0c17738ab3db3004bb1454900d660bda, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  muzzleFlash: {fileID: 198959474326930278}
-  hitEffectPrefab: {fileID: 0}
---- !u!114 &114627868464270466
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1154259467138764}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d7c24bb2c53a3a14c9190ca0977c5aea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  weaponManager: {fileID: 0}
-  bulletSpeed: 2
-  rateOfFire: 5
-  damage: 25
-  range: 100
-  bulletPenetration: 80
-  firePoint: {fileID: 1937307103873564}
---- !u!114 &114758873005897548
+--- !u!114 &114468341636012898
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -269,6 +238,36 @@ MonoBehaviour:
     i15: 156
   m_ServerOnly: 0
   m_LocalPlayerAuthority: 1
+--- !u!114 &114601176150191960
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1154259467138764}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c17738ab3db3004bb1454900d660bda, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  muzzleFlash: {fileID: 198959474326930278}
+  hitEffectPrefab: {fileID: 0}
+--- !u!114 &114839809768351542
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1154259467138764}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7c24bb2c53a3a14c9190ca0977c5aea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletSpeed: 100
+  rateOfFire: 5
+  damage: 25
+  range: 500
+  bulletPenetration: 80
+  cam: {fileID: 0}
 --- !u!198 &198875545914455740
 ParticleSystem:
   m_ObjectHideFlags: 1
