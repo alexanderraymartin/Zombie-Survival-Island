@@ -17,7 +17,9 @@ public class Player_Network : NetworkBehaviour
     public override void OnStartLocalPlayer()
     {
         GetComponent<FirstPersonController>().enabled = true;
-        firstPersonCharacter.SetActive(true);
+        firstPersonCharacter.GetComponent<Camera>().enabled = true;
+        firstPersonCharacter.GetComponent<AudioListener>().enabled = true;
+        firstPersonCharacter.GetComponent<FlareLayer>().enabled = true;
         playerID = gameObject.GetComponent<NetworkIdentity>();
 
         foreach (GameObject go in characterModel)

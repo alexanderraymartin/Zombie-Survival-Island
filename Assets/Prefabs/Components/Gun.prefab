@@ -297,7 +297,6 @@ MonoBehaviour:
   range: 500
   bulletPenetration: 80
   cam: {fileID: 0}
-  isEquiped: 0
 --- !u!198 &198875545914455740
 ParticleSystem:
   m_ObjectHideFlags: 1
