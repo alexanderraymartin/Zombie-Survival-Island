@@ -5,11 +5,14 @@ using UnityEngine.Networking;
 using UnityStandardAssets.Characters.FirstPerson;
 
 [RequireComponent(typeof(Health))]
+[RequireComponent(typeof(WeaponManager))]
 public class Player_Network : NetworkBehaviour
 {
     public GameObject firstPersonCharacter;
     public GameObject[] characterModel;
     public GameObject weaponHolder;
+
+    private WeaponManager weaponManager;
 
     public override void OnStartLocalPlayer()
     {
@@ -21,30 +24,20 @@ public class Player_Network : NetworkBehaviour
             go.SetActive(false);
         }
 
-        CmdEquipWeapon(GameObject.Find("Gun"));
+        weaponManager = gameObject.GetComponent<WeaponManager>();
+
+        weaponManager.CmdEquipWeapon(GameObject.Find("Gun"));
+
+        Invoke("Helper", 5);
+        Invoke("Helper2", 10);
     }
 
-    [Command]
-    public void CmdEquipWeapon(GameObject gun)
+    void Helper()
     {
-        gun.transform.SetParent(weaponHolder.transform);
-        gun.transform.localPosition = new Vector3(0, 0, 0);
-        gun.transform.localRotation = Quaternion.identity;
-        
-        gun.GetComponent<Gun>().cam = firstPersonCharacter;
-        if (gun.GetComponent<Gun>().cam != null)
-        {
-            Debug.Log("Gun Equiped");
-        }
-        else
-        {
-            Debug.Log("Gun not found");
-        }
+        weaponManager.CmdUnequipWeapon(GameObject.Find("Gun"));
     }
-
-    public void Unequip(Gun gun)
+    void Helper2()
     {
-        gun.transform.SetParent(null);
-        gun.cam = null;
+        weaponManager.CmdEquipWeapon(GameObject.Find("Gun"));
     }
 }

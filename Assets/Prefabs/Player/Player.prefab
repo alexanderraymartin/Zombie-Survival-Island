@@ -1006,13 +1006,14 @@ GameObject:
   - component: {fileID: 82840586253764000}
   - component: {fileID: 114624643334853114}
   - component: {fileID: 114135142946658336}
-  - component: {fileID: 114441485751950202}
   - component: {fileID: 114585683164256948}
   - component: {fileID: 95210266821935696}
   - component: {fileID: 114696754392853794}
   - component: {fileID: 114798004975087412}
   - component: {fileID: 208778267448626770}
+  - component: {fileID: 114441485751950202}
   - component: {fileID: 114718753514751162}
+  - component: {fileID: 114174255922811968}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -2896,6 +2897,20 @@ MonoBehaviour:
     i15: 177
   m_ServerOnly: 0
   m_LocalPlayerAuthority: 1
+--- !u!114 &114174255922811968
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1785911747235186}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bda4ce05d1b9346448bb520ee1aa4894, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weaponHolder: {fileID: 1798332243346810}
+  primaryWeapon: {fileID: 0}
+  secondaryWeapon: {fileID: 0}
 --- !u!114 &114441485751950202
 MonoBehaviour:
   m_ObjectHideFlags: 1
