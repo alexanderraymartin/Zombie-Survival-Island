@@ -266,7 +266,7 @@ MonoBehaviour:
     i14: 152
     i15: 156
   m_ServerOnly: 0
-  m_LocalPlayerAuthority: 1
+  m_LocalPlayerAuthority: 0
 --- !u!114 &114601176150191960
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -297,6 +297,7 @@ MonoBehaviour:
   range: 500
   bulletPenetration: 80
   cam: {fileID: 0}
+  isEquiped: 0
 --- !u!198 &198875545914455740
 ParticleSystem:
   m_ObjectHideFlags: 1

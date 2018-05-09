@@ -17,7 +17,7 @@ public class Gun : NetworkBehaviour
 
     void Update()
     {
-        if (Input.GetButtonDown("Fire1"))
+        if (Input.GetButtonDown("Fire1") && cam != null)
         {
             Shoot();
         }
