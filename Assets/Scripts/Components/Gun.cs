@@ -15,15 +15,7 @@ public class Gun : NetworkBehaviour
     [HideInInspector]
     public GameObject cam;
 
-    void Update()
-    {
-        if (Input.GetButtonDown("Fire1") && cam != null)
-        {
-            Shoot();
-        }
-    }
-
-    void Shoot()
+    public void Shoot()
     {
         RaycastHit[] hits = Physics.RaycastAll(cam.transform.position, cam.transform.forward, range);
         Debug.DrawRay(cam.transform.position, cam.transform.forward * 25, Color.red, 1); // TODO remove later

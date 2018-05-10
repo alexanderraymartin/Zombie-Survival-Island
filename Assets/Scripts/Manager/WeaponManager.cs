@@ -8,8 +8,24 @@ using UnityEngine.Networking;
 public class WeaponManager : NetworkBehaviour
 {
     public GameObject weaponHolder;
+    [SyncVar]
+    public int maxWeapons = 2;
+
+    [SyncVar]
+    private int currentWeaponIndex = 0;
+    [SyncVar]
+    private int weaponCount = 0;
 
     private NetworkTransform networkTransform;
+
+    public GameObject GetActiveWeapon()
+    {
+        if(weaponCount != 0)
+        {
+            return weaponHolder.transform.GetChild(currentWeaponIndex).gameObject;
+        }
+        return null;
+    }
 
     [Command]
     public void CmdEquipWeapon(GameObject gun)
@@ -23,6 +39,13 @@ public class WeaponManager : NetworkBehaviour
     {
         UnequipWeapon(gun.GetComponent<NetworkIdentity>().netId);
         RpcUnequipWeapon(gun.GetComponent<NetworkIdentity>().netId);
+    }
+
+    [Command]
+    public void CmdSelectWeapon()
+    {
+        SelectWeapon();
+        RpcSelectWeapon();
     }
 
     [ClientRpc]
@@ -55,22 +78,28 @@ public class WeaponManager : NetworkBehaviour
         weapon.GetComponent<Rigidbody>().isKinematic = false;
     }
 
-    void Update()
-    {
-        if (!isLocalPlayer)
-        {
-            return;
-        }
+ 
 
-        if (Input.GetButtonDown("Fire2") && weaponHolder.transform.childCount == 0)
+    [ClientRpc]
+    void RpcSelectWeapon()
+    {
+        SelectWeapon();
+    }
+
+    void SelectWeapon()
+    {
+        int i = 0;
+        foreach (Transform weapon in weaponHolder.transform)
         {
-            Debug.Log("Attemping to equip...");
-            CmdEquipWeapon(GameObject.Find("Gun"));
-        }
-        else if (Input.GetButtonDown("Fire2") && weaponHolder.transform.childCount != 0)
-        {
-            Debug.Log("Attemping to unequip...");
-            CmdUnequipWeapon(GameObject.Find("Gun"));
+            if (i == currentWeaponIndex)
+            {
+                weapon.gameObject.SetActive(true);
+            }
+            else
+            {
+                weapon.gameObject.SetActive(false);
+            }
+            i++;
         }
     }
 }
