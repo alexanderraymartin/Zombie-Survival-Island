@@ -106,6 +106,7 @@ public class WeaponManager : NetworkBehaviour
         weapon.transform.localRotation = Quaternion.identity;
         weapon.GetComponent<Rigidbody>().isKinematic = true;
         weapon.GetComponent<Gun>().cam = gameObject.GetComponent<Player_Network>().firstPersonCharacter;
+        weapon.GetComponent<Gun>().gunOwner = gameObject.GetComponent<Player_Network>();
     }
 
     void UnequipWeapon(NetworkInstanceId weaponId)
@@ -114,6 +115,7 @@ public class WeaponManager : NetworkBehaviour
         weapon.transform.SetParent(null);
         weapon.GetComponent<Gun>().cam = null;
         weapon.GetComponent<Rigidbody>().isKinematic = false;
+        weapon.GetComponent<Gun>().gunOwner = null;
     }
 
     void SelectWeapon()

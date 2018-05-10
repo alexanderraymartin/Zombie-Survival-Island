@@ -15,8 +15,16 @@ public class Gun : NetworkBehaviour
     [HideInInspector]
     public GameObject cam;
 
+    [HideInInspector]
+    public Player_Network gunOwner;
+
     public void Shoot()
     {
+        if (gunOwner == null)
+        {
+            return;
+        }
+
         RaycastHit[] hits = Physics.RaycastAll(cam.transform.position, cam.transform.forward, range);
         Debug.DrawRay(cam.transform.position, cam.transform.forward * 25, Color.red, 1); // TODO remove later
         {
@@ -28,17 +36,11 @@ public class Gun : NetworkBehaviour
                 if (hits[i].transform.gameObject.tag == "Enemy")
                 {
                     float calculatedDamage = damage * (Mathf.Pow(bulletPenetration / 100, i));
-                    CmdDealDamage(hits[i].transform.gameObject, calculatedDamage);
+                    gunOwner.CmdDealDamage(hits[i].transform.gameObject, calculatedDamage);
                     Debug.Log(hits[i].transform.name + "hit for " + calculatedDamage);
                     Debug.Log(hits[i].transform.gameObject.GetComponent<Health>().currentHealth);
                 }
             }
         }
-    }
-
-    [Command]
-    void CmdDealDamage(GameObject enemy, float damage)
-    {
-        enemy.GetComponent<Health>().TakeDamage(damage);
     }
 }

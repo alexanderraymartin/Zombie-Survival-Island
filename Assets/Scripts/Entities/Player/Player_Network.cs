@@ -17,6 +17,12 @@ public class Player_Network : NetworkBehaviour
 
     private WeaponManager weaponManager;
 
+    [Command]
+    public void CmdDealDamage(GameObject enemy, float damage)
+    {
+        enemy.GetComponent<Health>().TakeDamage(damage);
+    }
+
     public override void OnStartLocalPlayer()
     {
         GetComponent<FirstPersonController>().enabled = true;
