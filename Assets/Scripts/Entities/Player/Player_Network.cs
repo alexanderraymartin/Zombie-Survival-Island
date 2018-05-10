@@ -86,7 +86,7 @@ public class Player_Network : NetworkBehaviour
         {
             GameObject objectHit = hit.transform.gameObject;
 
-            if (objectHit.tag == "Gun")
+            if (objectHit.GetComponent<Gun>() != null && objectHit.GetComponent<Gun>().gunOwner == null)
             {
                 return objectHit;
             }
