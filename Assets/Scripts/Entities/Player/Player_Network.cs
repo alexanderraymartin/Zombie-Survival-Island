@@ -35,29 +35,31 @@ public class Player_Network : NetworkBehaviour
     {
         if (!isLocalPlayer)
         {
-            // Attempt to use active weapon
-            if (Input.GetButtonDown("Fire1"))
-            {
-                weaponManager.GetActiveWeapon().GetComponent<Gun>().Shoot();
-            }
-            // Attempt to cycle through weapons
-            else if (Input.GetButtonDown("Change Weapon") && weaponManager.weaponHolder.transform.childCount == 0)
-            {
-                Debug.Log("Attemping to equip...");
-                weaponManager.CmdEquipWeapon(GameObject.Find("Gun"));
-            }
-            // Attempt to pick up a weapon
-            else if (Input.GetButtonDown("Pickup Item") && weaponManager.weaponHolder.transform.childCount == 0)
-            {
-                Debug.Log("Attemping to equip...");
-                weaponManager.CmdEquipWeapon(GameObject.Find("Gun"));
-            }
-            // Attempt to drop a weapon
-            else if (Input.GetButtonDown("Drop Item") && weaponManager.weaponHolder.transform.childCount != 0)
-            {
-                Debug.Log("Attemping to unequip...");
-                weaponManager.CmdUnequipWeapon(GameObject.Find("Gun"));
-            }
+            return;
+        }
+        // Attempt to use active weapon
+        if (Input.GetButtonDown("Fire1") && weaponManager.GetActiveWeapon() != null)
+        {
+            Debug.Log("Attemping to shoot...");
+            weaponManager.GetActiveWeapon().GetComponent<Gun>().Shoot();
+        }
+        // Attempt to cycle through weapons
+        else if (Input.GetButtonDown("Change Weapon") && weaponManager.weaponHolder.transform.childCount > 1)
+        {
+            Debug.Log("Attemping to change weapons...");
+            weaponManager.CmdEquipWeapon(GameObject.Find("Gun"));
+        }
+        // Attempt to pick up a weapon
+        else if (Input.GetButtonDown("Pickup Item"))
+        {
+            Debug.Log("Attemping to pickup...");
+            weaponManager.CmdEquipWeapon(GameObject.Find("Gun"));
+        }
+        // Attempt to drop a weapon
+        else if (Input.GetButtonDown("Drop Item") && weaponManager.weaponHolder.transform.childCount != 0)
+        {
+            Debug.Log("Attemping to drop...");
+            weaponManager.CmdUnequipWeapon();
         }
     }
 }
