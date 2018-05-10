@@ -2909,6 +2909,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponHolder: {fileID: 1798332243346810}
+  maxWeapons: 2
 --- !u!114 &114441485751950202
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2924,6 +2925,7 @@ MonoBehaviour:
   characterModel:
   - {fileID: 1498690031806022}
   - {fileID: 1026619103284796}
+  pickupRange: 5
   playerID: {fileID: 0}
 --- !u!114 &114585683164256948
 MonoBehaviour:

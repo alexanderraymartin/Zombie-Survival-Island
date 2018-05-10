@@ -10,12 +10,14 @@ public class Player_Network : NetworkBehaviour
 {
     public GameObject firstPersonCharacter;
     public GameObject[] characterModel;
+    public int pickupRange;
 
     [HideInInspector]
     [SyncVar]
     public NetworkIdentity playerID; // Is this needed?
 
     private WeaponManager weaponManager;
+    private Camera fpsCam;
 
     [Command]
     public void CmdDealDamage(GameObject enemy, float damage)
@@ -31,6 +33,8 @@ public class Player_Network : NetworkBehaviour
         firstPersonCharacter.GetComponent<FlareLayer>().enabled = true;
         playerID = GetComponent<NetworkIdentity>();
         weaponManager = GetComponent<WeaponManager>();
+        fpsCam = firstPersonCharacter.GetComponent<Camera>();
+
         foreach (GameObject go in characterModel)
         {
             go.SetActive(false);
@@ -43,6 +47,11 @@ public class Player_Network : NetworkBehaviour
         {
             return;
         }
+        HandleInput();
+    }
+
+    void HandleInput()
+    {
         // Attempt to use active weapon
         if (Input.GetButtonDown("Fire1") && weaponManager.GetActiveWeapon() != null)
         {
@@ -59,7 +68,7 @@ public class Player_Network : NetworkBehaviour
         else if (Input.GetButtonDown("Pickup Item"))
         {
             Debug.Log("Attempting to pickup...");
-            weaponManager.CmdEquipWeapon(GameObject.Find("Gun"));
+            weaponManager.CmdEquipWeapon(GetItemFromRayCast());
         }
         // Attempt to drop a weapon
         else if (Input.GetButtonDown("Drop Item"))
@@ -67,5 +76,23 @@ public class Player_Network : NetworkBehaviour
             Debug.Log("Attempting to drop...");
             weaponManager.CmdUnequipWeapon();
         }
+    }
+
+    GameObject GetItemFromRayCast()
+    {
+        RaycastHit hit;
+
+        if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit, pickupRange))
+        {
+            GameObject objectHit = hit.transform.gameObject;
+
+            if (objectHit.tag == "Gun")
+            {
+                return objectHit;
+            }
+
+        }
+
+        return null;
     }
 }

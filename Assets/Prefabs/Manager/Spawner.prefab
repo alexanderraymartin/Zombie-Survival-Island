@@ -88,3 +88,4 @@ MonoBehaviour:
     type: 2}
   zombiePrefab: {fileID: 1738034817906532, guid: a47e386d387117444aaf58f8776af047,
     type: 2}
+  gunPrefab: {fileID: 1154259467138764, guid: b984ae2c5755f5f49830ab8f6bd3989c, type: 2}

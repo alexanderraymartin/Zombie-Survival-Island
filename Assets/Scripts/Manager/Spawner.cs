@@ -28,6 +28,13 @@ public class Spawner : NetworkBehaviour
         SpawnZombie(new Vector3(0, 0, 0));
         SpawnZombie(new Vector3(5, 0, 10));
         SpawnZombie(new Vector3(15, 0, 0));
+
+        SpawnGun(new Vector3(0, 0, 0));
+        SpawnGun(new Vector3(5, 0, 0));
+        SpawnGun(new Vector3(10, 0, 0));
+        SpawnGun(new Vector3(15, 0, 0));
+        SpawnGun(new Vector3(20, 0, 0));
+        SpawnGun(new Vector3(25, 0, 0));
     }
 
     void Update()

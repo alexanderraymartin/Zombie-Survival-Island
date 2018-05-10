@@ -30,6 +30,7 @@ public class WeaponManager : NetworkBehaviour
                 currentWeaponIndex++;
             }
         }
+        SelectWeapon();
     }
 
     public GameObject GetActiveWeapon()
@@ -44,12 +45,18 @@ public class WeaponManager : NetworkBehaviour
     [Command]
     public void CmdEquipWeapon(GameObject gun)
     {
+        if (gun == null)
+        {
+            return;
+        }
+
         // Check if weapon slots are full
         if (weaponHolder.transform.childCount >= maxWeapons)
         {
+            GameObject oldWeapon = GetActiveWeapon();
             // Unequip old weapon
-            UnequipWeapon(GetActiveWeapon().GetComponent<NetworkIdentity>().netId);
-            RpcUnequipWeapon(GetActiveWeapon().GetComponent<NetworkIdentity>().netId);
+            UnequipWeapon(oldWeapon.GetComponent<NetworkIdentity>().netId);
+            RpcUnequipWeapon(oldWeapon.GetComponent<NetworkIdentity>().netId);
             // Update index of current weapon
             currentWeaponIndex--;
         }
