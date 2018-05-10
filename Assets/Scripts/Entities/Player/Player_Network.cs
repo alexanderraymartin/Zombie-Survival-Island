@@ -44,10 +44,10 @@ public class Player_Network : NetworkBehaviour
             weaponManager.GetActiveWeapon().GetComponent<Gun>().Shoot();
         }
         // Attempt to cycle through weapons
-        else if (Input.GetButtonDown("Change Weapon") && weaponManager.weaponHolder.transform.childCount > 1)
+        else if (Input.GetButtonDown("Change Weapon"))
         {
             Debug.Log("Attempting to change weapons...");
-            weaponManager.CmdEquipWeapon(GameObject.Find("Gun"));
+            weaponManager.CmdChangeWeapons();
         }
         // Attempt to pick up a weapon
         else if (Input.GetButtonDown("Pickup Item"))
@@ -56,7 +56,7 @@ public class Player_Network : NetworkBehaviour
             weaponManager.CmdEquipWeapon(GameObject.Find("Gun"));
         }
         // Attempt to drop a weapon
-        else if (Input.GetButtonDown("Drop Item") && weaponManager.weaponHolder.transform.childCount != 0)
+        else if (Input.GetButtonDown("Drop Item"))
         {
             Debug.Log("Attempting to drop...");
             weaponManager.CmdUnequipWeapon();

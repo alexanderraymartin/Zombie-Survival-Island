@@ -16,6 +16,22 @@ public class WeaponManager : NetworkBehaviour
 
     private NetworkTransform networkTransform;
 
+    [Command]
+    public void CmdChangeWeapons()
+    {
+        if (weaponHolder.transform.childCount > 1)
+        {
+            if (currentWeaponIndex >= transform.childCount - 1)
+            {
+                currentWeaponIndex = 0;
+            }
+            else
+            {
+                currentWeaponIndex++;
+            }
+        }
+    }
+
     public GameObject GetActiveWeapon()
     {
         if (weaponHolder.transform.childCount != 0)
@@ -34,17 +50,17 @@ public class WeaponManager : NetworkBehaviour
             // Unequip old weapon
             UnequipWeapon(GetActiveWeapon().GetComponent<NetworkIdentity>().netId);
             RpcUnequipWeapon(GetActiveWeapon().GetComponent<NetworkIdentity>().netId);
-        }
-        // There are no weapon slots available
-        else
-        {
-            // Update index of current weapon and update weapon count
-            currentWeaponIndex++;
-
+            // Update index of current weapon
+            currentWeaponIndex--;
         }
         // Equip new weapon
         EquipWeapon(gun.GetComponent<NetworkIdentity>().netId);
         RpcEquipWeapon(gun.GetComponent<NetworkIdentity>().netId);
+        // Update index of current weapon
+        currentWeaponIndex++;
+        // Update current weapon
+        SelectWeapon();
+        RpcSelectWeapon();
     }
 
     [Command]
@@ -58,6 +74,9 @@ public class WeaponManager : NetworkBehaviour
             // Unequip old weapon
             UnequipWeapon(gun.GetComponent<NetworkIdentity>().netId);
             RpcUnequipWeapon(gun.GetComponent<NetworkIdentity>().netId);
+            // Update current weapon
+            SelectWeapon();
+            RpcSelectWeapon();
         }
     }
 
@@ -73,6 +92,12 @@ public class WeaponManager : NetworkBehaviour
         UnequipWeapon(weaponId);
     }
 
+    [ClientRpc]
+    void RpcSelectWeapon()
+    {
+        SelectWeapon();
+    }
+
     void EquipWeapon(NetworkInstanceId weaponId)
     {
         GameObject weapon = ClientScene.FindLocalObject(weaponId);
@@ -81,7 +106,6 @@ public class WeaponManager : NetworkBehaviour
         weapon.transform.localRotation = Quaternion.identity;
         weapon.GetComponent<Rigidbody>().isKinematic = true;
         weapon.GetComponent<Gun>().cam = gameObject.GetComponent<Player_Network>().firstPersonCharacter;
-        SelectWeapon();
     }
 
     void UnequipWeapon(NetworkInstanceId weaponId)
@@ -90,7 +114,6 @@ public class WeaponManager : NetworkBehaviour
         weapon.transform.SetParent(null);
         weapon.GetComponent<Gun>().cam = null;
         weapon.GetComponent<Rigidbody>().isKinematic = false;
-        SelectWeapon();
     }
 
     void SelectWeapon()
@@ -107,6 +130,13 @@ public class WeaponManager : NetworkBehaviour
                 weapon.gameObject.SetActive(false);
             }
             i++;
+        }
+
+        // Just to be safe
+        if (weaponHolder.transform.childCount == 1)
+        {
+            currentWeaponIndex = 0;
+            weaponHolder.transform.GetChild(0).gameObject.SetActive(true);
         }
     }
 }
