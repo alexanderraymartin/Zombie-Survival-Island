@@ -4,18 +4,16 @@ using UnityEngine;
 using UnityEngine.Networking;
 
 [RequireComponent(typeof(Player_Network))]
+[RequireComponent(typeof(NetworkTransform))]
 public class WeaponManager : NetworkBehaviour
 {
     public GameObject weaponHolder;
 
+    private NetworkTransform networkTransform;
+
     [Command]
     public void CmdEquipWeapon(GameObject gun)
     {
-        if (!isLocalPlayer || gun == null)
-        {
-            return;
-        }
-
         EquipWeapon(gun.GetComponent<NetworkIdentity>().netId);
         RpcEquipWeapon(gun.GetComponent<NetworkIdentity>().netId);
     }
@@ -23,11 +21,6 @@ public class WeaponManager : NetworkBehaviour
     [Command]
     public void CmdUnequipWeapon(GameObject gun)
     {
-        if (!isLocalPlayer || gun == null)
-        {
-            return;
-        }
-
         UnequipWeapon(gun.GetComponent<NetworkIdentity>().netId);
         RpcUnequipWeapon(gun.GetComponent<NetworkIdentity>().netId);
     }
@@ -46,6 +39,7 @@ public class WeaponManager : NetworkBehaviour
         weapon.transform.localRotation = Quaternion.identity;
         weapon.GetComponent<Rigidbody>().isKinematic = true;
         weapon.GetComponent<Gun>().cam = gameObject.GetComponent<Player_Network>().firstPersonCharacter;
+        networkTransform.enabled = false;
     }
 
     [ClientRpc]
@@ -60,6 +54,12 @@ public class WeaponManager : NetworkBehaviour
         weapon.transform.SetParent(null);
         weapon.GetComponent<Gun>().cam = null;
         weapon.GetComponent<Rigidbody>().isKinematic = false;
+        networkTransform.enabled = false;
+    }
+
+    void Start()
+    {
+        networkTransform = GetComponent<NetworkTransform>();
     }
 
     void Update()
