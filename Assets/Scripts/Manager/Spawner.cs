@@ -45,12 +45,14 @@ public class Spawner : NetworkBehaviour
     void SpawnZombie(Vector3 position)
     {
         GameObject instance = Instantiate(zombiePrefab, position, Quaternion.identity);
+        instance.name = instance.name + position;
         NetworkServer.Spawn(instance);
     }
 
     void SpawnGun(Vector3 position)
     {
         GameObject instance = Instantiate(gunPrefab, position, Quaternion.identity);
+        instance.name = instance.name + position;
         NetworkServer.Spawn(instance);
     }
 }

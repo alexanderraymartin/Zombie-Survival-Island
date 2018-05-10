@@ -21,7 +21,7 @@ public class WeaponManager : NetworkBehaviour
     {
         if (weaponHolder.transform.childCount > 1)
         {
-            if (currentWeaponIndex >= transform.childCount - 1)
+            if (currentWeaponIndex >= weaponHolder.transform.childCount - 1)
             {
                 currentWeaponIndex = 0;
             }
@@ -31,6 +31,7 @@ public class WeaponManager : NetworkBehaviour
             }
         }
         SelectWeapon();
+        RpcSelectWeapon();
     }
 
     public GameObject GetActiveWeapon()
@@ -57,14 +58,12 @@ public class WeaponManager : NetworkBehaviour
             // Unequip old weapon
             UnequipWeapon(oldWeapon.GetComponent<NetworkIdentity>().netId);
             RpcUnequipWeapon(oldWeapon.GetComponent<NetworkIdentity>().netId);
-            // Update index of current weapon
-            currentWeaponIndex--;
         }
         // Equip new weapon
         EquipWeapon(gun.GetComponent<NetworkIdentity>().netId);
         RpcEquipWeapon(gun.GetComponent<NetworkIdentity>().netId);
         // Update index of current weapon
-        currentWeaponIndex++;
+        currentWeaponIndex = weaponHolder.transform.childCount - 1;
         // Update current weapon
         SelectWeapon();
         RpcSelectWeapon();
@@ -76,11 +75,11 @@ public class WeaponManager : NetworkBehaviour
         GameObject gun = GetActiveWeapon();
         if (gun != null)
         {
-            // Update index of current weapon
-            currentWeaponIndex--;
             // Unequip old weapon
             UnequipWeapon(gun.GetComponent<NetworkIdentity>().netId);
             RpcUnequipWeapon(gun.GetComponent<NetworkIdentity>().netId);
+            // Update index of current weapon
+            currentWeaponIndex = weaponHolder.transform.childCount - 1;
             // Update current weapon
             SelectWeapon();
             RpcSelectWeapon();
@@ -114,6 +113,7 @@ public class WeaponManager : NetworkBehaviour
         weapon.GetComponent<Rigidbody>().isKinematic = true;
         weapon.GetComponent<Gun>().cam = gameObject.GetComponent<Player_Network>().firstPersonCharacter;
         weapon.GetComponent<Gun>().gunOwner = gameObject.GetComponent<Player_Network>();
+        weapon.SetActive(true);
     }
 
     void UnequipWeapon(NetworkInstanceId weaponId)
@@ -123,6 +123,7 @@ public class WeaponManager : NetworkBehaviour
         weapon.GetComponent<Gun>().cam = null;
         weapon.GetComponent<Rigidbody>().isKinematic = false;
         weapon.GetComponent<Gun>().gunOwner = null;
+        weapon.SetActive(true);
     }
 
     void SelectWeapon()
