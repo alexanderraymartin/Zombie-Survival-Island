@@ -39,7 +39,6 @@ public class WeaponManager : NetworkBehaviour
         weapon.transform.localRotation = Quaternion.identity;
         weapon.GetComponent<Rigidbody>().isKinematic = true;
         weapon.GetComponent<Gun>().cam = gameObject.GetComponent<Player_Network>().firstPersonCharacter;
-        networkTransform.enabled = false;
     }
 
     [ClientRpc]
@@ -54,12 +53,6 @@ public class WeaponManager : NetworkBehaviour
         weapon.transform.SetParent(null);
         weapon.GetComponent<Gun>().cam = null;
         weapon.GetComponent<Rigidbody>().isKinematic = false;
-        networkTransform.enabled = false;
-    }
-
-    void Start()
-    {
-        networkTransform = GetComponent<NetworkTransform>();
     }
 
     void Update()
