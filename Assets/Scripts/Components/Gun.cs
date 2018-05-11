@@ -14,7 +14,7 @@ public class Gun : NetworkBehaviour
 
     [HideInInspector]
     public GameObject cam;
-
+    
     [HideInInspector]
     public Player_Network gunOwner;
 
