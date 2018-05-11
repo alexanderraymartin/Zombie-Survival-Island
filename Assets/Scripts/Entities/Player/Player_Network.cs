@@ -12,17 +12,20 @@ public class Player_Network : NetworkBehaviour
     public GameObject[] characterModel;
     public int pickupRange;
 
-    [HideInInspector]
-    [SyncVar]
-    public NetworkIdentity playerID; // Is this needed?
-
-    private WeaponManager weaponManager;
-    private Camera fpsCam;
+    public WeaponManager weaponManager;
+    public Camera fpsCam;
 
     [Command]
     public void CmdDealDamage(GameObject enemy, float damage)
     {
         enemy.GetComponent<Health>().TakeDamage(damage);
+    }
+
+
+    [Command]
+    public void CmdMuzzleFlash()
+    {
+        RpcMuzzleFlash();
     }
 
     public override void OnStartLocalPlayer()
@@ -31,9 +34,6 @@ public class Player_Network : NetworkBehaviour
         firstPersonCharacter.GetComponent<Camera>().enabled = true;
         firstPersonCharacter.GetComponent<AudioListener>().enabled = true;
         firstPersonCharacter.GetComponent<FlareLayer>().enabled = true;
-        playerID = GetComponent<NetworkIdentity>();
-        weaponManager = GetComponent<WeaponManager>();
-        fpsCam = firstPersonCharacter.GetComponent<Camera>();
 
         foreach (GameObject go in characterModel)
         {
@@ -94,5 +94,11 @@ public class Player_Network : NetworkBehaviour
         }
 
         return null;
+    }
+
+    [ClientRpc]
+    void RpcMuzzleFlash()
+    {
+        weaponManager.GetActiveWeapon().GetComponent<Gun>().gameObject.GetComponent<WeaponGraphics>().muzzleFlash.Play();
     }
 }
