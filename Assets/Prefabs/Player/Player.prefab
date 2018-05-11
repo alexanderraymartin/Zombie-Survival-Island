@@ -2926,7 +2926,8 @@ MonoBehaviour:
   - {fileID: 1498690031806022}
   - {fileID: 1026619103284796}
   pickupRange: 5
-  playerID: {fileID: 0}
+  weaponManager: {fileID: 114174255922811968}
+  fpsCam: {fileID: 20517752726960712}
 --- !u!114 &114585683164256948
 MonoBehaviour:
   m_ObjectHideFlags: 1
