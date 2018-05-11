@@ -28,6 +28,12 @@ public class Player_Network : NetworkBehaviour
         RpcMuzzleFlash();
     }
 
+    [Command]
+    public void CmdHitEffect(Vector3 position, Vector3 normal)
+    {
+        RpcHitEffect(position, normal);
+    }
+
     public override void OnStartLocalPlayer()
     {
         GetComponent<FirstPersonController>().enabled = true;
@@ -100,5 +106,13 @@ public class Player_Network : NetworkBehaviour
     void RpcMuzzleFlash()
     {
         weaponManager.GetActiveWeapon().GetComponent<Gun>().gameObject.GetComponent<WeaponGraphics>().muzzleFlash.Play();
+    }
+
+    [ClientRpc]
+    void RpcHitEffect(Vector3 position, Vector3 normal)
+    {
+        // Replace with object pooling
+        GameObject instance = Instantiate(weaponManager.GetActiveWeapon().GetComponent<Gun>().gameObject.GetComponent<WeaponGraphics>().hitEffectPrefab, position, Quaternion.LookRotation(normal));
+        Destroy(instance, 2f);
     }
 }

@@ -33,8 +33,10 @@ public class Gun : NetworkBehaviour
         // Sort hits
         hits = hits.OrderBy(x => Vector2.Distance(cam.transform.position, x.transform.position)).ToArray();
 
+
         for (int i = 0; i < hits.Length; i++)
         {
+            gunOwner.CmdHitEffect(hits[i].point, hits[i].normal);
             if (hits[i].transform.gameObject.tag == "Enemy")
             {
                 float calculatedDamage = damage * (Mathf.Pow(bulletPenetration / 100, i));
