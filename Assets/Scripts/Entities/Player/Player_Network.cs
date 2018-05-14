@@ -9,18 +9,20 @@ using UnityStandardAssets.Characters.FirstPerson;
 public class Player_Network : NetworkBehaviour
 {
     public GameObject firstPersonCharacter;
-    public GameObject[] characterModel;
+    public GameObject[] characterModels;
     public int pickupRange;
 
     public WeaponManager weaponManager;
     public Camera fpsCam;
+
+    [SyncVar]
+    private int playerColorID;
 
     [Command]
     public void CmdDealDamage(GameObject enemy, float damage)
     {
         enemy.GetComponent<Health>().TakeDamage(damage);
     }
-
 
     [Command]
     public void CmdMuzzleFlash()
@@ -40,11 +42,12 @@ public class Player_Network : NetworkBehaviour
         firstPersonCharacter.GetComponent<Camera>().enabled = true;
         firstPersonCharacter.GetComponent<AudioListener>().enabled = true;
         firstPersonCharacter.GetComponent<FlareLayer>().enabled = true;
+        CmdSetPlayerColorID();
+    }
 
-        foreach (GameObject go in characterModel)
-        {
-            go.SetActive(false);
-        }
+    void Start()
+    {
+        SetPlayerModel();
     }
 
     void Update()
@@ -54,6 +57,23 @@ public class Player_Network : NetworkBehaviour
             return;
         }
         HandleInput();
+    }
+
+    [Command]
+    void CmdSetPlayerColorID()
+    {
+        playerColorID = GameManager.instance.GetNextPlayerColorID();
+    }
+
+    void SetPlayerModel()
+    {
+        foreach (GameObject go in characterModels)
+        {
+            go.SetActive(false);
+        }
+
+        Debug.Log(playerColorID);
+        characterModels[playerColorID].SetActive(true);
     }
 
     void HandleInput()
