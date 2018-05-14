@@ -14,8 +14,6 @@ public class WeaponManager : NetworkBehaviour
     [SyncVar]
     private int currentWeaponIndex = -1;
 
-    private NetworkTransform networkTransform;
-
     [Command]
     public void CmdChangeWeapons()
     {
