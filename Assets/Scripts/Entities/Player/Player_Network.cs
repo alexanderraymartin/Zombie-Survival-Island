@@ -14,8 +14,7 @@ public class Player_Network : NetworkBehaviour
 
     public WeaponManager weaponManager;
     public Camera fpsCam;
-
-    [SyncVar]
+    
     private int playerColorID;
 
     [Command]
@@ -70,7 +69,6 @@ public class Player_Network : NetworkBehaviour
     [ClientRpc]
     void RpcSetPlayerModel(int id)
     {
-        Debug.Log("Seting color id to: " + id);
         playerColorID = id;
         SetPlayerModel();
     }
@@ -81,8 +79,7 @@ public class Player_Network : NetworkBehaviour
         {
             go.SetActive(false);
         }
-
-        Debug.Log("Player id: " + playerColorID);
+        
         characterModels[playerColorID].SetActive(true);
     }
 
