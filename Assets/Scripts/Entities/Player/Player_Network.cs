@@ -42,7 +42,7 @@ public class Player_Network : NetworkBehaviour
         firstPersonCharacter.GetComponent<Camera>().enabled = true;
         firstPersonCharacter.GetComponent<AudioListener>().enabled = true;
         firstPersonCharacter.GetComponent<FlareLayer>().enabled = true;
-        CmdSetPlayerColorID();
+        CmdSetPlayerModel();
     }
 
     void Start()
@@ -60,9 +60,19 @@ public class Player_Network : NetworkBehaviour
     }
 
     [Command]
-    void CmdSetPlayerColorID()
+    void CmdSetPlayerModel()
     {
-        playerColorID = GameManager.instance.GetNextPlayerColorID();
+        int id = GameManager.instance.GetNextPlayerColorID();
+        playerColorID = id;
+        RpcSetPlayerModel(id);
+    }
+
+    [ClientRpc]
+    void RpcSetPlayerModel(int id)
+    {
+        Debug.Log("Seting color id to: " + id);
+        playerColorID = id;
+        SetPlayerModel();
     }
 
     void SetPlayerModel()
@@ -72,7 +82,7 @@ public class Player_Network : NetworkBehaviour
             go.SetActive(false);
         }
 
-        Debug.Log(playerColorID);
+        Debug.Log("Player id: " + playerColorID);
         characterModels[playerColorID].SetActive(true);
     }
 
