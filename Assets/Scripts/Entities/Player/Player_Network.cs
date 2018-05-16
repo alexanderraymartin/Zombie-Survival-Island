@@ -71,7 +71,7 @@ public class Player_Network : NetworkBehaviour
 
     void Update()
     {
-        if (!isLocalPlayer || !GetComponent<Health>().isAlive)
+        if (!isLocalPlayer)
         {
             return;
         }
@@ -107,6 +107,11 @@ public class Player_Network : NetworkBehaviour
 
     void HandleInput()
     {
+        if (!GetComponent<Health>().isAlive)
+        {
+            return;
+        }
+
         // Attempt to use active weapon
         if (Input.GetButtonDown("Fire1") && weaponManager.GetActiveWeapon() != null)
         {
@@ -149,8 +154,7 @@ public class Player_Network : NetworkBehaviour
 
     void PlayerDeath()
     {
-        GetComponent<FirstPersonController>().enabled = false;
-        gameObject.transform.Find("GFX").gameObject.SetActive(false);
+        Debug.Log("Player died");
     }
 
     [ClientRpc]
@@ -162,8 +166,7 @@ public class Player_Network : NetworkBehaviour
     void Respawn(Vector3 spawnPosition)
     {
         GetComponent<Health>().Revive();
-        GetComponent<FirstPersonController>().enabled = true;
-        gameObject.transform.Find("GFX").gameObject.SetActive(true);
+        Debug.Log("Player revived");
     }
 
     GameObject GetItemFromRayCast()

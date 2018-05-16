@@ -1379,9 +1379,9 @@ MonoBehaviour:
   attackRadius: 2
   walkSpeed: 2
   RunSpeed: 4
-  rotationSpeed: 5
-  findTargetCooldown: 3
-  despawnWaitTime: 2
+  rotationSpeed: 20
+  findTargetCooldown: 1
+  despawnCastTime: 3
   attackCooldown: 1.5
   attackCastTime: 0.5
 --- !u!114 &114500186898182744
