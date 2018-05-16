@@ -16,6 +16,7 @@ public class Player_Network : NetworkBehaviour
     public Camera fpsCam;
 
     private int playerColorID;
+    private bool hasDied;
 
     [Command]
     public void CmdTakeDamage(float damage)
@@ -62,6 +63,7 @@ public class Player_Network : NetworkBehaviour
         firstPersonCharacter.GetComponent<AudioListener>().enabled = true;
         firstPersonCharacter.GetComponent<FlareLayer>().enabled = true;
         CmdSetPlayerModel();
+        hasDied = false;
     }
 
     void Start()
@@ -140,7 +142,7 @@ public class Player_Network : NetworkBehaviour
 
     void CheckIfAlive()
     {
-        if (!GetComponent<Health>().isAlive)
+        if (!GetComponent<Health>().isAlive && !hasDied)
         {
             CmdPlayerDeath();
         }
@@ -155,6 +157,7 @@ public class Player_Network : NetworkBehaviour
     void PlayerDeath()
     {
         Debug.Log("Player died");
+        hasDied = true;
     }
 
     [ClientRpc]
@@ -165,6 +168,7 @@ public class Player_Network : NetworkBehaviour
 
     void Respawn(Vector3 spawnPosition)
     {
+        hasDied = false;
         GetComponent<Health>().Revive();
         Debug.Log("Player revived");
     }
