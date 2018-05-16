@@ -14,8 +14,14 @@ public class Player_Network : NetworkBehaviour
 
     public WeaponManager weaponManager;
     public Camera fpsCam;
-    
+
     private int playerColorID;
+
+    [Command]
+    public void CmdTakeDamage(float damage)
+    {
+        GetComponent<Health>().TakeDamage(damage);
+    }
 
     [Command]
     public void CmdDealDamage(GameObject enemy, float damage)
@@ -33,6 +39,20 @@ public class Player_Network : NetworkBehaviour
     public void CmdHitEffect(Vector3 position, Vector3 normal)
     {
         RpcHitEffect(position, normal);
+    }
+
+    [Command]
+    public void CmdPlayerDeath()
+    {
+        PlayerDeath();
+        RpcPlayerDeath();
+    }
+
+    [Command]
+    public void CmdRespawn(Vector3 spawnPosition)
+    {
+        Respawn(spawnPosition);
+        RpcRespawn(spawnPosition);
     }
 
     public override void OnStartLocalPlayer()
@@ -56,6 +76,7 @@ public class Player_Network : NetworkBehaviour
             return;
         }
         HandleInput();
+        CheckIfAlive();
     }
 
     [Command]
@@ -63,6 +84,7 @@ public class Player_Network : NetworkBehaviour
     {
         int id = GameManager.instance.GetNextPlayerColorID();
         playerColorID = id;
+        SetPlayerModel();
         RpcSetPlayerModel(id);
     }
 
@@ -79,7 +101,7 @@ public class Player_Network : NetworkBehaviour
         {
             go.SetActive(false);
         }
-        
+
         characterModels[playerColorID].SetActive(true);
     }
 
@@ -109,6 +131,39 @@ public class Player_Network : NetworkBehaviour
             Debug.Log("Attempting to drop...");
             weaponManager.CmdUnequipWeapon();
         }
+    }
+
+    void CheckIfAlive()
+    {
+        if (!GetComponent<Health>().isAlive)
+        {
+            CmdPlayerDeath();
+        }
+    }
+
+    [ClientRpc]
+    void RpcPlayerDeath()
+    {
+        PlayerDeath();
+    }
+
+    void PlayerDeath()
+    {
+        GetComponent<FirstPersonController>().enabled = false;
+        gameObject.transform.Find("GFX").gameObject.SetActive(false);
+    }
+
+    [ClientRpc]
+    void RpcRespawn(Vector3 spawnPosition)
+    {
+        Respawn(spawnPosition);
+    }
+
+    void Respawn(Vector3 spawnPosition)
+    {
+        GetComponent<Health>().Revive();
+        GetComponent<FirstPersonController>().enabled = true;
+        gameObject.transform.Find("GFX").gameObject.SetActive(true);
     }
 
     GameObject GetItemFromRayCast()

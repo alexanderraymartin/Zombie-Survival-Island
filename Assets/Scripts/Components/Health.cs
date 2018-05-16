@@ -17,6 +17,31 @@ public class Health : NetworkBehaviour
     public bool isAlive;
 
     [ServerCallback]
+    public void Revive()
+    {
+        if (!isServer)
+        {
+            return;
+        }
+
+        currentHealth = maxHealth;
+        isAlive = true;
+    }
+
+    [ServerCallback]
+    public void GainHealth(float amount)
+    {
+        if (!isServer)
+        {
+            return;
+        }
+
+        currentHealth += amount;
+
+        isAlive = currentHealth > 0;
+    }
+
+    [ServerCallback]
     public void TakeDamage(float damage)
     {
         if (!isServer)
@@ -26,10 +51,7 @@ public class Health : NetworkBehaviour
 
         currentHealth -= damage;
 
-        if (currentHealth <= 0)
-        {
-            isAlive = false;
-        }
+        isAlive = currentHealth > 0;
     }
 
     [ServerCallback]
