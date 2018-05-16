@@ -7,9 +7,13 @@ public class Spawner : NetworkBehaviour
 {
     public static Spawner instance = null;
 
+    public GameObject[] enemySpawns;
+
     public GameObject playerPrefab;
     public GameObject zombiePrefab;
     public GameObject gunPrefab;
+
+    private int spawnCounter = 0;
    
     [ServerCallback]
     void Start()
@@ -39,7 +43,11 @@ public class Spawner : NetworkBehaviour
 
     void Update()
     {
-
+        if (spawnCounter++ == 250) {
+            SpawnZombie(enemySpawns[0].transform.position);
+            SpawnZombie(enemySpawns[1].transform.position);
+            spawnCounter = 0;
+        }
     }
 
     void SpawnZombie(Vector3 position)

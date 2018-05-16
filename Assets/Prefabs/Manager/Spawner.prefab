@@ -84,6 +84,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52f0f13fe69053b4391cfc2aed909b50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemySpawns:
+  - {fileID: 1572259997064006, guid: 513d8e6b20abe524c9c2c6edd0557ebd, type: 2}
+  - {fileID: 1196767704414094, guid: 5dc774248d493c948940309b9dfe12b7, type: 2}
   playerPrefab: {fileID: 1166497252743736, guid: 465de3c97d94c064ca9e1a9eecf7b4df,
     type: 2}
   zombiePrefab: {fileID: 1738034817906532, guid: a47e386d387117444aaf58f8776af047,
