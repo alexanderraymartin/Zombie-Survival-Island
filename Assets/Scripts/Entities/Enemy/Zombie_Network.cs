@@ -57,6 +57,7 @@ public class Zombie_Network : NetworkBehaviour
 
             if (target == null || !target.GetComponent<Health>().isAlive)
             {
+                Stop();
                 return;
             }
 
@@ -129,6 +130,12 @@ public class Zombie_Network : NetworkBehaviour
         {
             Walk();
         }
+    }
+
+    void Stop()
+    {
+        agent.isStopped = false;
+        agent.speed = 0;
     }
 
     void Walk()
