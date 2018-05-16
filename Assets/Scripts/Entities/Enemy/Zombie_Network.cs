@@ -10,19 +10,24 @@ using UnityEngine.AI;
 public class Zombie_Network : NetworkBehaviour
 {
     public GameObject target;
-    
+
     public float damage;
     public float attackRadius;
-    public float movementSpeed;
+    public float walkSpeed;
+    public float RunSpeed;
     public float rotationSpeed;
-    public float findTargetInterval;
-    public float despawnInterval;
-    public float attackInterval;
-    
+    public float findTargetCooldown;
+    public float despawnWaitTime;
+    public float attackCooldown;
+    public float attackCastTime;
+
     private NavMeshAgent agent;
     private float findTargetTimer;
-    private float attackTimer;
+    private float attackCooldownTimer;
+    private float attackCastTimeTimer;
     private float despawnTimer;
+    private bool canAttack;
+    private bool isRunning;
     private Animate animate;
     private Health health;
 
@@ -33,8 +38,10 @@ public class Zombie_Network : NetworkBehaviour
         health = GetComponent<Health>();
         agent = GetComponent<NavMeshAgent>();
         findTargetTimer = 0;
-        attackTimer = 0;
+        attackCooldownTimer = 0;
         despawnTimer = 0;
+        canAttack = true;
+        isRunning = false;
     }
 
     [ServerCallback]
@@ -42,24 +49,33 @@ public class Zombie_Network : NetworkBehaviour
     {
         if (health.isAlive)
         {
+            // Find the nearest target
             AcquireTarget();
 
-            if (target != null)
+            if (target == null)
             {
-                FaceLocation(target.transform.position);
-
-                if (Vector3.Distance(target.transform.position, transform.position) > attackRadius)
-                {
-                    Move();
-                }
-                else
-                {
-                    Attack();
-                }
+                return;
             }
-            else
+
+            // Face the target
+            FaceLocation(target.transform.position);
+
+            // Update attack timer
+            attackCooldownTimer = UpdateTimer(attackCooldownTimer, attackCooldown);
+            if (attackCooldownTimer == 0)
             {
-                animate.SetAnimatorTrigger("Idle");
+                canAttack = true;
+            }
+
+            // Check for distance to target
+            if (Vector3.Distance(target.transform.position, transform.position) > attackRadius)
+            {
+                Move();
+            }
+            // Check attack cooldown
+            else if (canAttack)
+            {
+                Attack();
             }
         }
         else
@@ -70,7 +86,7 @@ public class Zombie_Network : NetworkBehaviour
 
     void AcquireTarget()
     {
-        findTargetTimer = UpdateTimer(findTargetTimer, findTargetInterval);
+        findTargetTimer = UpdateTimer(findTargetTimer, findTargetCooldown);
         if (findTargetTimer == 0)
         {
             target = FindClosestPlayer();
@@ -97,25 +113,42 @@ public class Zombie_Network : NetworkBehaviour
 
     void Move()
     {
+        if (isRunning)
+        {
+            Run();
+        }
+        else
+        {
+            Walk();
+        }
+    }
+
+    void Walk()
+    {
         agent.isStopped = false;
-        agent.speed = movementSpeed;
+        agent.speed = walkSpeed;
         agent.SetDestination(target.transform.position);
-        animate.SetAnimatorTrigger("Move");
+        animate.SetAnimatorTrigger("Walk");
+    }
+
+    void Run()
+    {
+        agent.isStopped = false;
+        agent.speed = RunSpeed;
+        agent.SetDestination(target.transform.position);
+        animate.SetAnimatorTrigger("Run");
     }
 
     void Attack()
     {
-        agent.isStopped = true;
-        attackTimer = UpdateTimer(attackTimer, attackInterval);
-        if (attackTimer == 0)
+        attackCastTimeTimer = UpdateTimer(attackCastTimeTimer, attackCastTime);
+        if (attackCastTimeTimer == 0)
         {
+            agent.isStopped = true;
             animate.SetAnimatorTrigger("Attack");
+            canAttack = false;
             Debug.Log("Attack");
-            // if collision do damage
-        }
-        else
-        {
-            animate.SetAnimatorTrigger("Idle");
+            // if collision do damages
         }
     }
 
@@ -124,7 +157,7 @@ public class Zombie_Network : NetworkBehaviour
         animate.SetAnimatorTrigger("FallBack");
         agent.isStopped = true;
         gameObject.GetComponent<CapsuleCollider>().enabled = false;
-        despawnTimer = UpdateTimer(despawnTimer, despawnInterval);
+        despawnTimer = UpdateTimer(despawnTimer, despawnWaitTime);
         if (despawnTimer == 0)
         {
             Destroy(gameObject);
