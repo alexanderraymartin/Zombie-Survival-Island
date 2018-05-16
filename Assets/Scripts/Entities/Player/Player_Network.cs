@@ -14,8 +14,15 @@ public class Player_Network : NetworkBehaviour
 
     public WeaponManager weaponManager;
     public Camera fpsCam;
-    
+
     private int playerColorID;
+    private bool hasDied;
+
+    [Command]
+    public void CmdTakeDamage(float damage)
+    {
+        GetComponent<Health>().TakeDamage(damage);
+    }
 
     [Command]
     public void CmdDealDamage(GameObject enemy, float damage)
@@ -35,6 +42,20 @@ public class Player_Network : NetworkBehaviour
         RpcHitEffect(position, normal);
     }
 
+    [Command]
+    public void CmdPlayerDeath()
+    {
+        PlayerDeath();
+        RpcPlayerDeath();
+    }
+
+    [Command]
+    public void CmdRespawn(Vector3 spawnPosition)
+    {
+        Respawn(spawnPosition);
+        RpcRespawn(spawnPosition);
+    }
+
     public override void OnStartLocalPlayer()
     {
         GetComponent<FirstPersonController>().enabled = true;
@@ -42,6 +63,7 @@ public class Player_Network : NetworkBehaviour
         firstPersonCharacter.GetComponent<AudioListener>().enabled = true;
         firstPersonCharacter.GetComponent<FlareLayer>().enabled = true;
         CmdSetPlayerModel();
+        hasDied = false;
     }
 
     void Start()
@@ -56,6 +78,7 @@ public class Player_Network : NetworkBehaviour
             return;
         }
         HandleInput();
+        CheckIfAlive();
     }
 
     [Command]
@@ -63,6 +86,7 @@ public class Player_Network : NetworkBehaviour
     {
         int id = GameManager.instance.GetNextPlayerColorID();
         playerColorID = id;
+        SetPlayerModel();
         RpcSetPlayerModel(id);
     }
 
@@ -79,12 +103,17 @@ public class Player_Network : NetworkBehaviour
         {
             go.SetActive(false);
         }
-        
+
         characterModels[playerColorID].SetActive(true);
     }
 
     void HandleInput()
     {
+        if (!GetComponent<Health>().isAlive)
+        {
+            return;
+        }
+
         // Attempt to use active weapon
         if (Input.GetButtonDown("Fire1") && weaponManager.GetActiveWeapon() != null)
         {
@@ -109,6 +138,39 @@ public class Player_Network : NetworkBehaviour
             Debug.Log("Attempting to drop...");
             weaponManager.CmdUnequipWeapon();
         }
+    }
+
+    void CheckIfAlive()
+    {
+        if (!GetComponent<Health>().isAlive && !hasDied)
+        {
+            CmdPlayerDeath();
+        }
+    }
+
+    [ClientRpc]
+    void RpcPlayerDeath()
+    {
+        PlayerDeath();
+    }
+
+    void PlayerDeath()
+    {
+        Debug.Log("Player died");
+        hasDied = true;
+    }
+
+    [ClientRpc]
+    void RpcRespawn(Vector3 spawnPosition)
+    {
+        Respawn(spawnPosition);
+    }
+
+    void Respawn(Vector3 spawnPosition)
+    {
+        hasDied = false;
+        GetComponent<Health>().Revive();
+        Debug.Log("Player revived");
     }
 
     GameObject GetItemFromRayCast()
