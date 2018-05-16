@@ -71,7 +71,7 @@ public class Player_Network : NetworkBehaviour
 
     void Update()
     {
-        if (!isLocalPlayer)
+        if (!isLocalPlayer || !GetComponent<Health>().isAlive)
         {
             return;
         }
