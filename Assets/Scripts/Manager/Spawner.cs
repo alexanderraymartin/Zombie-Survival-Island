@@ -39,6 +39,7 @@ public class Spawner : NetworkBehaviour
         SpawnGun(new Vector3(25, 10, 0));
     }
 
+    [ServerCallback]
     void Update()
     {
         if (zombiesAlive == 0)
