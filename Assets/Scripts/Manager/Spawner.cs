@@ -7,10 +7,16 @@ public class Spawner : NetworkBehaviour
 {
     public static Spawner instance = null;
 
+    public int wave = 0;
+    public int maxZombies = 0;
+    public int downtime = 5;
+    public int betweenSpawnsTime = 3;
+    public int zombiesAlive = 0;
+
     public GameObject playerPrefab;
     public GameObject zombiePrefab;
     public GameObject gunPrefab;
-   
+
     [ServerCallback]
     void Start()
     {
@@ -25,10 +31,6 @@ public class Spawner : NetworkBehaviour
 
         DontDestroyOnLoad(gameObject);
 
-        SpawnZombie(new Vector3(0, 0, 0));
-        SpawnZombie(new Vector3(5, 0, 10));
-        SpawnZombie(new Vector3(15, 0, 0));
-
         SpawnGun(new Vector3(0, 10, 0));
         SpawnGun(new Vector3(5, 10, 0));
         SpawnGun(new Vector3(10, 10, 0));
@@ -37,9 +39,50 @@ public class Spawner : NetworkBehaviour
         SpawnGun(new Vector3(25, 10, 0));
     }
 
+    [ServerCallback]
     void Update()
     {
+        if (zombiesAlive == 0)
+        {
+            incrementWave();
+        }
+    }
 
+    [ServerCallback]
+    void incrementWave()
+    {
+        wave = wave + 1;
+        maxZombies += (int)Mathf.Log(wave * 10, 2f);
+        zombiesAlive = maxZombies;
+        Debug.Log("Starting Wave: " + wave);
+        Debug.Log("Max Zombies: " + maxZombies);
+        RespawnPlayers();
+        StartCoroutine(spawnWave());
+    }
+
+    void RespawnPlayers()
+    {
+        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+
+        for (int i = 0; i < players.Length; i++)
+        {
+            if (!players[i].GetComponent<Health>().isAlive)
+            {
+                Debug.Log("Respawning player: " + players[i].name);
+                // TODO: add respawn points
+                players[i].GetComponent<Player_Network>().CmdRespawn(new Vector3(10.0f, 10.0f, 10.0f));
+            }
+        }
+    }
+
+    IEnumerator spawnWave()
+    {
+        yield return new WaitForSeconds(downtime);
+        for (int i = 0; i < maxZombies; i++)
+        {
+            SpawnZombie(new Vector3(0, 0, 0));
+            yield return new WaitForSeconds(betweenSpawnsTime);
+        }
     }
 
     void SpawnZombie(Vector3 position)

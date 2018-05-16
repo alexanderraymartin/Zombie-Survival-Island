@@ -14,6 +14,11 @@ public class GameManager : NetworkBehaviour
 
     public int GetNextPlayerColorID()
     {
+        // Just to be safe - return first colorID if out of colorIDs
+        if(playerColorIDs.Count == 0)
+        {
+            return 0;
+        }
         int id = playerColorIDs[0];
         playerColorIDs.RemoveAt(0);
         return id;

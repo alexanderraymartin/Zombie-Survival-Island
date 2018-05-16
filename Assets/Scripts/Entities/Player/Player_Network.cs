@@ -169,6 +169,7 @@ public class Player_Network : NetworkBehaviour
     void Respawn(Vector3 spawnPosition)
     {
         hasDied = false;
+        transform.SetPositionAndRotation(spawnPosition, Quaternion.identity);
         GetComponent<Health>().Revive();
         Debug.Log("Player revived");
     }
