@@ -16,7 +16,7 @@ public class Spawner : NetworkBehaviour
     public GameObject playerPrefab;
     public GameObject zombiePrefab;
     public GameObject gunPrefab;
-   
+
     [ServerCallback]
     void Start()
     {
@@ -56,8 +56,23 @@ public class Spawner : NetworkBehaviour
         zombiesAlive = maxZombies;
         Debug.Log("Starting Wave: " + wave);
         Debug.Log("Max Zombies: " + maxZombies);
-
+        RespawnPlayers();
         StartCoroutine(spawnWave());
+    }
+
+    void RespawnPlayers()
+    {
+        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+
+        for (int i = 0; i < players.Length; i++)
+        {
+            if (!players[i].GetComponent<Health>().isAlive)
+            {
+                Debug.Log("Respawning player: " + players[i].name);
+                // TODO: add respawn points
+                players[i].GetComponent<Player_Network>().CmdRespawn(new Vector3(10.0f, 10.0f, 10.0f));
+            }
+        }
     }
 
     IEnumerator spawnWave()
