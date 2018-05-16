@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 114999942910836368}
   m_Layer: 0
   m_Name: Spawner
-  m_TagString: Untagged
+  m_TagString: Spawner
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -84,6 +84,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52f0f13fe69053b4391cfc2aed909b50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  wave: 0
+  maxZombies: 0
+  downtime: 10
+  betweenSpawnsTime: 3
+  zombiesAlive: 0
   playerPrefab: {fileID: 1166497252743736, guid: 465de3c97d94c064ca9e1a9eecf7b4df,
     type: 2}
   zombiePrefab: {fileID: 1738034817906532, guid: a47e386d387117444aaf58f8776af047,
