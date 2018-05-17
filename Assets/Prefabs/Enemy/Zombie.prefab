@@ -1346,7 +1346,7 @@ MonoBehaviour:
   target: {fileID: 0}
   damage: 25
   attackRadius: 2
-  movementSpeed: 2
+  movementSpeed: 5
   rotationSpeed: 5
   findTargetInterval: 5
   despawnInterval: 5
