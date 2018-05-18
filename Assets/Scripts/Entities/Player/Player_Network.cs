@@ -127,13 +127,10 @@ public class Player_Network : NetworkBehaviour
             return;
         }
 
-        // Attempt to use active weapon
-        if (Input.GetButtonDown("Fire1") && weaponManager.GetActiveWeapon() != null)
-        {
-            weaponManager.GetActiveWeapon().GetComponent<Gun>().Shoot();
-        }
+        HandleShootingInput();
+
         // Attempt to cycle through weapons
-        else if (Input.GetButtonDown("Change Weapon"))
+        if (Input.GetButtonDown("Change Weapon"))
         {
             weaponManager.CmdChangeWeapons();
         }
@@ -146,6 +143,32 @@ public class Player_Network : NetworkBehaviour
         else if (Input.GetButtonDown("Drop Item"))
         {
             weaponManager.CmdUnequipWeapon();
+        }
+    }
+
+    void HandleShootingInput()
+    {
+        // Attempt to use active weapon
+        GameObject gun = weaponManager.GetActiveWeapon();
+        if (gun == null)
+        {
+            return;
+        }
+        // Gun is automatic
+        if (gun.GetComponent<Gun>().isAuto)
+        {
+            if (Input.GetButton("Fire1"))
+            {
+                weaponManager.GetActiveWeapon().GetComponent<Gun>().Shoot();
+            }
+        }
+        // Gun is semi-automatic
+        else
+        {
+            if (Input.GetButtonDown("Fire1"))
+            {
+                weaponManager.GetActiveWeapon().GetComponent<Gun>().Shoot();
+            }
         }
     }
 

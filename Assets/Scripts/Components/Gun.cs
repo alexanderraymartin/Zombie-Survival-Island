@@ -12,6 +12,8 @@ public class Gun : NetworkBehaviour
 
     [SyncVar]
     public float rateOfFire;
+    public bool isAuto;
+
     [SyncVar]
     public float damage;
     [SyncVar]
@@ -35,6 +37,8 @@ public class Gun : NetworkBehaviour
     [SyncVar]
     private bool isReloading = false;
 
+    private float nextTimeToFire = 0;
+
     [HideInInspector]
     public GameObject cam;
 
@@ -49,11 +53,31 @@ public class Gun : NetworkBehaviour
         reserveAmmo = reserveMaxAmmo;
     }
 
+    [Client]
+    void Update()
+    {
+        // Attempt to use active weapon
+        if (Input.GetButtonDown("Fire1") && gunOwner != null)
+        {
+            //weaponManager.GetActiveWeapon().GetComponent<Gun>().Shoot();
+        }
+    }
+
 
     [Client]
     public void Shoot()
     {
         if (gunOwner == null || isReloading)
+        {
+            return;
+        }
+
+        // Limit rate of fire
+        if (Time.time >= nextTimeToFire)
+        {
+            nextTimeToFire = Time.time + 1.0f / rateOfFire;
+        }
+        else
         {
             return;
         }
@@ -89,7 +113,7 @@ public class Gun : NetworkBehaviour
             }
         }
     }
-    
+
     public IEnumerator Reload()
     {
         // If no ammo
