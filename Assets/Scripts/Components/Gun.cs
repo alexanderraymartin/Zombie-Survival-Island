@@ -34,8 +34,9 @@ public class Gun : NetworkBehaviour
     [SyncVar]
     private int reserveAmmo;
 
+    [HideInInspector]
     [SyncVar]
-    private bool isReloading = false;
+    public bool isReloading = false;
 
     private float nextTimeToFire = 0;
 
@@ -51,6 +52,11 @@ public class Gun : NetworkBehaviour
     {
         clipAmmo = clipMaxAmmo;
         reserveAmmo = reserveMaxAmmo;
+    }
+
+    void OnEnable()
+    {
+        isReloading = false;
     }
 
     [Client]
@@ -111,7 +117,14 @@ public class Gun : NetworkBehaviour
         // If no ammo
         if (reserveAmmo <= 0)
         {
-            Debug.Log("Out of ammo!");
+            Debug.Log("Out of ammo");
+            yield break;
+        }
+
+        // If full ammo
+        if (clipAmmo == clipMaxAmmo)
+        {
+            Debug.Log("Already full ammo");
             yield break;
         }
 

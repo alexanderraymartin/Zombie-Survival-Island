@@ -129,6 +129,11 @@ public class Player_Network : NetworkBehaviour
 
         HandleShootingInput();
 
+        // Attempt to reload
+        if (Input.GetButtonDown("Reload"))
+        {
+            CmdReloadGun(weaponManager.GetActiveWeapon());
+        }
         // Attempt to cycle through weapons
         if (Input.GetButtonDown("Change Weapon"))
         {
@@ -244,6 +249,9 @@ public class Player_Network : NetworkBehaviour
 
     void ReloadGun(GameObject gun)
     {
-        StartCoroutine(gun.GetComponent<Gun>().Reload());
+        if (gun != null && !gun.GetComponent<Gun>().isReloading)
+        {
+            StartCoroutine(gun.GetComponent<Gun>().Reload());
+        }
     }
 }
