@@ -54,17 +54,6 @@ public class Gun : NetworkBehaviour
     }
 
     [Client]
-    void Update()
-    {
-        // Attempt to use active weapon
-        if (Input.GetButtonDown("Fire1") && gunOwner != null)
-        {
-            //weaponManager.GetActiveWeapon().GetComponent<Gun>().Shoot();
-        }
-    }
-
-
-    [Client]
     public void Shoot()
     {
         if (gunOwner == null || isReloading)
@@ -82,6 +71,7 @@ public class Gun : NetworkBehaviour
             return;
         }
 
+        // Out of clip ammo
         if (clipAmmo <= 0)
         {
             // Attempt reload here
@@ -89,11 +79,13 @@ public class Gun : NetworkBehaviour
             return;
         }
 
+        // Decrease clip ammo by 1 bullet
         clipAmmo -= 1;
 
         // Play shooting sound
         gunOwner.soundManager.CmdPlaySound(shootingSoundIndex, transform.position, 0.15f);
 
+        // Show muzzle flash
         gunOwner.CmdMuzzleFlash();
         RaycastHit[] hits = Physics.RaycastAll(cam.transform.position, cam.transform.forward, range);
 
