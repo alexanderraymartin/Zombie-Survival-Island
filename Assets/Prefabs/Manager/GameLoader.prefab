@@ -53,6 +53,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameManager: {fileID: 1526401654730166, guid: a11c1440af039cc468aae6cce4beab3c,
     type: 2}
-  soundManager: {fileID: 1246296975123128, guid: b5cdde23fac63e344846e8b0550a7cf8,
-    type: 2}
   spawner: {fileID: 1301948243246986, guid: 7efc53bce7426a744b93941ce5d9d5a7, type: 2}
+  gatewayManager: {fileID: 0}

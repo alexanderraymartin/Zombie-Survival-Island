@@ -755,7 +755,7 @@ Transform:
   m_Father: {fileID: 4160946467390164}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &4129669783396570
+--- !u!4 &4129669783396570 
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
