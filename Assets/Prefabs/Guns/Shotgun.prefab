@@ -265,11 +265,12 @@ MonoBehaviour:
   rateOfFire: 2
   isAuto: 0
   damage: 50
-  range: 100
+  range: 20
   bulletPenetration: 80
   reloadTime: 2
   clipMaxAmmo: 4
   reserveMaxAmmo: 20
+  isReloading: 0
   cam: {fileID: 0}
   gunOwner: {fileID: 0}
 --- !u!114 &114572694688999070
