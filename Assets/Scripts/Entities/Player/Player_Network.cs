@@ -45,14 +45,12 @@ public class Player_Network : NetworkBehaviour
     [Command]
     public void CmdPlayerDeath()
     {
-        PlayerDeath();
         RpcPlayerDeath();
     }
 
     [Command]
     public void CmdRespawn(Vector3 spawnPosition)
     {
-        Respawn(spawnPosition);
         RpcRespawn(spawnPosition);
     }
 
@@ -86,7 +84,6 @@ public class Player_Network : NetworkBehaviour
     {
         int id = GameManager.instance.GetNextPlayerColorID();
         playerColorID = id;
-        SetPlayerModel();
         RpcSetPlayerModel(id);
     }
 
@@ -117,25 +114,21 @@ public class Player_Network : NetworkBehaviour
         // Attempt to use active weapon
         if (Input.GetButtonDown("Fire1") && weaponManager.GetActiveWeapon() != null)
         {
-            Debug.Log("Attempting to shoot...");
             weaponManager.GetActiveWeapon().GetComponent<Gun>().Shoot();
         }
         // Attempt to cycle through weapons
         else if (Input.GetButtonDown("Change Weapon"))
         {
-            Debug.Log("Attempting to change weapons...");
             weaponManager.CmdChangeWeapons();
         }
         // Attempt to pick up a weapon
         else if (Input.GetButtonDown("Pickup Item"))
         {
-            Debug.Log("Attempting to pickup...");
             weaponManager.CmdEquipWeapon(GetItemFromRayCast());
         }
         // Attempt to drop a weapon
         else if (Input.GetButtonDown("Drop Item"))
         {
-            Debug.Log("Attempting to drop...");
             weaponManager.CmdUnequipWeapon();
         }
     }
@@ -156,7 +149,6 @@ public class Player_Network : NetworkBehaviour
 
     void PlayerDeath()
     {
-        Debug.Log("Player died");
         hasDied = true;
     }
 
@@ -171,7 +163,6 @@ public class Player_Network : NetworkBehaviour
         hasDied = false;
         transform.SetPositionAndRotation(spawnPosition, Quaternion.identity);
         GetComponent<Health>().Revive();
-        Debug.Log("Player revived");
     }
 
     GameObject GetItemFromRayCast()
