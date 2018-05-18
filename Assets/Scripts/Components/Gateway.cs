@@ -7,10 +7,10 @@ public class Gateway : MonoBehaviour
     public bool isOpen = false;
     private bool isOpening = false;
 
-    // Use this for initialization
-    void Start()
+    public void OpenGateway()
     {
-
+        Debug.Log("Opening Gateway!");
+        GetComponent<Gateway>().StartAnimation();
     }
 
     public void StartAnimation()

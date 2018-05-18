@@ -73,7 +73,7 @@ public class Player_Network : NetworkBehaviour
     [Command]
     public void CmdOpenGateway(GameObject gateway)
     {
-        GatewayManager.instance.RpcOpenGateway(gateway);
+        RpcOpenGateway(gateway);
     }
 
     public override void OnStartLocalPlayer()
@@ -270,5 +270,11 @@ public class Player_Network : NetworkBehaviour
         {
             StartCoroutine(gun.GetComponent<Gun>().Reload());
         }
+    }
+
+    [ClientRpc]
+    void RpcOpenGateway(GameObject gateway)
+    {
+        gateway.GetComponent<Gateway>().OpenGateway();
     }
 }

@@ -54,5 +54,4 @@ MonoBehaviour:
   gameManager: {fileID: 1526401654730166, guid: a11c1440af039cc468aae6cce4beab3c,
     type: 2}
   spawner: {fileID: 1301948243246986, guid: 7efc53bce7426a744b93941ce5d9d5a7, type: 2}
-  gatewayManager: {fileID: 1084840133547136, guid: a21414044ea0f9f42972892ded465a43,
-    type: 2}
+  gatewayManager: {fileID: 0}
