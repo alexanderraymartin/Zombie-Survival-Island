@@ -1330,6 +1330,7 @@ GameObject:
   - component: {fileID: 114441485751950202}
   - component: {fileID: 114718753514751162}
   - component: {fileID: 114174255922811968}
+  - component: {fileID: 114286803182274046}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -3678,6 +3679,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponHolder: {fileID: 1798332243346810}
   maxWeapons: 2
+--- !u!114 &114286803182274046
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1785911747235186}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c364056d6c526794486fe3d21b2b12ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sounds:
+  - {fileID: 8300000, guid: 1b145bcffd767854fb0c71c37678ebaa, type: 3}
+  - {fileID: 8300000, guid: 406c929b7299afb469c82778f8d15d5b, type: 3}
 --- !u!114 &114441485751950202
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3698,8 +3713,9 @@ MonoBehaviour:
   - {fileID: 1081438485324852}
   - {fileID: 1509424902892720}
   pickupRange: 5
-  weaponManager: {fileID: 114174255922811968}
   fpsCam: {fileID: 20517752726960712}
+  weaponManager: {fileID: 114174255922811968}
+  soundManager: {fileID: 0}
 --- !u!114 &114585683164256948
 MonoBehaviour:
   m_ObjectHideFlags: 1

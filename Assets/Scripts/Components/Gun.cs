@@ -41,12 +41,12 @@ public class Gun : NetworkBehaviour
             // TODO
 
             // Play reloading sound
-            SoundManager.instance.CmdPlaySound(1, transform.position, 0.25f);
+            gunOwner.soundManager.CmdPlaySound(1, transform.position, 0.15f);
             return;
         }
 
         // Play shooting sound
-        SoundManager.instance.CmdPlaySound(0, transform.position, 0.25f);
+        gunOwner.soundManager.CmdPlaySound(0, transform.position, 0.15f);
 
         gunOwner.CmdMuzzleFlash();
         RaycastHit[] hits = Physics.RaycastAll(cam.transform.position, cam.transform.forward, range);

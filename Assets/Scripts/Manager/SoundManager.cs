@@ -5,24 +5,7 @@ using UnityEngine.Networking;
 
 public class SoundManager : NetworkBehaviour
 {
-    public static SoundManager instance = null;
-
     public AudioClip[] sounds;
-
-    [ServerCallback]
-    void Awake()
-    {
-        if (instance == null)
-        {
-            instance = this;
-        }
-        else if (instance != this)
-        {
-            Destroy(gameObject);
-        }
-
-        DontDestroyOnLoad(gameObject);
-    }
 
     [Command]
     public void CmdPlaySound(int index, Vector3 location, float volume)

@@ -6,17 +6,27 @@ using UnityStandardAssets.Characters.FirstPerson;
 
 [RequireComponent(typeof(Health))]
 [RequireComponent(typeof(WeaponManager))]
+[RequireComponent(typeof(SoundManager))]
 public class Player_Network : NetworkBehaviour
 {
     public GameObject firstPersonCharacter;
     public GameObject[] characterModels;
     public int pickupRange;
-
-    public WeaponManager weaponManager;
     public Camera fpsCam;
+
+    [HideInInspector]
+    public WeaponManager weaponManager;
+    [HideInInspector]
+    public SoundManager soundManager;
 
     private int playerColorID;
     private bool hasDied;
+
+    void Awake()
+    {
+        weaponManager = GetComponent<WeaponManager>();
+        soundManager = GetComponent<SoundManager>();
+    }
 
     [Command]
     public void CmdTakeDamage(float damage)
