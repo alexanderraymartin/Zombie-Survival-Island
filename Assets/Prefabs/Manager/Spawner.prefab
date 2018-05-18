@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 114999942910836368}
   m_Layer: 0
   m_Name: Spawner
-  m_TagString: Untagged
+  m_TagString: Spawner
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -84,11 +84,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52f0f13fe69053b4391cfc2aed909b50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemySpawns:
-  - {fileID: 1572259997064006, guid: 513d8e6b20abe524c9c2c6edd0557ebd, type: 2}
-  - {fileID: 1196767704414094, guid: 5dc774248d493c948940309b9dfe12b7, type: 2}
-  playerPrefab: {fileID: 1166497252743736, guid: 465de3c97d94c064ca9e1a9eecf7b4df,
+  wave: 0
+  maxZombies: 0
+  downtime: 10
+  betweenSpawnsTime: 3
+  zombiesAlive: 0
+  playerPrefab: {fileID: 1785911747235186, guid: e4c67f56983980b4d8ce164fc863abb1,
     type: 2}
   zombiePrefab: {fileID: 1738034817906532, guid: a47e386d387117444aaf58f8776af047,
     type: 2}
-  gunPrefab: {fileID: 1154259467138764, guid: b984ae2c5755f5f49830ab8f6bd3989c, type: 2}
+  ak47Prefab: {fileID: 1643736623542640, guid: d78334f7dbc999045bc9b3bf89503c2e, type: 2}
+  L96SniperRiflePrefab: {fileID: 1811732089280252, guid: 0285e33a3f37b104ea9de41355ab6832,
+    type: 2}
+  M4CarbinePrefab: {fileID: 1689326312062168, guid: f7b6b35b6c0899e41951a95621356936,
+    type: 2}
+  PistolPrefab: {fileID: 1840547184890504, guid: 2be8b423d7a08b74594ec0f58b990982,
+    type: 2}
+  ShotgunPrefab: {fileID: 1939069594581930, guid: 74ffd197f5548f54d90bc5b51cf34973,
+    type: 2}

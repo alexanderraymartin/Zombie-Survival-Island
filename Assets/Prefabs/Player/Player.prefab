@@ -1330,6 +1330,7 @@ GameObject:
   - component: {fileID: 114441485751950202}
   - component: {fileID: 114718753514751162}
   - component: {fileID: 114174255922811968}
+  - component: {fileID: 114286803182274046}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -3523,9 +3524,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IsWalking: 0
   m_WalkSpeed: 5
-  m_RunSpeed: 10
+  m_RunSpeed: 7
   m_RunstepLenghten: 0.7
-  m_JumpSpeed: 10
+  m_JumpSpeed: 8
   m_StickToGroundForce: 10
   m_GravityMultiplier: 2
   m_MouseLook:
@@ -3678,6 +3679,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponHolder: {fileID: 1798332243346810}
   maxWeapons: 2
+--- !u!114 &114286803182274046
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1785911747235186}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c364056d6c526794486fe3d21b2b12ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sounds:
+  - {fileID: 8300000, guid: 406c929b7299afb469c82778f8d15d5b, type: 3}
+  - {fileID: 8300000, guid: 1b145bcffd767854fb0c71c37678ebaa, type: 3}
+  - {fileID: 8300000, guid: 8581f806dddef8046b4942de05b897be, type: 3}
+  - {fileID: 8300000, guid: be64544bade297e4d872dd74c66256d2, type: 3}
+  - {fileID: 8300000, guid: 1df1429981f76644097c7fd47fc5f239, type: 3}
+  - {fileID: 8300000, guid: fecc3e7a0166a104cb810435f6fdf37b, type: 3}
 --- !u!114 &114441485751950202
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3698,8 +3717,9 @@ MonoBehaviour:
   - {fileID: 1081438485324852}
   - {fileID: 1509424902892720}
   pickupRange: 5
-  weaponManager: {fileID: 114174255922811968}
   fpsCam: {fileID: 20517752726960712}
+  weaponManager: {fileID: 114174255922811968}
+  soundManager: {fileID: 0}
 --- !u!114 &114585683164256948
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -6484,7 +6504,7 @@ CharacterController:
   m_Enabled: 1
   serializedVersion: 2
   m_Height: 1.75
-  m_Radius: 0.3
+  m_Radius: 0.5
   m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
@@ -6499,7 +6519,7 @@ NavMeshObstacle:
   m_Enabled: 1
   serializedVersion: 3
   m_Shape: 0
-  m_Extents: {x: 0.3, y: 0.875, z: 0.3}
+  m_Extents: {x: 0.5, y: 0.875, z: 0.5}
   m_MoveThreshold: 0.1
   m_Carve: 0
   m_CarveOnlyStationary: 1
