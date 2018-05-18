@@ -104,7 +104,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1643736623542640}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.971, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4244423912030300}
@@ -145,7 +145,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1233860440072514}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.05, z: 0.6}
+  m_LocalPosition: {x: 0, y: 0.034, z: 0.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4889839392126194}
@@ -256,6 +256,7 @@ MonoBehaviour:
   reloadTime: 2
   clipMaxAmmo: 20
   reserveMaxAmmo: 80
+  isReloading: 0
   cam: {fileID: 0}
   gunOwner: {fileID: 0}
 --- !u!114 &114067260936263098
