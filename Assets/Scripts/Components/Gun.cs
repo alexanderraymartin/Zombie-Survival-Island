@@ -130,7 +130,7 @@ public class Gun : NetworkBehaviour
 
         isReloading = true;
         // Play reloading sound
-        gunOwner.soundManager.CmdPlaySound(reloadingSoundIndex, transform.position, 0.15f);
+        gunOwner.soundManager.PlaySound(reloadingSoundIndex, transform.position, 0.15f);
 
         Debug.Log("Reloading...");
 

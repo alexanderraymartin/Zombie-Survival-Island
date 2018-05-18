@@ -14,12 +14,12 @@ public class SoundManager : NetworkBehaviour
     }
 
     [ClientRpc]
-    void RpcPlaySound(int index, Vector3 location, float volume)
+    public void RpcPlaySound(int index, Vector3 location, float volume)
     {
         PlaySound(index, location, volume);
     }
 
-    void PlaySound(int index, Vector3 location, float volume)
+    public void PlaySound(int index, Vector3 location, float volume)
     {
         if (index < sounds.Length)
         {
