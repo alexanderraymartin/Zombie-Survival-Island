@@ -77,11 +77,8 @@ public class Gun : NetworkBehaviour
             return;
         }
 
-        // Out of clip ammo
-        if (clipAmmo <= 0)
+        if (CheckForReload())
         {
-            // Attempt reload here
-            gunOwner.CmdReloadGun(gameObject);
             return;
         }
 
@@ -110,6 +107,8 @@ public class Gun : NetworkBehaviour
                 Debug.Log(hits[i].transform.gameObject.GetComponent<Health>().currentHealth);
             }
         }
+
+        CheckForReload();
     }
 
     public IEnumerator Reload()
@@ -141,5 +140,17 @@ public class Gun : NetworkBehaviour
         clipAmmo = Mathf.Min(clipMaxAmmo, reserveAmmo + oldAmmoCount);
         reserveAmmo = Mathf.Max(reserveAmmo + oldAmmoCount - clipMaxAmmo, 0);
         isReloading = false;
+    }
+
+    bool CheckForReload()
+    {
+        // Out of clip ammo
+        if (clipAmmo <= 0)
+        {
+            // Attempt reload here
+            gunOwner.CmdReloadGun(gameObject);
+            return true;
+        }
+        return false;
     }
 }
