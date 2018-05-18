@@ -7,8 +7,8 @@ using UnityEngine.Networking;
 [RequireComponent(typeof(WeaponGraphics))]
 public class Gun : NetworkBehaviour
 {
-    public int shootingSoundIndex;
     public int reloadingSoundIndex;
+    public int shootingSoundIndex;
 
     [SyncVar]
     public float rateOfFire;

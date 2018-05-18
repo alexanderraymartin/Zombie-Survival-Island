@@ -3691,8 +3691,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sounds:
-  - {fileID: 8300000, guid: 1b145bcffd767854fb0c71c37678ebaa, type: 3}
   - {fileID: 8300000, guid: 406c929b7299afb469c82778f8d15d5b, type: 3}
+  - {fileID: 8300000, guid: 1b145bcffd767854fb0c71c37678ebaa, type: 3}
+  - {fileID: 8300000, guid: 8581f806dddef8046b4942de05b897be, type: 3}
+  - {fileID: 8300000, guid: be64544bade297e4d872dd74c66256d2, type: 3}
+  - {fileID: 8300000, guid: 1df1429981f76644097c7fd47fc5f239, type: 3}
+  - {fileID: 8300000, guid: fecc3e7a0166a104cb810435f6fdf37b, type: 3}
 --- !u!114 &114441485751950202
 MonoBehaviour:
   m_ObjectHideFlags: 1
