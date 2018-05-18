@@ -19,7 +19,8 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4039834978118256}
-  - component: {fileID: 114271550137612382}
+  - component: {fileID: 114010948270444894}
+  - component: {fileID: 114097567130730418}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -40,7 +41,39 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114271550137612382
+--- !u!114 &114010948270444894
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1526401654730166}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: 870353891bb340e2b2a9c8707e7419ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 161
+    i1: 28
+    i2: 20
+    i3: 64
+    i4: 175
+    i5: 3
+    i6: 156
+    i7: 196
+    i8: 104
+    i9: 170
+    i10: 230
+    i11: 204
+    i12: 228
+    i13: 190
+    i14: 171
+    i15: 60
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0
+--- !u!114 &114097567130730418
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -51,3 +84,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3435e7ef96afc5342a150c3c3b83c63f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerColorIDs: 

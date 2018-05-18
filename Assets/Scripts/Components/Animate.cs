@@ -6,7 +6,8 @@ using UnityEngine.UI;
 
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(NetworkAnimator))]
-public class Animate : NetworkBehaviour {
+public class Animate : NetworkBehaviour
+{
 
     private Animator animator;
     private NetworkAnimator networkAnimator;
@@ -15,6 +16,20 @@ public class Animate : NetworkBehaviour {
     {
         animator.SetTrigger(name);
         networkAnimator.SetTrigger(name);
+    }
+
+    public void SetAnimatorBool(string name, bool value)
+    {
+        ClearAnimator();
+        animator.SetBool(name, value);
+    }
+
+    public void ClearAnimator()
+    {
+        foreach (AnimatorControllerParameter parameter in animator.parameters)
+        {
+            animator.SetBool(parameter.name, false);
+        }
     }
 
     [ServerCallback]

@@ -89,8 +89,16 @@ MonoBehaviour:
   downtime: 10
   betweenSpawnsTime: 3
   zombiesAlive: 0
-  playerPrefab: {fileID: 1166497252743736, guid: 465de3c97d94c064ca9e1a9eecf7b4df,
+  playerPrefab: {fileID: 1785911747235186, guid: e4c67f56983980b4d8ce164fc863abb1,
     type: 2}
   zombiePrefab: {fileID: 1738034817906532, guid: a47e386d387117444aaf58f8776af047,
     type: 2}
-  gunPrefab: {fileID: 1154259467138764, guid: b984ae2c5755f5f49830ab8f6bd3989c, type: 2}
+  ak47Prefab: {fileID: 1643736623542640, guid: d78334f7dbc999045bc9b3bf89503c2e, type: 2}
+  L96SniperRiflePrefab: {fileID: 1811732089280252, guid: 0285e33a3f37b104ea9de41355ab6832,
+    type: 2}
+  M4CarbinePrefab: {fileID: 1689326312062168, guid: f7b6b35b6c0899e41951a95621356936,
+    type: 2}
+  PistolPrefab: {fileID: 1840547184890504, guid: 2be8b423d7a08b74594ec0f58b990982,
+    type: 2}
+  ShotgunPrefab: {fileID: 1939069594581930, guid: 74ffd197f5548f54d90bc5b51cf34973,
+    type: 2}

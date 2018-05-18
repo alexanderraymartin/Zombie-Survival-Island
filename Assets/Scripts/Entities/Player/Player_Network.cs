@@ -6,17 +6,27 @@ using UnityStandardAssets.Characters.FirstPerson;
 
 [RequireComponent(typeof(Health))]
 [RequireComponent(typeof(WeaponManager))]
+[RequireComponent(typeof(SoundManager))]
 public class Player_Network : NetworkBehaviour
 {
     public GameObject firstPersonCharacter;
     public GameObject[] characterModels;
     public int pickupRange;
-
-    public WeaponManager weaponManager;
     public Camera fpsCam;
+
+    [HideInInspector]
+    public WeaponManager weaponManager;
+    [HideInInspector]
+    public SoundManager soundManager;
 
     private int playerColorID;
     private bool hasDied;
+
+    void Awake()
+    {
+        weaponManager = GetComponent<WeaponManager>();
+        soundManager = GetComponent<SoundManager>();
+    }
 
     [Command]
     public void CmdTakeDamage(float damage)
@@ -45,15 +55,19 @@ public class Player_Network : NetworkBehaviour
     [Command]
     public void CmdPlayerDeath()
     {
-        PlayerDeath();
         RpcPlayerDeath();
     }
 
     [Command]
     public void CmdRespawn(Vector3 spawnPosition)
     {
-        Respawn(spawnPosition);
         RpcRespawn(spawnPosition);
+    }
+
+    [Command]
+    public void CmdReloadGun(GameObject gun)
+    {
+        RpcReloadGun(gun);
     }
 
     public override void OnStartLocalPlayer()
@@ -86,7 +100,6 @@ public class Player_Network : NetworkBehaviour
     {
         int id = GameManager.instance.GetNextPlayerColorID();
         playerColorID = id;
-        SetPlayerModel();
         RpcSetPlayerModel(id);
     }
 
@@ -114,29 +127,53 @@ public class Player_Network : NetworkBehaviour
             return;
         }
 
-        // Attempt to use active weapon
-        if (Input.GetButtonDown("Fire1") && weaponManager.GetActiveWeapon() != null)
+        HandleShootingInput();
+
+        // Attempt to reload
+        if (Input.GetButtonDown("Reload"))
         {
-            Debug.Log("Attempting to shoot...");
-            weaponManager.GetActiveWeapon().GetComponent<Gun>().Shoot();
+            CmdReloadGun(weaponManager.GetActiveWeapon());
         }
         // Attempt to cycle through weapons
-        else if (Input.GetButtonDown("Change Weapon"))
+        if (Input.GetButtonDown("Change Weapon"))
         {
-            Debug.Log("Attempting to change weapons...");
             weaponManager.CmdChangeWeapons();
         }
         // Attempt to pick up a weapon
         else if (Input.GetButtonDown("Pickup Item"))
         {
-            Debug.Log("Attempting to pickup...");
             weaponManager.CmdEquipWeapon(GetItemFromRayCast());
         }
         // Attempt to drop a weapon
         else if (Input.GetButtonDown("Drop Item"))
         {
-            Debug.Log("Attempting to drop...");
             weaponManager.CmdUnequipWeapon();
+        }
+    }
+
+    void HandleShootingInput()
+    {
+        // Attempt to use active weapon
+        GameObject gun = weaponManager.GetActiveWeapon();
+        if (gun == null)
+        {
+            return;
+        }
+        // Gun is automatic
+        if (gun.GetComponent<Gun>().isAuto)
+        {
+            if (Input.GetButton("Fire1"))
+            {
+                weaponManager.GetActiveWeapon().GetComponent<Gun>().Shoot();
+            }
+        }
+        // Gun is semi-automatic
+        else
+        {
+            if (Input.GetButtonDown("Fire1"))
+            {
+                weaponManager.GetActiveWeapon().GetComponent<Gun>().Shoot();
+            }
         }
     }
 
@@ -156,7 +193,6 @@ public class Player_Network : NetworkBehaviour
 
     void PlayerDeath()
     {
-        Debug.Log("Player died");
         hasDied = true;
     }
 
@@ -171,7 +207,6 @@ public class Player_Network : NetworkBehaviour
         hasDied = false;
         transform.SetPositionAndRotation(spawnPosition, Quaternion.identity);
         GetComponent<Health>().Revive();
-        Debug.Log("Player revived");
     }
 
     GameObject GetItemFromRayCast()
@@ -204,5 +239,19 @@ public class Player_Network : NetworkBehaviour
         // Replace with object pooling
         GameObject instance = Instantiate(weaponManager.GetActiveWeapon().GetComponent<Gun>().gameObject.GetComponent<WeaponGraphics>().hitEffectPrefab, position, Quaternion.LookRotation(normal));
         Destroy(instance, 2f);
+    }
+
+    [ClientRpc]
+    void RpcReloadGun(GameObject gun)
+    {
+        ReloadGun(gun);
+    }
+
+    void ReloadGun(GameObject gun)
+    {
+        if (gun != null && !gun.GetComponent<Gun>().isReloading)
+        {
+            StartCoroutine(gun.GetComponent<Gun>().Reload());
+        }
     }
 }

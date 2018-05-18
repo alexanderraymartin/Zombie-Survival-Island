@@ -136,6 +136,7 @@ public class Zombie_Network : NetworkBehaviour
     {
         agent.isStopped = false;
         agent.speed = 0;
+        animate.ClearAnimator();
     }
 
     void Walk()
@@ -143,7 +144,7 @@ public class Zombie_Network : NetworkBehaviour
         agent.isStopped = false;
         agent.speed = walkSpeed;
         agent.SetDestination(target.transform.position);
-        animate.SetAnimatorTrigger("Walk");
+        animate.SetAnimatorBool("Walking", true);
     }
 
     void Run()
@@ -151,7 +152,7 @@ public class Zombie_Network : NetworkBehaviour
         agent.isStopped = false;
         agent.speed = RunSpeed;
         agent.SetDestination(target.transform.position);
-        animate.SetAnimatorTrigger("Run");
+        animate.SetAnimatorBool("Running", true);
     }
 
     void Attack()

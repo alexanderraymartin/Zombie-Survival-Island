@@ -13,9 +13,16 @@ public class Spawner : NetworkBehaviour
     public int betweenSpawnsTime = 3;
     public int zombiesAlive = 0;
 
+    // Player
     public GameObject playerPrefab;
+    // Zombie
     public GameObject zombiePrefab;
-    public GameObject gunPrefab;
+    // Guns
+    public GameObject ak47Prefab;
+    public GameObject L96SniperRiflePrefab;
+    public GameObject M4CarbinePrefab;
+    public GameObject PistolPrefab;
+    public GameObject ShotgunPrefab;
 
     [ServerCallback]
     void Start()
@@ -31,12 +38,17 @@ public class Spawner : NetworkBehaviour
 
         DontDestroyOnLoad(gameObject);
 
-        SpawnGun(new Vector3(0, 10, 0));
-        SpawnGun(new Vector3(5, 10, 0));
-        SpawnGun(new Vector3(10, 10, 0));
-        SpawnGun(new Vector3(15, 10, 0));
-        SpawnGun(new Vector3(20, 10, 0));
-        SpawnGun(new Vector3(25, 10, 0));
+        SpawnEntity(new Vector3(0, 15, 0), ak47Prefab);
+        SpawnEntity(new Vector3(5, 15, 0), L96SniperRiflePrefab);
+        SpawnEntity(new Vector3(10, 15, 0), M4CarbinePrefab);
+        SpawnEntity(new Vector3(15, 15, 0), PistolPrefab);
+        SpawnEntity(new Vector3(20, 15, 0), ShotgunPrefab);
+
+        SpawnEntity(new Vector3(0, 10, 0), ak47Prefab);
+        SpawnEntity(new Vector3(5, 10, 0), L96SniperRiflePrefab);
+        SpawnEntity(new Vector3(10, 10, 0), M4CarbinePrefab);
+        SpawnEntity(new Vector3(15, 10, 0), PistolPrefab);
+        SpawnEntity(new Vector3(20, 10, 0), ShotgunPrefab);
     }
 
     [ServerCallback]
@@ -57,7 +69,7 @@ public class Spawner : NetworkBehaviour
         Debug.Log("Starting Wave: " + wave);
         Debug.Log("Max Zombies: " + maxZombies);
         RespawnPlayers();
-        StartCoroutine(spawnWave());
+        StartCoroutine(SpawnWave());
     }
 
     void RespawnPlayers()
@@ -75,26 +87,19 @@ public class Spawner : NetworkBehaviour
         }
     }
 
-    IEnumerator spawnWave()
+    IEnumerator SpawnWave()
     {
         yield return new WaitForSeconds(downtime);
         for (int i = 0; i < maxZombies; i++)
         {
-            SpawnZombie(new Vector3(0, 0, 0));
+            SpawnEntity(new Vector3(0, 0, 0), zombiePrefab);
             yield return new WaitForSeconds(betweenSpawnsTime);
         }
     }
 
-    void SpawnZombie(Vector3 position)
+    void SpawnEntity(Vector3 position, GameObject prefab)
     {
-        GameObject instance = Instantiate(zombiePrefab, position, Quaternion.identity);
-        instance.name = instance.name + position;
-        NetworkServer.Spawn(instance);
-    }
-
-    void SpawnGun(Vector3 position)
-    {
-        GameObject instance = Instantiate(gunPrefab, position, Quaternion.identity);
+        GameObject instance = Instantiate(prefab, position, Quaternion.identity);
         instance.name = instance.name + position;
         NetworkServer.Spawn(instance);
     }
