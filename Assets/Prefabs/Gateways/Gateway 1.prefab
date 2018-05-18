@@ -19,6 +19,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4063992912712322}
+  - component: {fileID: 114827071649620308}
   - component: {fileID: 33916077873045048}
   - component: {fileID: 23138959475352242}
   - component: {fileID: 64156393109335660}
@@ -111,3 +112,35 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isOpen: 0
+--- !u!114 &114827071649620308
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1198221587555824}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: 870353891bb340e2b2a9c8707e7419ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 176
+    i1: 219
+    i2: 48
+    i3: 142
+    i4: 26
+    i5: 92
+    i6: 59
+    i7: 196
+    i8: 251
+    i9: 102
+    i10: 242
+    i11: 155
+    i12: 210
+    i13: 97
+    i14: 16
+    i15: 192
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0

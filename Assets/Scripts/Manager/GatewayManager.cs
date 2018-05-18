@@ -1,37 +1,43 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class GatewayManager : MonoBehaviour {
-
-    public GatewayManager instance = null;
+public class GatewayManager : NetworkBehaviour
+{
+    public static GatewayManager instance = null;
     public GameObject[] beachGateways;
 
-
-
-	// Use this for initialization
-	void Awake () {
+    [ServerCallback]
+    void Awake()
+    {
         if (instance == null)
         {
             instance = this;
-        } else {
+        }
+        else
+        {
             Destroy(gameObject);
         }
 
         DontDestroyOnLoad(gameObject);
-	}
+    }
 
-    public static void openGateway(GameObject gateway) {
-        if (gateway == null || !(gateway.tag == "Gateway")) {
-            return; 
+    [ClientRpc]
+    public void RpcOpenGateway(GameObject gateway)
+    {
+        if (gateway == null || !(gateway.tag == "Gateway"))
+        {
+            return;
         }
 
         Debug.Log("Opening Gateway!");
         gateway.GetComponent<Gateway>().StartAnimation();
     }
-    
-	
-	// Update is called once per frame
-	void Update () {
-	}
+
+
+    // Update is called once per frame
+    void Update()
+    {
+    }
 }

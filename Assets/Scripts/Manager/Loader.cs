@@ -7,6 +7,7 @@ public class Loader : NetworkBehaviour
 {
     public GameObject gameManager;
     public GameObject spawner;
+    public GameObject gatewayManager;
 
     [ServerCallback]
     void Awake()
@@ -18,6 +19,10 @@ public class Loader : NetworkBehaviour
         if (Spawner.instance == null)
         {
             Instantiate(spawner);
+        }
+        if (GatewayManager.instance == null)
+        {
+            Instantiate(gatewayManager);
         }
     }
 

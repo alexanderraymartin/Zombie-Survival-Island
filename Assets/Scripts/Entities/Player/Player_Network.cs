@@ -70,6 +70,12 @@ public class Player_Network : NetworkBehaviour
         RpcReloadGun(gun);
     }
 
+    [Command]
+    public void CmdOpenGateway(GameObject gateway)
+    {
+        GatewayManager.instance.RpcOpenGateway(gateway);
+    }
+
     public override void OnStartLocalPlayer()
     {
         GetComponent<FirstPersonController>().enabled = true;
@@ -145,16 +151,18 @@ public class Player_Network : NetworkBehaviour
             Debug.Log("Attempting to pickup...");
             GameObject objHit = GetItemFromRayCast();
 
-            if (objHit == null) {
+            if (objHit == null)
+            {
                 return;
             }
 
-            switch (objHit.tag) {
+            switch (objHit.tag)
+            {
                 case "Gun":
                     weaponManager.CmdEquipWeapon(objHit);
                     break;
                 case "Gateway":
-                    GatewayManager.openGateway(objHit);
+                    CmdOpenGateway(objHit);
                     break;
             }
         }

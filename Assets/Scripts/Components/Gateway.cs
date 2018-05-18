@@ -2,24 +2,28 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Gateway : MonoBehaviour {
-
+public class Gateway : MonoBehaviour
+{
     public bool isOpen = false;
-    private bool isOpening = false; 
+    private bool isOpening = false;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
+    // Use this for initialization
+    void Start()
+    {
 
-    public void StartAnimation() {
+    }
+
+    public void StartAnimation()
+    {
         gameObject.SetActive(false);
         //StartCoroutine(AnimateGateway());
     }
 
-    private IEnumerator AnimateGateway() {
-        if (isOpen) {
-            yield break; 
+    private IEnumerator AnimateGateway()
+    {
+        if (isOpen)
+        {
+            yield break;
         }
 
         isOpen = true;
@@ -28,9 +32,10 @@ public class Gateway : MonoBehaviour {
         MeshRenderer mesh = GetComponent<MeshRenderer>();
         Color oldColor = mesh.material.color;
 
-        float t = 0.0f; 
+        float t = 0.0f;
 
-       while (t < 1.0f) {
+        while (t < 1.0f)
+        {
             Debug.Log("Still Opening");
             Debug.Log(oldColor.a);
             t += Time.deltaTime;
