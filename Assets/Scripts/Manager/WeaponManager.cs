@@ -11,7 +11,7 @@ public class WeaponManager : NetworkBehaviour
     [SyncVar]
     public int maxWeapons = 2;
 
-    [SyncVar]
+    [SyncVar(hook = "SelectWeapon")]
     private int currentWeaponIndex = -1;
 
     [Command]
@@ -28,8 +28,6 @@ public class WeaponManager : NetworkBehaviour
                 currentWeaponIndex++;
             }
         }
-        SelectWeapon();
-        RpcSelectWeapon();
     }
 
     public GameObject GetActiveWeapon()
@@ -62,9 +60,6 @@ public class WeaponManager : NetworkBehaviour
         RpcEquipWeapon(gun.GetComponent<NetworkIdentity>().netId);
         // Update index of current weapon
         currentWeaponIndex = weaponHolder.transform.childCount - 1;
-        // Update current weapon
-        SelectWeapon();
-        RpcSelectWeapon();
     }
 
     [Command]
@@ -78,9 +73,6 @@ public class WeaponManager : NetworkBehaviour
             RpcUnequipWeapon(gun.GetComponent<NetworkIdentity>().netId);
             // Update index of current weapon
             currentWeaponIndex = weaponHolder.transform.childCount - 1;
-            // Update current weapon
-            SelectWeapon();
-            RpcSelectWeapon();
         }
     }
 
@@ -94,12 +86,6 @@ public class WeaponManager : NetworkBehaviour
     void RpcUnequipWeapon(NetworkInstanceId weaponId)
     {
         UnequipWeapon(weaponId);
-    }
-
-    [ClientRpc]
-    void RpcSelectWeapon()
-    {
-        SelectWeapon();
     }
 
     void EquipWeapon(NetworkInstanceId weaponId)
@@ -124,8 +110,9 @@ public class WeaponManager : NetworkBehaviour
         weapon.SetActive(true);
     }
 
-    void SelectWeapon()
+    void SelectWeapon(int index)
     {
+        currentWeaponIndex = index;
         int i = 0;
         foreach (Transform weapon in weaponHolder.transform)
         {
