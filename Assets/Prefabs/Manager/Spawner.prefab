@@ -89,7 +89,7 @@ MonoBehaviour:
   downtime: 10
   betweenSpawnsTime: 3
   zombiesAlive: 0
-  playerPrefab: {fileID: 1166497252743736, guid: 465de3c97d94c064ca9e1a9eecf7b4df,
+  playerPrefab: {fileID: 1785911747235186, guid: e4c67f56983980b4d8ce164fc863abb1,
     type: 2}
   zombiePrefab: {fileID: 1738034817906532, guid: a47e386d387117444aaf58f8776af047,
     type: 2}
