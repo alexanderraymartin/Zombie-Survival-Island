@@ -57,7 +57,7 @@ public class Spawner : NetworkBehaviour
         Debug.Log("Starting Wave: " + wave);
         Debug.Log("Max Zombies: " + maxZombies);
         RespawnPlayers();
-        StartCoroutine(spawnWave());
+        StartCoroutine(SpawnWave());
     }
 
     void RespawnPlayers()
@@ -75,7 +75,7 @@ public class Spawner : NetworkBehaviour
         }
     }
 
-    IEnumerator spawnWave()
+    IEnumerator SpawnWave()
     {
         yield return new WaitForSeconds(downtime);
         for (int i = 0; i < maxZombies; i++)
