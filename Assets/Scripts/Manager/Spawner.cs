@@ -6,7 +6,6 @@ using UnityEngine.Networking;
 public class Spawner : NetworkBehaviour
 {
     public static Spawner instance = null;
-
     public int wave = 0;
     public int maxZombies = 0;
     public int downtime = 5;

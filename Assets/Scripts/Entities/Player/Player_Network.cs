@@ -140,9 +140,23 @@ public class Player_Network : NetworkBehaviour
             weaponManager.CmdChangeWeapons();
         }
         // Attempt to pick up a weapon
-        else if (Input.GetButtonDown("Pickup Item"))
+        else if (Input.GetButtonDown("Interact"))
         {
-            weaponManager.CmdEquipWeapon(GetItemFromRayCast());
+            Debug.Log("Attempting to pickup...");
+            GameObject objHit = GetItemFromRayCast();
+
+            if (objHit == null) {
+                return;
+            }
+
+            switch (objHit.tag) {
+                case "Gun":
+                    weaponManager.CmdEquipWeapon(objHit);
+                    break;
+                case "Gateway":
+                    GatewayManager.openGateway(objHit);
+                    break;
+            }
         }
         // Attempt to drop a weapon
         else if (Input.GetButtonDown("Drop Item"))
@@ -216,12 +230,7 @@ public class Player_Network : NetworkBehaviour
         if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit, pickupRange))
         {
             GameObject objectHit = hit.transform.gameObject;
-
-            if (objectHit.GetComponent<Gun>() != null && objectHit.GetComponent<Gun>().gunOwner == null)
-            {
-                return objectHit;
-            }
-
+            return objectHit;
         }
 
         return null;
