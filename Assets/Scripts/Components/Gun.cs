@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 
 [RequireComponent(typeof(WeaponGraphics))]
+[RequireComponent(typeof(AudioSource))]
 public class Gun : NetworkBehaviour
 {
     public float bulletSpeed;
@@ -13,11 +14,30 @@ public class Gun : NetworkBehaviour
     public float range;
     public float bulletPenetration; // 0 - 100
 
+    [SyncVar]
+    public int clipAmmo;
+    public int clipMaxAmmo;
+
+    [SyncVar]
+    public int reserveAmmo;
+    public int maxReserveAmmo;
+
+    public AudioClip shootingSound;
+    public AudioClip reloadingSound;
+
+    private AudioSource audioSource;
+
     [HideInInspector]
     public GameObject cam;
     
     [HideInInspector]
     public Player_Network gunOwner;
+
+    void Awake()
+    {
+        audioSource = GetComponent<AudioSource>();
+        audioSource.clip = shootingSound;
+    }
 
     [Client]
     public void Shoot()
@@ -26,6 +46,17 @@ public class Gun : NetworkBehaviour
         {
             return;
         }
+
+        if (clipAmmo <= 0)
+        {
+            // attempt reload here
+            audioSource.clip = reloadingSound;
+            audioSource.Play();
+            return;
+        }
+
+        audioSource.clip = shootingSound;
+        audioSource.Play();
 
         gunOwner.CmdMuzzleFlash();
         RaycastHit[] hits = Physics.RaycastAll(cam.transform.position, cam.transform.forward, range);

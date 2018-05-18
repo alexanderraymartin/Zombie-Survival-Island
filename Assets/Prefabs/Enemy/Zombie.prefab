@@ -1375,10 +1375,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  spawner: {fileID: 1301948243246986, guid: 7efc53bce7426a744b93941ce5d9d5a7, type: 2}
   damage: 25
   attackRadius: 2
-  walkSpeed: 2
+  walkSpeed: 6
   RunSpeed: 4
   rotationSpeed: 20
   findTargetCooldown: 1
