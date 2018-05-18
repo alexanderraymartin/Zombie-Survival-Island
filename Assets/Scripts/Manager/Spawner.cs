@@ -37,17 +37,17 @@ public class Spawner : NetworkBehaviour
 
         DontDestroyOnLoad(gameObject);
 
-        SpawnEntity(new Vector3(0, 15, 0), ak47Prefab);
-        SpawnEntity(new Vector3(5, 15, 0), L96SniperRiflePrefab);
-        SpawnEntity(new Vector3(10, 15, 0), M4CarbinePrefab);
-        SpawnEntity(new Vector3(15, 15, 0), PistolPrefab);
-        SpawnEntity(new Vector3(20, 15, 0), ShotgunPrefab);
+        SpawnEntity(new Vector3(-85, 0, 75), ak47Prefab);
+        SpawnEntity(new Vector3(-85, 0, 80), L96SniperRiflePrefab);
+        SpawnEntity(new Vector3(-85, 0, 85), M4CarbinePrefab);
+        SpawnEntity(new Vector3(-85, 0, 90), PistolPrefab);
+        SpawnEntity(new Vector3(-85, 0, 95), ShotgunPrefab);
 
-        SpawnEntity(new Vector3(0, 10, 0), ak47Prefab);
-        SpawnEntity(new Vector3(5, 10, 0), L96SniperRiflePrefab);
-        SpawnEntity(new Vector3(10, 10, 0), M4CarbinePrefab);
-        SpawnEntity(new Vector3(15, 10, 0), PistolPrefab);
-        SpawnEntity(new Vector3(20, 10, 0), ShotgunPrefab);
+        SpawnEntity(new Vector3(-90, 0, 75), ak47Prefab);
+        SpawnEntity(new Vector3(-90, 0, 80), L96SniperRiflePrefab);
+        SpawnEntity(new Vector3(-90, 0, 85), M4CarbinePrefab);
+        SpawnEntity(new Vector3(-90, 0, 90), PistolPrefab);
+        SpawnEntity(new Vector3(-90, 0, 95), ShotgunPrefab);
     }
 
     [ServerCallback]
@@ -91,7 +91,7 @@ public class Spawner : NetworkBehaviour
         yield return new WaitForSeconds(downtime);
         for (int i = 0; i < maxZombies; i++)
         {
-            SpawnEntity(new Vector3(0, 0, 0), zombiePrefab);
+            SpawnEntity(new Vector3(-40, 0, 70), zombiePrefab);
             yield return new WaitForSeconds(betweenSpawnsTime);
         }
     }
