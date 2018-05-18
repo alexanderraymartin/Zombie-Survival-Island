@@ -64,6 +64,12 @@ public class Player_Network : NetworkBehaviour
         RpcRespawn(spawnPosition);
     }
 
+    [Command]
+    public void CmdReloadGun(GameObject gun)
+    {
+        RpcReloadGun(gun);
+    }
+
     public override void OnStartLocalPlayer()
     {
         GetComponent<FirstPersonController>().enabled = true;
@@ -205,5 +211,16 @@ public class Player_Network : NetworkBehaviour
         // Replace with object pooling
         GameObject instance = Instantiate(weaponManager.GetActiveWeapon().GetComponent<Gun>().gameObject.GetComponent<WeaponGraphics>().hitEffectPrefab, position, Quaternion.LookRotation(normal));
         Destroy(instance, 2f);
+    }
+
+    [ClientRpc]
+    void RpcReloadGun(GameObject gun)
+    {
+        ReloadGun(gun);
+    }
+
+    void ReloadGun(GameObject gun)
+    {
+        StartCoroutine(gun.GetComponent<Gun>().Reload());
     }
 }

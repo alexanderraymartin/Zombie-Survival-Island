@@ -7,30 +7,53 @@ using UnityEngine.Networking;
 [RequireComponent(typeof(WeaponGraphics))]
 public class Gun : NetworkBehaviour
 {
-    public float bulletSpeed;
+    public int shootingSoundIndex;
+    public int reloadingSoundIndex;
+
+    [SyncVar]
     public float rateOfFire;
+    [SyncVar]
     public float damage;
+    [SyncVar]
     public float range;
+    [SyncVar]
     public float bulletPenetration; // 0 - 100
 
     [SyncVar]
-    public int clipAmmo;
-    public int clipMaxAmmo;
+    public float reloadTime;
 
     [SyncVar]
-    public int reserveAmmo;
-    public int maxReserveAmmo;
+    public int clipMaxAmmo;
+    [SyncVar]
+    public int reserveMaxAmmo;
+
+    [SyncVar]
+    private int clipAmmo;
+    [SyncVar]
+    private int reserveAmmo;
+
+    [SyncVar]
+    private bool isReloading = false;
 
     [HideInInspector]
     public GameObject cam;
-    
+
     [HideInInspector]
     public Player_Network gunOwner;
+
+
+    [ServerCallback]
+    void Awake()
+    {
+        clipAmmo = clipMaxAmmo;
+        reserveAmmo = reserveMaxAmmo;
+    }
+
 
     [Client]
     public void Shoot()
     {
-        if (gunOwner == null)
+        if (gunOwner == null || isReloading)
         {
             return;
         }
@@ -38,15 +61,14 @@ public class Gun : NetworkBehaviour
         if (clipAmmo <= 0)
         {
             // Attempt reload here
-            // TODO
-
-            // Play reloading sound
-            gunOwner.soundManager.CmdPlaySound(1, transform.position, 0.15f);
+            gunOwner.CmdReloadGun(gameObject);
             return;
         }
 
+        clipAmmo -= 1;
+
         // Play shooting sound
-        gunOwner.soundManager.CmdPlaySound(0, transform.position, 0.15f);
+        gunOwner.soundManager.CmdPlaySound(shootingSoundIndex, transform.position, 0.15f);
 
         gunOwner.CmdMuzzleFlash();
         RaycastHit[] hits = Physics.RaycastAll(cam.transform.position, cam.transform.forward, range);
@@ -66,5 +88,29 @@ public class Gun : NetworkBehaviour
                 Debug.Log(hits[i].transform.gameObject.GetComponent<Health>().currentHealth);
             }
         }
+    }
+    
+    public IEnumerator Reload()
+    {
+        // If no ammo
+        if (reserveAmmo <= 0)
+        {
+            Debug.Log("Out of ammo!");
+            yield break;
+        }
+
+        isReloading = true;
+        // Play reloading sound
+        gunOwner.soundManager.CmdPlaySound(reloadingSoundIndex, transform.position, 0.15f);
+
+        Debug.Log("Reloading...");
+
+        yield return new WaitForSeconds(reloadTime);
+
+        int oldAmmoCount = clipAmmo;
+
+        clipAmmo = Mathf.Min(clipMaxAmmo, reserveAmmo + oldAmmoCount);
+        reserveAmmo = Mathf.Max(reserveAmmo + oldAmmoCount - clipMaxAmmo, 0);
+        isReloading = false;
     }
 }

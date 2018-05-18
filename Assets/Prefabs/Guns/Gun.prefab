@@ -292,15 +292,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7c24bb2c53a3a14c9190ca0977c5aea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletSpeed: 100
+  shootingSoundIndex: 0
+  reloadingSoundIndex: 1
   rateOfFire: 5
   damage: 25
   range: 500
   bulletPenetration: 80
-  clipAmmo: 20
+  reloadTime: 1
   clipMaxAmmo: 20
-  reserveAmmo: 40
-  maxReserveAmmo: 40
+  reserveMaxAmmo: 40
   cam: {fileID: 0}
   gunOwner: {fileID: 0}
 --- !u!198 &198875545914455740
