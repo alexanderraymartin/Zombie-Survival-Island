@@ -43,7 +43,7 @@ public class WeaponManager : NetworkBehaviour
     [Command]
     public void CmdEquipWeapon(GameObject gun)
     {
-        if (gun == null)
+        if (gun == null || gun.GetComponent<Gun>().gunOwner != null)
         {
             return;
         }
