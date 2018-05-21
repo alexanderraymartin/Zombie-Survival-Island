@@ -19,8 +19,7 @@ public class HealthBar : MonoBehaviour
         instance.transform.localPosition = position;
         healthBarImage = instance.transform.Find("HealthBarImage").GetComponent<Image>();
     }
-
-    // Update is called once per frame
+    
     void Update()
     {
         instance.transform.rotation = Camera.main.transform.rotation;
