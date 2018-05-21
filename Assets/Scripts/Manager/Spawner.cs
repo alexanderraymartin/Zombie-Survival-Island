@@ -81,7 +81,7 @@ public class Spawner : NetworkBehaviour
             {
                 Debug.Log("Respawning player: " + players[i].name);
                 // TODO: add respawn points
-                players[i].GetComponent<Player_Network>().CmdRespawn(new Vector3(10.0f, 10.0f, 10.0f));
+                players[i].GetComponent<Player_Network>().CmdRespawn(new Vector3(-90.0f, 2.0f, 70.0f));
             }
         }
     }
