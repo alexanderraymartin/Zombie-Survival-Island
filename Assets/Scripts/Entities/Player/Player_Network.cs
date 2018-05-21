@@ -65,9 +65,9 @@ public class Player_Network : NetworkBehaviour
     }
 
     [Command]
-    public void CmdSubtractAmmo(GameObject gun)
+    public void CmdSetAmmo(GameObject gun, int count)
     {
-        gun.GetComponent<Gun>().clipAmmo -= 1;
+        gun.GetComponent<Gun>().clipAmmo = count;
     }
 
     [Command]
