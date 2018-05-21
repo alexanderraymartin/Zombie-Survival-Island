@@ -65,6 +65,12 @@ public class Player_Network : NetworkBehaviour
     }
 
     [Command]
+    public void CmdSubtractAmmo(GameObject gun)
+    {
+        gun.GetComponent<Gun>().clipAmmo -= 1;
+    }
+
+    [Command]
     public void CmdReloadGun(GameObject gun)
     {
         RpcReloadGun(gun);
