@@ -35,8 +35,6 @@ public class Spawner : NetworkBehaviour
             Destroy(gameObject);
         }
 
-        DontDestroyOnLoad(gameObject);
-
         SpawnEntity(new Vector3(-85, 0, 75), ak47Prefab);
         SpawnEntity(new Vector3(-85, 0, 80), L96SniperRiflePrefab);
         SpawnEntity(new Vector3(-85, 0, 85), M4CarbinePrefab);
