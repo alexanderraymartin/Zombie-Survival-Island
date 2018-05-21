@@ -29,10 +29,13 @@ public class Gun : NetworkBehaviour
     [SyncVar]
     public int reserveMaxAmmo;
 
+    [HideInInspector]
     [SyncVar]
-    private int clipAmmo;
+    public int clipAmmo;
+
+    [HideInInspector]
     [SyncVar]
-    private int reserveAmmo;
+    public int reserveAmmo;
 
     [HideInInspector]
     [SyncVar]
