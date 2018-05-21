@@ -509,6 +509,7 @@ GameObject:
   - component: {fileID: 114576083895886986}
   - component: {fileID: 114500186898182744}
   - component: {fileID: 114221971906688854}
+  - component: {fileID: 114037537163216874}
   m_Layer: 0
   m_Name: Zombie
   m_TagString: Enemy
@@ -755,7 +756,7 @@ Transform:
   m_Father: {fileID: 4160946467390164}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &4129669783396570 
+--- !u!4 &4129669783396570
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -1320,6 +1321,20 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &114037537163216874
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1738034817906532}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89af0d9579981dd4ab53b702814101ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthBarCanvas: {fileID: 1878840711323558, guid: 681bfa6d0995f694f993eafdcf4d9335,
+    type: 2}
+  position: {x: 0, y: 1.85, z: 0}
 --- !u!114 &114221971906688854
 MonoBehaviour:
   m_ObjectHideFlags: 1
