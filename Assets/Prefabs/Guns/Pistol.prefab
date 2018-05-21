@@ -255,7 +255,10 @@ MonoBehaviour:
   bulletPenetration: 30
   reloadTime: 2
   clipMaxAmmo: 10
-  reserveMaxAmmo: 50
+  reserveMaxAmmo: 60
+  clipAmmo: 0
+  reserveAmmo: 0
+  isReloading: 0
   cam: {fileID: 0}
   gunOwner: {fileID: 0}
 --- !u!114 &114605910812889586

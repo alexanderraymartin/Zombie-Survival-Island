@@ -29,10 +29,13 @@ public class Gun : NetworkBehaviour
     [SyncVar]
     public int reserveMaxAmmo;
 
+    [HideInInspector]
     [SyncVar]
-    private int clipAmmo;
+    public int clipAmmo;
+
+    [HideInInspector]
     [SyncVar]
-    private int reserveAmmo;
+    public int reserveAmmo;
 
     [HideInInspector]
     [SyncVar]
@@ -83,7 +86,7 @@ public class Gun : NetworkBehaviour
         }
 
         // Decrease clip ammo by 1 bullet
-        clipAmmo -= 1;
+        gunOwner.CmdSubtractAmmo(gameObject);
 
         // Play shooting sound
         gunOwner.soundManager.CmdPlaySound(shootingSoundIndex, transform.position, 0.15f);
