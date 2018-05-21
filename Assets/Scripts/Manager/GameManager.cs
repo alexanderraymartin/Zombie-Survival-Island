@@ -35,8 +35,7 @@ public class GameManager : NetworkBehaviour
         {
             Destroy(gameObject);
         }
-
-        DontDestroyOnLoad(gameObject);
+        
         InitGame();
     }
 
