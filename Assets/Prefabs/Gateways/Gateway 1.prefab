@@ -19,11 +19,11 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4063992912712322}
-  - component: {fileID: 114827071649620308}
   - component: {fileID: 33916077873045048}
   - component: {fileID: 23138959475352242}
   - component: {fileID: 64156393109335660}
   - component: {fileID: 114035140038461206}
+  - component: {fileID: 114341765829873020}
   m_Layer: 0
   m_Name: Gateway 1
   m_TagString: Gateway
@@ -112,7 +112,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isOpen: 0
---- !u!114 &114827071649620308
+--- !u!114 &114341765829873020
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
