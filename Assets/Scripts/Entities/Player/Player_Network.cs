@@ -65,9 +65,9 @@ public class Player_Network : NetworkBehaviour
     }
 
     [Command]
-    public void CmdSetAmmo(GameObject gun, int count)
+    public void CmdSubtractAmmo(GameObject gun)
     {
-        gun.GetComponent<Gun>().clipAmmo = count;
+        RpcSubtractAmmo(gun);
     }
 
     [Command]
@@ -216,21 +216,11 @@ public class Player_Network : NetworkBehaviour
     [ClientRpc]
     void RpcPlayerDeath()
     {
-        PlayerDeath();
-    }
-
-    void PlayerDeath()
-    {
         hasDied = true;
     }
 
     [ClientRpc]
     void RpcRespawn(Vector3 spawnPosition)
-    {
-        Respawn(spawnPosition);
-    }
-
-    void Respawn(Vector3 spawnPosition)
     {
         hasDied = false;
         transform.SetPositionAndRotation(spawnPosition, Quaternion.identity);
@@ -265,12 +255,13 @@ public class Player_Network : NetworkBehaviour
     }
 
     [ClientRpc]
-    void RpcReloadGun(GameObject gun)
+    public void RpcSubtractAmmo(GameObject gun)
     {
-        ReloadGun(gun);
+        gun.GetComponent<Gun>().clipAmmo -= 1;
     }
 
-    void ReloadGun(GameObject gun)
+    [ClientRpc]
+    void RpcReloadGun(GameObject gun)
     {
         if (gun != null && !gun.GetComponent<Gun>().isReloading)
         {
