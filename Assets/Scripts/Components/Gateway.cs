@@ -5,6 +5,7 @@ using UnityEngine;
 public class Gateway : MonoBehaviour
 {
     public bool isOpen = false;
+
     private bool isOpening = false;
 
     public void OpenGateway()
@@ -13,13 +14,13 @@ public class Gateway : MonoBehaviour
         GetComponent<Gateway>().StartAnimation();
     }
 
-    public void StartAnimation()
+    void StartAnimation()
     {
         gameObject.SetActive(false);
         //StartCoroutine(AnimateGateway());
     }
 
-    private IEnumerator AnimateGateway()
+    IEnumerator AnimateGateway()
     {
         if (isOpen)
         {

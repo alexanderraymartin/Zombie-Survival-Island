@@ -65,9 +65,10 @@ public class Player_Network : NetworkBehaviour
     }
 
     [Command]
-    public void CmdSetAmmo(GameObject gun, int count)
+    public void CmdSetAmmo(GameObject gun, int clipAmmo, int reserveAmmo)
     {
-        gun.GetComponent<Gun>().clipAmmo = count;
+        gun.GetComponent<Gun>().clipAmmo = clipAmmo;
+        gun.GetComponent<Gun>().reserveAmmo = reserveAmmo;
     }
 
     [Command]
@@ -165,6 +166,11 @@ public class Player_Network : NetworkBehaviour
             switch (objHit.tag)
             {
                 case "Gun":
+                    GameObject gun = weaponManager.GetActiveWeapon();
+                    if (gun != null)
+                    {
+                        CmdSetAmmo(gun, gun.GetComponent<Gun>().clipAmmo, gun.GetComponent<Gun>().reserveAmmo);
+                    }
                     weaponManager.CmdEquipWeapon(objHit);
                     break;
                 case "Gateway":
@@ -175,7 +181,12 @@ public class Player_Network : NetworkBehaviour
         // Attempt to drop a weapon
         else if (Input.GetButtonDown("Drop Item"))
         {
-            weaponManager.CmdUnequipWeapon();
+            GameObject gun = weaponManager.GetActiveWeapon();
+            if (gun != null)
+            {
+                CmdSetAmmo(gun, gun.GetComponent<Gun>().clipAmmo, gun.GetComponent<Gun>().reserveAmmo);
+                weaponManager.CmdUnequipWeapon();
+            }
         }
     }
 
@@ -216,21 +227,11 @@ public class Player_Network : NetworkBehaviour
     [ClientRpc]
     void RpcPlayerDeath()
     {
-        PlayerDeath();
-    }
-
-    void PlayerDeath()
-    {
         hasDied = true;
     }
 
     [ClientRpc]
     void RpcRespawn(Vector3 spawnPosition)
-    {
-        Respawn(spawnPosition);
-    }
-
-    void Respawn(Vector3 spawnPosition)
     {
         hasDied = false;
         transform.SetPositionAndRotation(spawnPosition, Quaternion.identity);
@@ -266,11 +267,6 @@ public class Player_Network : NetworkBehaviour
 
     [ClientRpc]
     void RpcReloadGun(GameObject gun)
-    {
-        ReloadGun(gun);
-    }
-
-    void ReloadGun(GameObject gun)
     {
         if (gun != null && !gun.GetComponent<Gun>().isReloading)
         {
