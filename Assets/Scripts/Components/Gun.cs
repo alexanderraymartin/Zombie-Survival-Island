@@ -86,7 +86,7 @@ public class Gun : NetworkBehaviour
         }
 
         // Decrease clip ammo by 1 bullet
-        gunOwner.CmdSubtractAmmo(gameObject);
+        clipAmmo -= 1;
 
         // Play shooting sound
         gunOwner.soundManager.CmdPlaySound(shootingSoundIndex, transform.position, 0.15f);

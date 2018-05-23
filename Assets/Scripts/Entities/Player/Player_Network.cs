@@ -65,9 +65,10 @@ public class Player_Network : NetworkBehaviour
     }
 
     [Command]
-    public void CmdSubtractAmmo(GameObject gun)
+    public void CmdSetAmmo(GameObject gun, int clipAmmo, int reserveAmmo)
     {
-        RpcSubtractAmmo(gun);
+        gun.GetComponent<Gun>().clipAmmo = clipAmmo;
+        gun.GetComponent<Gun>().reserveAmmo = reserveAmmo;
     }
 
     [Command]
@@ -165,6 +166,11 @@ public class Player_Network : NetworkBehaviour
             switch (objHit.tag)
             {
                 case "Gun":
+                    GameObject gun = weaponManager.GetActiveWeapon();
+                    if (gun != null)
+                    {
+                        CmdSetAmmo(gun, gun.GetComponent<Gun>().clipAmmo, gun.GetComponent<Gun>().reserveAmmo);
+                    }
                     weaponManager.CmdEquipWeapon(objHit);
                     break;
                 case "Gateway":
@@ -175,7 +181,12 @@ public class Player_Network : NetworkBehaviour
         // Attempt to drop a weapon
         else if (Input.GetButtonDown("Drop Item"))
         {
-            weaponManager.CmdUnequipWeapon();
+            GameObject gun = weaponManager.GetActiveWeapon();
+            if (gun != null)
+            {
+                CmdSetAmmo(gun, gun.GetComponent<Gun>().clipAmmo, gun.GetComponent<Gun>().reserveAmmo);
+                weaponManager.CmdUnequipWeapon();
+            }
         }
     }
 
@@ -252,12 +263,6 @@ public class Player_Network : NetworkBehaviour
         // Replace with object pooling
         GameObject instance = Instantiate(weaponManager.GetActiveWeapon().GetComponent<Gun>().gameObject.GetComponent<WeaponGraphics>().hitEffectPrefab, position, Quaternion.LookRotation(normal));
         Destroy(instance, 2f);
-    }
-
-    [ClientRpc]
-    public void RpcSubtractAmmo(GameObject gun)
-    {
-        gun.GetComponent<Gun>().clipAmmo -= 1;
     }
 
     [ClientRpc]
