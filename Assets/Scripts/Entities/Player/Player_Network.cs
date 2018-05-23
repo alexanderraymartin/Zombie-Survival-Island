@@ -138,6 +138,10 @@ public class Player_Network : NetworkBehaviour
             Debug.Log("Attempting to drop...");
             weaponManager.CmdUnequipWeapon();
         }
+        else if (Input.GetButtonDown("Fire2"))
+        {
+            Debug.Log("Attempting to cast special ability");
+        }
     }
 
     void CheckIfAlive()
