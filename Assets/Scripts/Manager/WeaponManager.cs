@@ -79,22 +79,13 @@ public class WeaponManager : NetworkBehaviour
     [Command]
     void CmdEquipWeapon(int connectionId, GameObject weapon)
     {
-        if (weapon == null || weapon.GetComponent<Gun>().gunOwner != null)
-        {
-            return;
-        }
-
         RpcEquipWeapon(connectionId, weapon);
     }
 
     [Command]
     void CmdUnequipWeapon(int connectionId)
     {
-        GameObject weapon = GetActiveWeapon();
-        if (weapon != null)
-        {
-            RpcUnequipWeapon(connectionId, weapon);
-        }
+        RpcUnequipWeapon(connectionId);
     }
 
     [Command]
@@ -133,7 +124,7 @@ public class WeaponManager : NetworkBehaviour
     }
 
     [ClientRpc]
-    void RpcUnequipWeapon(int connectionId, GameObject weapon)
+    void RpcUnequipWeapon(int connectionId)
     {
         if (GetComponent<Player_Network>().IsCallingPlayer(connectionId))
         {
@@ -196,6 +187,11 @@ public class WeaponManager : NetworkBehaviour
 
     void EquipWeaponHelper(GameObject weapon)
     {
+        if (weapon == null || weapon.GetComponent<Gun>().gunOwner != null)
+        {
+            return;
+        }
+
         // Check if weapon slots are full
         if (weaponHolder.transform.childCount >= maxWeapons)
         {

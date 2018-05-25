@@ -19,9 +19,6 @@ public class Player_Network : NetworkBehaviour
     [HideInInspector]
     public SoundManager soundManager;
 
-    [HideInInspector]
-    public int connectionId;
-
     private int playerColorID;
     private bool hasDied;
 
@@ -31,19 +28,13 @@ public class Player_Network : NetworkBehaviour
         soundManager = GetComponent<SoundManager>();
     }
 
-    public override void OnStartClient()
-    {
-        connectionId = GetComponent<NetworkIdentity>().connectionToClient.connectionId;
-        Debug.Log(connectionId);
-    }
-
     /*
      * Returns true if the client called the Cmd.
      */
     [Client]
     public bool IsCallingPlayer(int id)
     {
-        return connectionId == id;
+        return playerControllerId == id;
     }
 
     public void TakeDamage(int connectionId, float damage)
@@ -156,7 +147,7 @@ public class Player_Network : NetworkBehaviour
         // Attempt to cycle through weapons
         if (Input.GetButtonDown("Change Weapon"))
         {
-            weaponManager.ChangeWeapon(connectionId);
+            weaponManager.ChangeWeapon(playerControllerId);
         }
         // Attempt to pick up a weapon
         else if (Input.GetButtonDown("Interact"))
@@ -177,7 +168,7 @@ public class Player_Network : NetworkBehaviour
                     {
                         CmdSetAmmo(gun, gun.GetComponent<Gun>().clipAmmo, gun.GetComponent<Gun>().reserveAmmo);
                     }
-                    weaponManager.EquipWeapon(connectionId, objHit);
+                    weaponManager.EquipWeapon(playerControllerId, objHit);
                     break;
                 case "Gateway":
                     CmdOpenGateway(objHit);
@@ -191,7 +182,7 @@ public class Player_Network : NetworkBehaviour
             if (gun != null)
             {
                 CmdSetAmmo(gun, gun.GetComponent<Gun>().clipAmmo, gun.GetComponent<Gun>().reserveAmmo);
-                weaponManager.UnequipWeapon(connectionId);
+                weaponManager.UnequipWeapon(playerControllerId);
             }
         }
     }
