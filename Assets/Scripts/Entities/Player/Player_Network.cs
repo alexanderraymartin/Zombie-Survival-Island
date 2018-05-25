@@ -7,6 +7,7 @@ using UnityStandardAssets.Characters.FirstPerson;
 [RequireComponent(typeof(Health))]
 [RequireComponent(typeof(WeaponManager))]
 [RequireComponent(typeof(SoundManager))]
+[RequireComponent(typeof(NetworkTransform))]
 public class Player_Network : NetworkBehaviour
 {
     public GameObject firstPersonCharacter;
