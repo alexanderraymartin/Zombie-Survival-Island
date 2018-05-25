@@ -11,7 +11,7 @@ public class HealthBar : MonoBehaviour
 
     private GameObject instance;
     private Image healthBarImage;
-    
+
     void Start()
     {
         instance = Instantiate(healthBarCanvas);
@@ -19,10 +19,13 @@ public class HealthBar : MonoBehaviour
         instance.transform.localPosition = position;
         healthBarImage = instance.transform.Find("HealthBarImage").GetComponent<Image>();
     }
-    
+
     void Update()
     {
-        instance.transform.rotation = Camera.main.transform.rotation;
-        healthBarImage.fillAmount = GetComponent<Health>().currentHealth / GetComponent<Health>().maxHealth;
+        if (Camera.main != null)
+        {
+            instance.transform.rotation = Camera.main.transform.rotation;
+            healthBarImage.fillAmount = GetComponent<Health>().currentHealth / GetComponent<Health>().maxHealth;
+        }
     }
 }
