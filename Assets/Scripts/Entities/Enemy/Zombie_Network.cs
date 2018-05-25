@@ -165,8 +165,7 @@ public class Zombie_Network : NetworkBehaviour
             canAttack = false;
             Debug.Log("Attack");
             // if collision do damage
-            int connectionId = target.GetComponent<Player_Network>().playerControllerId;
-            target.GetComponent<Player_Network>().TakeDamage(connectionId, damage);
+            target.GetComponent<Player_Network>().TakeDamage(playerControllerId, damage);
         }
     }
 

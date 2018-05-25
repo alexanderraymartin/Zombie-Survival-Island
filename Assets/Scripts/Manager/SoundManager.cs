@@ -7,30 +7,30 @@ public class SoundManager : NetworkBehaviour
 {
     public AudioClip[] sounds;
 
-    public void PlaySound(int connectionId, int index, Vector3 location, float volume)
+    public void PlaySound(int index, Vector3 location, float volume)
     {
-        PlaySoundHelper(connectionId, index, location, volume);
-        CmdPlaySound(connectionId, index, location, volume);
+        PlaySoundHelper(index, location, volume);
+        CmdPlaySound(index, location, volume);
     }
 
     [Command]
-    private void CmdPlaySound(int connectionId, int index, Vector3 location, float volume)
+    private void CmdPlaySound(int index, Vector3 location, float volume)
     {
-        RpcPlaySound(connectionId, index, location, volume);
+        RpcPlaySound(index, location, volume);
     }
 
     [ClientRpc]
-    private void RpcPlaySound(int connectionId, int index, Vector3 location, float volume)
+    private void RpcPlaySound(int index, Vector3 location, float volume)
     {
-        if (GetComponent<Player_Network>().IsCallingPlayer(connectionId))
+        if (isLocalPlayer)
         {
             // Don't run on client who called function
             return;
         }
-        PlaySoundHelper(connectionId, index, location, volume);
+        PlaySoundHelper(index, location, volume);
     }
 
-    private void PlaySoundHelper(int connectionId, int index, Vector3 location, float volume)
+    private void PlaySoundHelper(int index, Vector3 location, float volume)
     {
         if (index < sounds.Length)
         {

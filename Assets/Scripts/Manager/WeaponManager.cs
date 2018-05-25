@@ -28,83 +28,83 @@ public class WeaponManager : NetworkBehaviour
         return null;
     }
 
-    public void DealDamage(int connectionId, GameObject enemy, float damage)
+    public void DealDamage(GameObject enemy, float damage)
     {
-        CmdDealDamage(connectionId, enemy, damage);
+        CmdDealDamage(enemy, damage);
     }
 
-    public void ChangeWeapon(int connectionId)
+    public void ChangeWeapon()
     {
         ChangeWeaponHelper();
-        CmdChangeWeapons(connectionId);
+        CmdChangeWeapons();
     }
 
-    public void EquipWeapon(int connectionId, GameObject weapon)
+    public void EquipWeapon(GameObject weapon)
     {
         EquipWeaponHelper(weapon);
-        CmdEquipWeapon(connectionId, weapon);
+        CmdEquipWeapon(weapon);
     }
 
-    public void UnequipWeapon(int connectionId)
+    public void UnequipWeapon()
     {
         UnequipWeaponHelper();
-        CmdUnequipWeapon(connectionId);
+        CmdUnequipWeapon();
     }
 
-    public void MuzzleFlash(int connectionId)
+    public void MuzzleFlash()
     {
         MuzzleFlashHelper();
-        CmdMuzzleFlash(connectionId);
+        CmdMuzzleFlash();
     }
 
-    public void HitEffect(int connectionId, Vector3 position, Vector3 normal)
+    public void HitEffect(Vector3 position, Vector3 normal)
     {
         HitEffectHelper(position, normal);
-        CmdHitEffect(connectionId, position, normal);
+        CmdHitEffect(position, normal);
     }
 
     /*************************** Cmd Functions ***************************/
     [Command]
-    void CmdDealDamage(int connectionId, GameObject enemy, float damage)
+    void CmdDealDamage(GameObject enemy, float damage)
     {
         enemy.GetComponent<Health>().TakeDamage(damage);
     }
 
     [Command]
-    void CmdChangeWeapons(int connectionId)
+    void CmdChangeWeapons()
     {
-        RpcChangeWeapon(connectionId);
+        RpcChangeWeapon();
     }
 
     [Command]
-    void CmdEquipWeapon(int connectionId, GameObject weapon)
+    void CmdEquipWeapon(GameObject weapon)
     {
-        RpcEquipWeapon(connectionId, weapon);
+        RpcEquipWeapon(weapon);
     }
 
     [Command]
-    void CmdUnequipWeapon(int connectionId)
+    void CmdUnequipWeapon()
     {
-        RpcUnequipWeapon(connectionId);
+        RpcUnequipWeapon();
     }
 
     [Command]
-    void CmdMuzzleFlash(int connectionId)
+    void CmdMuzzleFlash()
     {
-        RpcMuzzleFlash(connectionId);
+        RpcMuzzleFlash();
     }
 
     [Command]
-    void CmdHitEffect(int connectionId, Vector3 position, Vector3 normal)
+    void CmdHitEffect(Vector3 position, Vector3 normal)
     {
-        RpcHitEffect(connectionId, position, normal);
+        RpcHitEffect(position, normal);
     }
 
     /*************************** Rpc Functions ***************************/
     [ClientRpc]
-    void RpcChangeWeapon(int connectionId)
+    void RpcChangeWeapon()
     {
-        if (GetComponent<Player_Network>().IsCallingPlayer(connectionId))
+        if (isLocalPlayer)
         {
             // Don't run on client who called function
             return;
@@ -113,9 +113,9 @@ public class WeaponManager : NetworkBehaviour
     }
 
     [ClientRpc]
-    void RpcEquipWeapon(int connectionId, GameObject weapon)
+    void RpcEquipWeapon(GameObject weapon)
     {
-        if (GetComponent<Player_Network>().IsCallingPlayer(connectionId))
+        if (isLocalPlayer)
         {
             // Don't run on client who called function
             return;
@@ -124,9 +124,9 @@ public class WeaponManager : NetworkBehaviour
     }
 
     [ClientRpc]
-    void RpcUnequipWeapon(int connectionId)
+    void RpcUnequipWeapon()
     {
-        if (GetComponent<Player_Network>().IsCallingPlayer(connectionId))
+        if (isLocalPlayer)
         {
             // Don't run on client who called function
             return;
@@ -135,9 +135,9 @@ public class WeaponManager : NetworkBehaviour
     }
 
     [ClientRpc]
-    void RpcMuzzleFlash(int connectionId)
+    void RpcMuzzleFlash()
     {
-        if (GetComponent<Player_Network>().IsCallingPlayer(connectionId))
+        if (isLocalPlayer)
         {
             // Don't run on client who called function
             return;
@@ -146,9 +146,9 @@ public class WeaponManager : NetworkBehaviour
     }
 
     [ClientRpc]
-    void RpcHitEffect(int connectionId, Vector3 position, Vector3 normal)
+    void RpcHitEffect(Vector3 position, Vector3 normal)
     {
-        if (GetComponent<Player_Network>().IsCallingPlayer(connectionId))
+        if (isLocalPlayer)
         {
             // Don't run on client who called function
             return;
@@ -157,9 +157,9 @@ public class WeaponManager : NetworkBehaviour
     }
 
     [ClientRpc]
-    void RpcSelectWeapon(int connectionId, int index)
+    void RpcSelectWeapon(int index)
     {
-        if (GetComponent<Player_Network>().IsCallingPlayer(connectionId))
+        if (isLocalPlayer)
         {
             // Don't run on client who called function
             return;

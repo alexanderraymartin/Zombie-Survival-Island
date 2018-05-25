@@ -28,15 +28,6 @@ public class Player_Network : NetworkBehaviour
         soundManager = GetComponent<SoundManager>();
     }
 
-    /*
-     * Returns true if the client called the Cmd.
-     */
-    [Client]
-    public bool IsCallingPlayer(int id)
-    {
-        return playerControllerId == id;
-    }
-
     public void TakeDamage(int connectionId, float damage)
     {
         CmdTakeDamage(connectionId, damage);
@@ -147,7 +138,7 @@ public class Player_Network : NetworkBehaviour
         // Attempt to cycle through weapons
         if (Input.GetButtonDown("Change Weapon"))
         {
-            weaponManager.ChangeWeapon(playerControllerId);
+            weaponManager.ChangeWeapon();
         }
         // Attempt to pick up a weapon
         else if (Input.GetButtonDown("Interact"))
@@ -168,7 +159,7 @@ public class Player_Network : NetworkBehaviour
                     {
                         CmdSetAmmo(gun, gun.GetComponent<Gun>().clipAmmo, gun.GetComponent<Gun>().reserveAmmo);
                     }
-                    weaponManager.EquipWeapon(playerControllerId, objHit);
+                    weaponManager.EquipWeapon(objHit);
                     break;
                 case "Gateway":
                     CmdOpenGateway(objHit);
@@ -182,7 +173,7 @@ public class Player_Network : NetworkBehaviour
             if (gun != null)
             {
                 CmdSetAmmo(gun, gun.GetComponent<Gun>().clipAmmo, gun.GetComponent<Gun>().reserveAmmo);
-                weaponManager.UnequipWeapon(playerControllerId);
+                weaponManager.UnequipWeapon();
             }
         }
     }

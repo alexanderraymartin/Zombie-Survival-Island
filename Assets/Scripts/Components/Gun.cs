@@ -62,8 +62,6 @@ public class Gun : NetworkBehaviour
             return;
         }
 
-        int connectionId = gunOwner.GetComponent<Player_Network>().GetComponent<NetworkIdentity>().connectionToClient.connectionId;
-
         // Limit rate of fire
         if (Time.time >= nextTimeToFire)
         {
@@ -83,10 +81,10 @@ public class Gun : NetworkBehaviour
         clipAmmo -= 1;
 
         // Play shooting sound
-        gunOwner.soundManager.PlaySound(connectionId, shootingSoundIndex, transform.position, 0.15f);
+        gunOwner.soundManager.PlaySound(shootingSoundIndex, transform.position, 0.15f);
 
         // Show muzzle flash
-        gunOwner.weaponManager.MuzzleFlash(connectionId);
+        gunOwner.weaponManager.MuzzleFlash();
         RaycastHit[] hits = Physics.RaycastAll(cam.transform.position, cam.transform.forward, range);
 
         // Sort hits
@@ -94,11 +92,11 @@ public class Gun : NetworkBehaviour
 
         for (int i = 0; i < hits.Length; i++)
         {
-            gunOwner.weaponManager.HitEffect(connectionId, hits[i].point, hits[i].normal);
+            gunOwner.weaponManager.HitEffect(hits[i].point, hits[i].normal);
             if (hits[i].transform.gameObject.tag == "Enemy")
             {
                 float calculatedDamage = damage * (Mathf.Pow(bulletPenetration / 100, i));
-                gunOwner.weaponManager.DealDamage(connectionId, hits[i].transform.gameObject, calculatedDamage);
+                gunOwner.weaponManager.DealDamage(hits[i].transform.gameObject, calculatedDamage);
                 Debug.Log(hits[i].transform.name + "hit for " + calculatedDamage);
                 Debug.Log(hits[i].transform.gameObject.GetComponent<Health>().currentHealth);
             }
@@ -125,7 +123,7 @@ public class Gun : NetworkBehaviour
 
         isReloading = true;
         // Play reloading sound
-        gunOwner.soundManager.PlaySound(gunOwner.GetComponent<Player_Network>().GetComponent<NetworkIdentity>().connectionToClient.connectionId, reloadingSoundIndex, transform.position, 0.15f);
+        gunOwner.soundManager.PlaySound(reloadingSoundIndex, transform.position, 0.15f);
 
         Debug.Log("Reloading...");
 
