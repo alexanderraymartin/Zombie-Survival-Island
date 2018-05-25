@@ -28,6 +28,12 @@ public class WeaponManager : NetworkBehaviour
         return null;
     }
 
+    public void ReloadWeapon()
+    {
+        ReloadWeaponHelper();
+        CmdReloadWeapon();
+    }
+
     public void DealDamage(GameObject enemy, float damage)
     {
         CmdDealDamage(enemy, damage);
@@ -65,6 +71,12 @@ public class WeaponManager : NetworkBehaviour
 
     /*************************** Cmd Functions ***************************/
     [Command]
+    public void CmdReloadWeapon()
+    {
+        RpcReloadWeapon();
+    }
+
+    [Command]
     void CmdDealDamage(GameObject enemy, float damage)
     {
         enemy.GetComponent<Health>().TakeDamage(damage);
@@ -101,6 +113,17 @@ public class WeaponManager : NetworkBehaviour
     }
 
     /*************************** Rpc Functions ***************************/
+    [ClientRpc]
+    void RpcReloadWeapon()
+    {
+        if (isLocalPlayer)
+        {
+            // Don't run on client who called function
+            return;
+        }
+        ReloadWeaponHelper();
+    }
+
     [ClientRpc]
     void RpcChangeWeapon()
     {
@@ -168,6 +191,15 @@ public class WeaponManager : NetworkBehaviour
     }
 
     /*************************** Helper Functions ***************************/
+
+    void ReloadWeaponHelper()
+    {
+        GameObject weapon = GetActiveWeapon();
+        if (weapon != null && !weapon.GetComponent<Gun>().isReloading)
+        {
+            StartCoroutine(weapon.GetComponent<Gun>().Reload());
+        }
+    }
 
     void ChangeWeaponHelper()
     {

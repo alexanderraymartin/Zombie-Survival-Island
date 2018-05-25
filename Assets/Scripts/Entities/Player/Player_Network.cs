@@ -60,12 +60,6 @@ public class Player_Network : NetworkBehaviour
     }
 
     [Command]
-    public void CmdReloadGun(GameObject gun)
-    {
-        RpcReloadGun(gun);
-    }
-
-    [Command]
     public void CmdOpenGateway(GameObject gateway)
     {
         RpcOpenGateway(gateway);
@@ -133,7 +127,7 @@ public class Player_Network : NetworkBehaviour
         // Attempt to reload
         if (Input.GetButtonDown("Reload"))
         {
-            CmdReloadGun(weaponManager.GetActiveWeapon());
+            weaponManager.ReloadWeapon();
         }
         // Attempt to cycle through weapons
         if (Input.GetButtonDown("Change Weapon"))
@@ -241,14 +235,7 @@ public class Player_Network : NetworkBehaviour
 
 
 
-    [ClientRpc]
-    void RpcReloadGun(GameObject gun)
-    {
-        if (gun != null && !gun.GetComponent<Gun>().isReloading)
-        {
-            StartCoroutine(gun.GetComponent<Gun>().Reload());
-        }
-    }
+
 
     [ClientRpc]
     void RpcOpenGateway(GameObject gateway)

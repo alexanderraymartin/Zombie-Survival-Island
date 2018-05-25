@@ -123,7 +123,7 @@ public class Gun : NetworkBehaviour
 
         isReloading = true;
         // Play reloading sound
-        gunOwner.soundManager.PlaySound(reloadingSoundIndex, transform.position, 0.15f);
+        gunOwner.soundManager.PlaySoundLocal(reloadingSoundIndex, transform.position, 0.15f);
 
         Debug.Log("Reloading...");
 
@@ -142,7 +142,7 @@ public class Gun : NetworkBehaviour
         if (clipAmmo <= 0)
         {
             // Attempt reload here
-            gunOwner.CmdReloadGun(gameObject);
+            gunOwner.weaponManager.ReloadWeapon();
             return true;
         }
         return false;
