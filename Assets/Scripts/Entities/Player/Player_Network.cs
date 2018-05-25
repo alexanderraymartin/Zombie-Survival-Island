@@ -22,47 +22,11 @@ public class Player_Network : NetworkBehaviour
     private int playerColorID;
     private bool hasDied;
 
+    /*************************** Init Functions ***************************/
     void Awake()
     {
         weaponManager = GetComponent<WeaponManager>();
         soundManager = GetComponent<SoundManager>();
-    }
-
-    public void TakeDamage(int connectionId, float damage)
-    {
-        CmdTakeDamage(connectionId, damage);
-    }
-
-    [Command]
-    private void CmdTakeDamage(int connectionId, float damage)
-    {
-        GetComponent<Health>().TakeDamage(damage);
-    }
-
-
-    [Command]
-    public void CmdPlayerDeath()
-    {
-        RpcPlayerDeath();
-    }
-
-    [Command]
-    public void CmdRespawn(Vector3 spawnPosition)
-    {
-        RpcRespawn(spawnPosition);
-    }
-
-    [Command]
-    public void CmdSetAmmo(GameObject gun, int clipAmmo, int reserveAmmo)
-    {
-        gun.GetComponent<Gun>().clipAmmo = clipAmmo;
-        gun.GetComponent<Gun>().reserveAmmo = reserveAmmo;
-    }
-
-    [Command]
-    public void CmdOpenGateway(GameObject gateway)
-    {
-        RpcOpenGateway(gateway);
     }
 
     public override void OnStartLocalPlayer()
@@ -90,6 +54,52 @@ public class Player_Network : NetworkBehaviour
         CheckIfAlive();
     }
 
+    /*************************** Public Functions ***************************/
+    public void TakeDamage(int connectionId, float damage)
+    {
+        CmdTakeDamage(connectionId, damage);
+    }
+
+    public void PlayerDeath()
+    {
+        CmdPlayerDeath();
+    }
+
+    public void PlayerRespawn(Vector3 spawnPosition)
+    {
+        CmdPlayerRespawn(spawnPosition);
+    }
+
+    public void OpenGateway(GameObject gateway)
+    {
+        CmdOpenGateway(gateway);
+    }
+
+    /*************************** Cmd Functions ***************************/
+    [Command]
+    void CmdTakeDamage(int connectionId, float damage)
+    {
+        GetComponent<Health>().TakeDamage(damage);
+    }
+
+    [Command]
+    void CmdPlayerDeath()
+    {
+        RpcPlayerDeath();
+    }
+
+    [Command]
+    void CmdPlayerRespawn(Vector3 spawnPosition)
+    {
+        RpcPlayerRespawn(spawnPosition);
+    }
+
+    [Command]
+    void CmdOpenGateway(GameObject gateway)
+    {
+        RpcOpenGateway(gateway);
+    }
+
     [Command]
     void CmdSetPlayerModel()
     {
@@ -98,11 +108,36 @@ public class Player_Network : NetworkBehaviour
         RpcSetPlayerModel(id);
     }
 
+    /*************************** Rpc Functions ***************************/
+    [ClientRpc]
+    void RpcPlayerDeath()
+    {
+        hasDied = true;
+    }
+
+    [ClientRpc]
+    void RpcPlayerRespawn(Vector3 spawnPosition)
+    {
+        PlayerRespawnHelper(spawnPosition);
+    }
+
+    [ClientRpc]
+    void RpcOpenGateway(GameObject gateway)
+    {
+        OpenGatewayHelper(gateway);
+    }
+
     [ClientRpc]
     void RpcSetPlayerModel(int id)
     {
         playerColorID = id;
         SetPlayerModel();
+    }
+
+    /*************************** Helper Functions ***************************/
+    void OpenGatewayHelper(GameObject gateway)
+    {
+        gateway.GetComponent<Gateway>().OpenGateway();
     }
 
     void SetPlayerModel()
@@ -113,6 +148,60 @@ public class Player_Network : NetworkBehaviour
         }
 
         characterModels[playerColorID].SetActive(true);
+    }
+
+    void PlayerRespawnHelper(Vector3 spawnPosition)
+    {
+        hasDied = false;
+        transform.SetPositionAndRotation(spawnPosition, Quaternion.identity);
+        GetComponent<Health>().Revive();
+    }
+
+    GameObject GetItemFromRayCast()
+    {
+        RaycastHit hit;
+
+        if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit, pickupRange))
+        {
+            GameObject objectHit = hit.transform.gameObject;
+            return objectHit;
+        }
+
+        return null;
+    }
+
+    void CheckIfAlive()
+    {
+        if (!GetComponent<Health>().isAlive && !hasDied)
+        {
+            CmdPlayerDeath();
+        }
+    }
+
+    void HandleShootingInput()
+    {
+        // Attempt to use active weapon
+        GameObject gun = weaponManager.GetActiveWeapon();
+        if (gun == null)
+        {
+            return;
+        }
+        // Gun is automatic
+        if (gun.GetComponent<Gun>().isAuto)
+        {
+            if (Input.GetButton("Fire1"))
+            {
+                weaponManager.GetActiveWeapon().GetComponent<Gun>().Shoot();
+            }
+        }
+        // Gun is semi-automatic
+        else
+        {
+            if (Input.GetButtonDown("Fire1"))
+            {
+                weaponManager.GetActiveWeapon().GetComponent<Gun>().Shoot();
+            }
+        }
     }
 
     void HandleInput()
@@ -151,7 +240,7 @@ public class Player_Network : NetworkBehaviour
                     GameObject gun = weaponManager.GetActiveWeapon();
                     if (gun != null)
                     {
-                        CmdSetAmmo(gun, gun.GetComponent<Gun>().clipAmmo, gun.GetComponent<Gun>().reserveAmmo);
+                        weaponManager.SetAmmo(gun, gun.GetComponent<Gun>().clipAmmo, gun.GetComponent<Gun>().reserveAmmo);
                     }
                     weaponManager.EquipWeapon(objHit);
                     break;
@@ -166,80 +255,9 @@ public class Player_Network : NetworkBehaviour
             GameObject gun = weaponManager.GetActiveWeapon();
             if (gun != null)
             {
-                CmdSetAmmo(gun, gun.GetComponent<Gun>().clipAmmo, gun.GetComponent<Gun>().reserveAmmo);
+                weaponManager.SetAmmo(gun, gun.GetComponent<Gun>().clipAmmo, gun.GetComponent<Gun>().reserveAmmo);
                 weaponManager.UnequipWeapon();
             }
         }
-    }
-
-    void HandleShootingInput()
-    {
-        // Attempt to use active weapon
-        GameObject gun = weaponManager.GetActiveWeapon();
-        if (gun == null)
-        {
-            return;
-        }
-        // Gun is automatic
-        if (gun.GetComponent<Gun>().isAuto)
-        {
-            if (Input.GetButton("Fire1"))
-            {
-                weaponManager.GetActiveWeapon().GetComponent<Gun>().Shoot();
-            }
-        }
-        // Gun is semi-automatic
-        else
-        {
-            if (Input.GetButtonDown("Fire1"))
-            {
-                weaponManager.GetActiveWeapon().GetComponent<Gun>().Shoot();
-            }
-        }
-    }
-
-    void CheckIfAlive()
-    {
-        if (!GetComponent<Health>().isAlive && !hasDied)
-        {
-            CmdPlayerDeath();
-        }
-    }
-
-    [ClientRpc]
-    void RpcPlayerDeath()
-    {
-        hasDied = true;
-    }
-
-    [ClientRpc]
-    void RpcRespawn(Vector3 spawnPosition)
-    {
-        hasDied = false;
-        transform.SetPositionAndRotation(spawnPosition, Quaternion.identity);
-        GetComponent<Health>().Revive();
-    }
-
-    GameObject GetItemFromRayCast()
-    {
-        RaycastHit hit;
-
-        if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit, pickupRange))
-        {
-            GameObject objectHit = hit.transform.gameObject;
-            return objectHit;
-        }
-
-        return null;
-    }
-
-
-
-
-
-    [ClientRpc]
-    void RpcOpenGateway(GameObject gateway)
-    {
-        gateway.GetComponent<Gateway>().OpenGateway();
     }
 }

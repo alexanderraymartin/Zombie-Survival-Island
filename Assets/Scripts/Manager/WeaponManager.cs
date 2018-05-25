@@ -34,6 +34,11 @@ public class WeaponManager : NetworkBehaviour
         CmdReloadWeapon();
     }
 
+    public void SetAmmo(GameObject gun, int clipAmmo, int reserveAmmo)
+    {
+        CmdSetAmmo(gun, clipAmmo, reserveAmmo);
+    }
+
     public void DealDamage(GameObject enemy, float damage)
     {
         CmdDealDamage(enemy, damage);
@@ -71,9 +76,16 @@ public class WeaponManager : NetworkBehaviour
 
     /*************************** Cmd Functions ***************************/
     [Command]
-    public void CmdReloadWeapon()
+    void CmdReloadWeapon()
     {
         RpcReloadWeapon();
+    }
+
+    [Command]
+    void CmdSetAmmo(GameObject gun, int clipAmmo, int reserveAmmo)
+    {
+        gun.GetComponent<Gun>().clipAmmo = clipAmmo;
+        gun.GetComponent<Gun>().reserveAmmo = reserveAmmo;
     }
 
     [Command]
