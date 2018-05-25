@@ -9,19 +9,11 @@ public class Gun : NetworkBehaviour
 {
     public int reloadingSoundIndex;
     public int shootingSoundIndex;
-
-    [SyncVar]
-    public float rateOfFire;
     public bool isAuto;
-
-    [SyncVar]
+    public float rateOfFire;
     public float damage;
-    [SyncVar]
     public float range;
-    [SyncVar]
     public float bulletPenetration; // 0 - 100
-
-    [SyncVar]
     public float reloadTime;
 
     [SyncVar]
@@ -89,23 +81,22 @@ public class Gun : NetworkBehaviour
         clipAmmo -= 1;
 
         // Play shooting sound
-        gunOwner.soundManager.CmdPlaySound(shootingSoundIndex, transform.position, 0.15f);
+        gunOwner.soundManager.PlaySound(shootingSoundIndex, transform.position, 0.15f);
 
         // Show muzzle flash
-        gunOwner.CmdMuzzleFlash();
+        gunOwner.weaponManager.MuzzleFlash();
         RaycastHit[] hits = Physics.RaycastAll(cam.transform.position, cam.transform.forward, range);
 
         // Sort hits
         hits = hits.OrderBy(x => Vector2.Distance(cam.transform.position, x.transform.position)).ToArray();
 
-
         for (int i = 0; i < hits.Length; i++)
         {
-            gunOwner.CmdHitEffect(hits[i].point, hits[i].normal);
+            gunOwner.weaponManager.HitEffect(hits[i].point, hits[i].normal);
             if (hits[i].transform.gameObject.tag == "Enemy")
             {
                 float calculatedDamage = damage * (Mathf.Pow(bulletPenetration / 100, i));
-                gunOwner.CmdDealDamage(hits[i].transform.gameObject, calculatedDamage);
+                gunOwner.weaponManager.DealDamage(hits[i].transform.gameObject, calculatedDamage);
                 Debug.Log(hits[i].transform.name + "hit for " + calculatedDamage);
                 Debug.Log(hits[i].transform.gameObject.GetComponent<Health>().currentHealth);
             }
@@ -132,7 +123,7 @@ public class Gun : NetworkBehaviour
 
         isReloading = true;
         // Play reloading sound
-        gunOwner.soundManager.PlaySound(reloadingSoundIndex, transform.position, 0.15f);
+        gunOwner.soundManager.PlaySoundLocal(reloadingSoundIndex, transform.position, 0.15f);
 
         Debug.Log("Reloading...");
 
@@ -151,7 +142,7 @@ public class Gun : NetworkBehaviour
         if (clipAmmo <= 0)
         {
             // Attempt reload here
-            gunOwner.CmdReloadGun(gameObject);
+            gunOwner.weaponManager.ReloadWeapon();
             return true;
         }
         return false;

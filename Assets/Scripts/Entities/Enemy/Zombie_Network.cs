@@ -164,8 +164,8 @@ public class Zombie_Network : NetworkBehaviour
             animate.SetAnimatorTrigger("Attack");
             canAttack = false;
             Debug.Log("Attack");
-            // if collision do damages
-            target.GetComponent<Player_Network>().CmdTakeDamage(damage);
+            // if collision do damage
+            target.GetComponent<Player_Network>().TakeDamage(playerControllerId, damage);
         }
     }
 

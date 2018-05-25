@@ -8,13 +8,212 @@ using UnityEngine.Networking;
 public class WeaponManager : NetworkBehaviour
 {
     public GameObject weaponHolder;
-    [SyncVar]
     public int maxWeapons = 2;
 
     private int currentWeaponIndex = -1;
 
+    /*************************** Init Functions ***************************/
+    void Awake()
+    {
+        Debug.Log("WeaponManager initialized.");
+    }
+
+    /*************************** Public Functions ***************************/
+    public GameObject GetActiveWeapon()
+    {
+        if (weaponHolder.transform.childCount != 0)
+        {
+            return weaponHolder.transform.GetChild(currentWeaponIndex).gameObject;
+        }
+        return null;
+    }
+
+    public void ReloadWeapon()
+    {
+        ReloadWeaponHelper();
+        CmdReloadWeapon();
+    }
+
+    public void SetAmmo(GameObject gun, int clipAmmo, int reserveAmmo)
+    {
+        CmdSetAmmo(gun, clipAmmo, reserveAmmo);
+    }
+
+    public void DealDamage(GameObject enemy, float damage)
+    {
+        CmdDealDamage(enemy, damage);
+    }
+
+    public void ChangeWeapon()
+    {
+        ChangeWeaponHelper();
+        CmdChangeWeapons();
+    }
+
+    public void EquipWeapon(GameObject weapon)
+    {
+        EquipWeaponHelper(weapon);
+        CmdEquipWeapon(weapon);
+    }
+
+    public void UnequipWeapon()
+    {
+        UnequipWeaponHelper();
+        CmdUnequipWeapon();
+    }
+
+    public void MuzzleFlash()
+    {
+        MuzzleFlashHelper();
+        CmdMuzzleFlash();
+    }
+
+    public void HitEffect(Vector3 position, Vector3 normal)
+    {
+        HitEffectHelper(position, normal);
+        CmdHitEffect(position, normal);
+    }
+
+    /*************************** Cmd Functions ***************************/
     [Command]
-    public void CmdChangeWeapons()
+    void CmdReloadWeapon()
+    {
+        RpcReloadWeapon();
+    }
+
+    [Command]
+    void CmdSetAmmo(GameObject gun, int clipAmmo, int reserveAmmo)
+    {
+        gun.GetComponent<Gun>().clipAmmo = clipAmmo;
+        gun.GetComponent<Gun>().reserveAmmo = reserveAmmo;
+    }
+
+    [Command]
+    void CmdDealDamage(GameObject enemy, float damage)
+    {
+        enemy.GetComponent<Health>().TakeDamage(damage);
+    }
+
+    [Command]
+    void CmdChangeWeapons()
+    {
+        RpcChangeWeapon();
+    }
+
+    [Command]
+    void CmdEquipWeapon(GameObject weapon)
+    {
+        RpcEquipWeapon(weapon);
+    }
+
+    [Command]
+    void CmdUnequipWeapon()
+    {
+        RpcUnequipWeapon();
+    }
+
+    [Command]
+    void CmdMuzzleFlash()
+    {
+        RpcMuzzleFlash();
+    }
+
+    [Command]
+    void CmdHitEffect(Vector3 position, Vector3 normal)
+    {
+        RpcHitEffect(position, normal);
+    }
+
+    /*************************** Rpc Functions ***************************/
+    [ClientRpc]
+    void RpcReloadWeapon()
+    {
+        if (isLocalPlayer)
+        {
+            // Don't run on client who called function
+            return;
+        }
+        ReloadWeaponHelper();
+    }
+
+    [ClientRpc]
+    void RpcChangeWeapon()
+    {
+        if (isLocalPlayer)
+        {
+            // Don't run on client who called function
+            return;
+        }
+        ChangeWeaponHelper();
+    }
+
+    [ClientRpc]
+    void RpcEquipWeapon(GameObject weapon)
+    {
+        if (isLocalPlayer)
+        {
+            // Don't run on client who called function
+            return;
+        }
+        EquipWeaponHelper(weapon);
+    }
+
+    [ClientRpc]
+    void RpcUnequipWeapon()
+    {
+        if (isLocalPlayer)
+        {
+            // Don't run on client who called function
+            return;
+        }
+        UnequipWeaponHelper();
+    }
+
+    [ClientRpc]
+    void RpcMuzzleFlash()
+    {
+        if (isLocalPlayer)
+        {
+            // Don't run on client who called function
+            return;
+        }
+        MuzzleFlashHelper();
+    }
+
+    [ClientRpc]
+    void RpcHitEffect(Vector3 position, Vector3 normal)
+    {
+        if (isLocalPlayer)
+        {
+            // Don't run on client who called function
+            return;
+        }
+        HitEffectHelper(position, normal);
+    }
+
+    [ClientRpc]
+    void RpcSelectWeapon(int index)
+    {
+        if (isLocalPlayer)
+        {
+            // Don't run on client who called function
+            return;
+        }
+        SelectWeaponHelper(index);
+    }
+
+    /*************************** Helper Functions ***************************/
+
+    void ReloadWeaponHelper()
+    {
+        GameObject weapon = GetActiveWeapon();
+        if (weapon != null && !weapon.GetComponent<Gun>().isReloading)
+        {
+            StartCoroutine(weapon.GetComponent<Gun>().Reload());
+        }
+    }
+
+    void ChangeWeaponHelper()
     {
         if (weaponHolder.transform.childCount > 1)
         {
@@ -27,23 +226,12 @@ public class WeaponManager : NetworkBehaviour
                 currentWeaponIndex++;
             }
         }
-        SelectWeapon(currentWeaponIndex);
-        RpcSelectWeapon(currentWeaponIndex);
+        SelectWeaponHelper(currentWeaponIndex);
     }
 
-    public GameObject GetActiveWeapon()
+    void EquipWeaponHelper(GameObject weapon)
     {
-        if (weaponHolder.transform.childCount != 0)
-        {
-            return weaponHolder.transform.GetChild(currentWeaponIndex).gameObject;
-        }
-        return null;
-    }
-
-    [Command]
-    public void CmdEquipWeapon(GameObject gun)
-    {
-        if (gun == null || gun.GetComponent<Gun>().gunOwner != null)
+        if (weapon == null || weapon.GetComponent<Gun>().gunOwner != null)
         {
             return;
         }
@@ -51,53 +239,10 @@ public class WeaponManager : NetworkBehaviour
         // Check if weapon slots are full
         if (weaponHolder.transform.childCount >= maxWeapons)
         {
-            GameObject oldWeapon = GetActiveWeapon();
-            // Unequip old weapon
-            UnequipWeapon(oldWeapon.GetComponent<NetworkIdentity>().netId);
-            RpcUnequipWeapon(oldWeapon.GetComponent<NetworkIdentity>().netId);
+            UnequipWeaponHelper();
         }
+
         // Equip new weapon
-        EquipWeapon(gun.GetComponent<NetworkIdentity>().netId);
-        RpcEquipWeapon(gun.GetComponent<NetworkIdentity>().netId);
-        // Update index of current weapon
-        currentWeaponIndex = weaponHolder.transform.childCount - 1;
-        // Select weapon
-        SelectWeapon(currentWeaponIndex);
-        RpcSelectWeapon(currentWeaponIndex);
-    }
-
-    [Command]
-    public void CmdUnequipWeapon()
-    {
-        GameObject gun = GetActiveWeapon();
-        if (gun != null)
-        {
-            // Unequip old weapon
-            UnequipWeapon(gun.GetComponent<NetworkIdentity>().netId);
-            RpcUnequipWeapon(gun.GetComponent<NetworkIdentity>().netId);
-            // Update index of current weapon
-            currentWeaponIndex = weaponHolder.transform.childCount - 1;
-            // Select weapon
-            SelectWeapon(currentWeaponIndex);
-            RpcSelectWeapon(currentWeaponIndex);
-        }
-    }
-
-    [ClientRpc]
-    void RpcEquipWeapon(NetworkInstanceId weaponId)
-    {
-        EquipWeapon(weaponId);
-    }
-
-    [ClientRpc]
-    void RpcUnequipWeapon(NetworkInstanceId weaponId)
-    {
-        UnequipWeapon(weaponId);
-    }
-
-    void EquipWeapon(NetworkInstanceId weaponId)
-    {
-        GameObject weapon = ClientScene.FindLocalObject(weaponId);
         weapon.transform.SetParent(weaponHolder.transform);
         weapon.transform.localPosition = Vector3.zero;
         weapon.transform.localRotation = Quaternion.identity;
@@ -105,25 +250,53 @@ public class WeaponManager : NetworkBehaviour
         weapon.GetComponent<Gun>().cam = gameObject.GetComponent<Player_Network>().firstPersonCharacter;
         weapon.GetComponent<Gun>().gunOwner = gameObject.GetComponent<Player_Network>();
         weapon.SetActive(true);
+
+        // Update index of current weapon
+        currentWeaponIndex = weaponHolder.transform.childCount - 1;
+        // Select weapon
+        SelectWeaponHelper(currentWeaponIndex);
     }
 
-    void UnequipWeapon(NetworkInstanceId weaponId)
+    void UnequipWeaponHelper()
     {
-        GameObject weapon = ClientScene.FindLocalObject(weaponId);
+        GameObject weapon = GetActiveWeapon();
+        if (weapon == null)
+        {
+            return;
+        }
         weapon.transform.SetParent(null);
         weapon.GetComponent<Gun>().cam = null;
         weapon.GetComponent<Rigidbody>().isKinematic = false;
         weapon.GetComponent<Gun>().gunOwner = null;
         weapon.SetActive(true);
+
+        // Update index of current weapon
+        currentWeaponIndex = weaponHolder.transform.childCount - 1;
+        // Select weapon
+        SelectWeaponHelper(currentWeaponIndex);
     }
 
-    [ClientRpc]
-    void RpcSelectWeapon(int index)
+    void MuzzleFlashHelper()
     {
-        SelectWeapon(index);
+        GameObject weapon = GetActiveWeapon();
+        if (weapon != null)
+        {
+            weapon.GetComponent<Gun>().gameObject.GetComponent<WeaponGraphics>().muzzleFlash.Play();
+        }
     }
 
-    void SelectWeapon(int index)
+    void HitEffectHelper(Vector3 position, Vector3 normal)
+    {
+        // Replace with object pooling
+        GameObject weapon = GetActiveWeapon();
+        if (weapon != null)
+        {
+            GameObject instance = Instantiate(weapon.GetComponent<Gun>().gameObject.GetComponent<WeaponGraphics>().hitEffectPrefab, position, Quaternion.LookRotation(normal));
+            Destroy(instance, 2f);
+        }
+    }
+
+    void SelectWeaponHelper(int index)
     {
         currentWeaponIndex = index;
         int i = 0;

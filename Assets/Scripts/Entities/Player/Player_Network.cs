@@ -22,65 +22,11 @@ public class Player_Network : NetworkBehaviour
     private int playerColorID;
     private bool hasDied;
 
+    /*************************** Init Functions ***************************/
     void Awake()
     {
         weaponManager = GetComponent<WeaponManager>();
         soundManager = GetComponent<SoundManager>();
-    }
-
-    [Command]
-    public void CmdTakeDamage(float damage)
-    {
-        GetComponent<Health>().TakeDamage(damage);
-    }
-
-    [Command]
-    public void CmdDealDamage(GameObject enemy, float damage)
-    {
-        enemy.GetComponent<Health>().TakeDamage(damage);
-    }
-
-    [Command]
-    public void CmdMuzzleFlash()
-    {
-        RpcMuzzleFlash();
-    }
-
-    [Command]
-    public void CmdHitEffect(Vector3 position, Vector3 normal)
-    {
-        RpcHitEffect(position, normal);
-    }
-
-    [Command]
-    public void CmdPlayerDeath()
-    {
-        RpcPlayerDeath();
-    }
-
-    [Command]
-    public void CmdRespawn(Vector3 spawnPosition)
-    {
-        RpcRespawn(spawnPosition);
-    }
-
-    [Command]
-    public void CmdSetAmmo(GameObject gun, int clipAmmo, int reserveAmmo)
-    {
-        gun.GetComponent<Gun>().clipAmmo = clipAmmo;
-        gun.GetComponent<Gun>().reserveAmmo = reserveAmmo;
-    }
-
-    [Command]
-    public void CmdReloadGun(GameObject gun)
-    {
-        RpcReloadGun(gun);
-    }
-
-    [Command]
-    public void CmdOpenGateway(GameObject gateway)
-    {
-        RpcOpenGateway(gateway);
     }
 
     public override void OnStartLocalPlayer()
@@ -108,6 +54,52 @@ public class Player_Network : NetworkBehaviour
         CheckIfAlive();
     }
 
+    /*************************** Public Functions ***************************/
+    public void TakeDamage(int connectionId, float damage)
+    {
+        CmdTakeDamage(connectionId, damage);
+    }
+
+    public void PlayerDeath()
+    {
+        CmdPlayerDeath();
+    }
+
+    public void PlayerRespawn(Vector3 spawnPosition)
+    {
+        CmdPlayerRespawn(spawnPosition);
+    }
+
+    public void OpenGateway(GameObject gateway)
+    {
+        CmdOpenGateway(gateway);
+    }
+
+    /*************************** Cmd Functions ***************************/
+    [Command]
+    void CmdTakeDamage(int connectionId, float damage)
+    {
+        GetComponent<Health>().TakeDamage(damage);
+    }
+
+    [Command]
+    void CmdPlayerDeath()
+    {
+        RpcPlayerDeath();
+    }
+
+    [Command]
+    void CmdPlayerRespawn(Vector3 spawnPosition)
+    {
+        RpcPlayerRespawn(spawnPosition);
+    }
+
+    [Command]
+    void CmdOpenGateway(GameObject gateway)
+    {
+        RpcOpenGateway(gateway);
+    }
+
     [Command]
     void CmdSetPlayerModel()
     {
@@ -116,11 +108,36 @@ public class Player_Network : NetworkBehaviour
         RpcSetPlayerModel(id);
     }
 
+    /*************************** Rpc Functions ***************************/
+    [ClientRpc]
+    void RpcPlayerDeath()
+    {
+        hasDied = true;
+    }
+
+    [ClientRpc]
+    void RpcPlayerRespawn(Vector3 spawnPosition)
+    {
+        PlayerRespawnHelper(spawnPosition);
+    }
+
+    [ClientRpc]
+    void RpcOpenGateway(GameObject gateway)
+    {
+        OpenGatewayHelper(gateway);
+    }
+
     [ClientRpc]
     void RpcSetPlayerModel(int id)
     {
         playerColorID = id;
         SetPlayerModel();
+    }
+
+    /*************************** Helper Functions ***************************/
+    void OpenGatewayHelper(GameObject gateway)
+    {
+        gateway.GetComponent<Gateway>().OpenGateway();
     }
 
     void SetPlayerModel()
@@ -133,60 +150,31 @@ public class Player_Network : NetworkBehaviour
         characterModels[playerColorID].SetActive(true);
     }
 
-    void HandleInput()
+    void PlayerRespawnHelper(Vector3 spawnPosition)
     {
-        if (!GetComponent<Health>().isAlive)
+        hasDied = false;
+        transform.SetPositionAndRotation(spawnPosition, Quaternion.identity);
+        GetComponent<Health>().Revive();
+    }
+
+    GameObject GetItemFromRayCast()
+    {
+        RaycastHit hit;
+
+        if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit, pickupRange))
         {
-            return;
+            GameObject objectHit = hit.transform.gameObject;
+            return objectHit;
         }
 
-        HandleShootingInput();
+        return null;
+    }
 
-        // Attempt to reload
-        if (Input.GetButtonDown("Reload"))
+    void CheckIfAlive()
+    {
+        if (!GetComponent<Health>().isAlive && !hasDied)
         {
-            CmdReloadGun(weaponManager.GetActiveWeapon());
-        }
-        // Attempt to cycle through weapons
-        if (Input.GetButtonDown("Change Weapon"))
-        {
-            weaponManager.CmdChangeWeapons();
-        }
-        // Attempt to pick up a weapon
-        else if (Input.GetButtonDown("Interact"))
-        {
-            Debug.Log("Attempting to pickup...");
-            GameObject objHit = GetItemFromRayCast();
-
-            if (objHit == null)
-            {
-                return;
-            }
-
-            switch (objHit.tag)
-            {
-                case "Gun":
-                    GameObject gun = weaponManager.GetActiveWeapon();
-                    if (gun != null)
-                    {
-                        CmdSetAmmo(gun, gun.GetComponent<Gun>().clipAmmo, gun.GetComponent<Gun>().reserveAmmo);
-                    }
-                    weaponManager.CmdEquipWeapon(objHit);
-                    break;
-                case "Gateway":
-                    CmdOpenGateway(objHit);
-                    break;
-            }
-        }
-        // Attempt to drop a weapon
-        else if (Input.GetButtonDown("Drop Item"))
-        {
-            GameObject gun = weaponManager.GetActiveWeapon();
-            if (gun != null)
-            {
-                CmdSetAmmo(gun, gun.GetComponent<Gun>().clipAmmo, gun.GetComponent<Gun>().reserveAmmo);
-                weaponManager.CmdUnequipWeapon();
-            }
+            CmdPlayerDeath();
         }
     }
 
@@ -216,67 +204,60 @@ public class Player_Network : NetworkBehaviour
         }
     }
 
-    void CheckIfAlive()
+    void HandleInput()
     {
-        if (!GetComponent<Health>().isAlive && !hasDied)
+        if (!GetComponent<Health>().isAlive)
         {
-            CmdPlayerDeath();
-        }
-    }
-
-    [ClientRpc]
-    void RpcPlayerDeath()
-    {
-        hasDied = true;
-    }
-
-    [ClientRpc]
-    void RpcRespawn(Vector3 spawnPosition)
-    {
-        hasDied = false;
-        transform.SetPositionAndRotation(spawnPosition, Quaternion.identity);
-        GetComponent<Health>().Revive();
-    }
-
-    GameObject GetItemFromRayCast()
-    {
-        RaycastHit hit;
-
-        if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit, pickupRange))
-        {
-            GameObject objectHit = hit.transform.gameObject;
-            return objectHit;
+            return;
         }
 
-        return null;
-    }
+        HandleShootingInput();
 
-    [ClientRpc]
-    void RpcMuzzleFlash()
-    {
-        weaponManager.GetActiveWeapon().GetComponent<Gun>().gameObject.GetComponent<WeaponGraphics>().muzzleFlash.Play();
-    }
-
-    [ClientRpc]
-    void RpcHitEffect(Vector3 position, Vector3 normal)
-    {
-        // Replace with object pooling
-        GameObject instance = Instantiate(weaponManager.GetActiveWeapon().GetComponent<Gun>().gameObject.GetComponent<WeaponGraphics>().hitEffectPrefab, position, Quaternion.LookRotation(normal));
-        Destroy(instance, 2f);
-    }
-
-    [ClientRpc]
-    void RpcReloadGun(GameObject gun)
-    {
-        if (gun != null && !gun.GetComponent<Gun>().isReloading)
+        // Attempt to reload
+        if (Input.GetButtonDown("Reload"))
         {
-            StartCoroutine(gun.GetComponent<Gun>().Reload());
+            weaponManager.ReloadWeapon();
         }
-    }
+        // Attempt to cycle through weapons
+        if (Input.GetButtonDown("Change Weapon"))
+        {
+            weaponManager.ChangeWeapon();
+        }
+        // Attempt to pick up a weapon
+        else if (Input.GetButtonDown("Interact"))
+        {
+            Debug.Log("Attempting to pickup...");
+            GameObject objHit = GetItemFromRayCast();
 
-    [ClientRpc]
-    void RpcOpenGateway(GameObject gateway)
-    {
-        gateway.GetComponent<Gateway>().OpenGateway();
+            if (objHit == null)
+            {
+                return;
+            }
+
+            switch (objHit.tag)
+            {
+                case "Gun":
+                    GameObject gun = weaponManager.GetActiveWeapon();
+                    if (gun != null)
+                    {
+                        weaponManager.SetAmmo(gun, gun.GetComponent<Gun>().clipAmmo, gun.GetComponent<Gun>().reserveAmmo);
+                    }
+                    weaponManager.EquipWeapon(objHit);
+                    break;
+                case "Gateway":
+                    CmdOpenGateway(objHit);
+                    break;
+            }
+        }
+        // Attempt to drop a weapon
+        else if (Input.GetButtonDown("Drop Item"))
+        {
+            GameObject gun = weaponManager.GetActiveWeapon();
+            if (gun != null)
+            {
+                weaponManager.SetAmmo(gun, gun.GetComponent<Gun>().clipAmmo, gun.GetComponent<Gun>().reserveAmmo);
+                weaponManager.UnequipWeapon();
+            }
+        }
     }
 }
