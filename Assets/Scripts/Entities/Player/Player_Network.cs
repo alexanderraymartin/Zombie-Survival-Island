@@ -19,6 +19,9 @@ public class Player_Network : NetworkBehaviour
     [HideInInspector]
     public SoundManager soundManager;
 
+    [HideInInspector]
+    public int connectionId;
+
     private int playerColorID;
     private bool hasDied;
 
@@ -28,29 +31,32 @@ public class Player_Network : NetworkBehaviour
         soundManager = GetComponent<SoundManager>();
     }
 
+    public override void OnStartClient()
+    {
+        connectionId = GetComponent<NetworkIdentity>().connectionToClient.connectionId;
+        Debug.Log(connectionId);
+    }
+
+    /*
+     * Returns true if the client called the Cmd.
+     */
+    [Client]
+    public bool IsCallingPlayer(int id)
+    {
+        return connectionId == id;
+    }
+
+    public void TakeDamage(int connectionId, float damage)
+    {
+        CmdTakeDamage(connectionId, damage);
+    }
+
     [Command]
-    public void CmdTakeDamage(float damage)
+    private void CmdTakeDamage(int connectionId, float damage)
     {
         GetComponent<Health>().TakeDamage(damage);
     }
 
-    [Command]
-    public void CmdDealDamage(GameObject enemy, float damage)
-    {
-        enemy.GetComponent<Health>().TakeDamage(damage);
-    }
-
-    [Command]
-    public void CmdMuzzleFlash()
-    {
-        RpcMuzzleFlash();
-    }
-
-    [Command]
-    public void CmdHitEffect(Vector3 position, Vector3 normal)
-    {
-        RpcHitEffect(position, normal);
-    }
 
     [Command]
     public void CmdPlayerDeath()
@@ -150,7 +156,7 @@ public class Player_Network : NetworkBehaviour
         // Attempt to cycle through weapons
         if (Input.GetButtonDown("Change Weapon"))
         {
-            weaponManager.CmdChangeWeapons();
+            weaponManager.ChangeWeapon(connectionId);
         }
         // Attempt to pick up a weapon
         else if (Input.GetButtonDown("Interact"))
@@ -171,7 +177,7 @@ public class Player_Network : NetworkBehaviour
                     {
                         CmdSetAmmo(gun, gun.GetComponent<Gun>().clipAmmo, gun.GetComponent<Gun>().reserveAmmo);
                     }
-                    weaponManager.CmdEquipWeapon(objHit);
+                    weaponManager.EquipWeapon(connectionId, objHit);
                     break;
                 case "Gateway":
                     CmdOpenGateway(objHit);
@@ -185,7 +191,7 @@ public class Player_Network : NetworkBehaviour
             if (gun != null)
             {
                 CmdSetAmmo(gun, gun.GetComponent<Gun>().clipAmmo, gun.GetComponent<Gun>().reserveAmmo);
-                weaponManager.CmdUnequipWeapon();
+                weaponManager.UnequipWeapon(connectionId);
             }
         }
     }
@@ -251,19 +257,7 @@ public class Player_Network : NetworkBehaviour
         return null;
     }
 
-    [ClientRpc]
-    void RpcMuzzleFlash()
-    {
-        weaponManager.GetActiveWeapon().GetComponent<Gun>().gameObject.GetComponent<WeaponGraphics>().muzzleFlash.Play();
-    }
 
-    [ClientRpc]
-    void RpcHitEffect(Vector3 position, Vector3 normal)
-    {
-        // Replace with object pooling
-        GameObject instance = Instantiate(weaponManager.GetActiveWeapon().GetComponent<Gun>().gameObject.GetComponent<WeaponGraphics>().hitEffectPrefab, position, Quaternion.LookRotation(normal));
-        Destroy(instance, 2f);
-    }
 
     [ClientRpc]
     void RpcReloadGun(GameObject gun)

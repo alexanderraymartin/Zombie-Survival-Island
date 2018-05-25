@@ -27,6 +27,7 @@ public class Health : NetworkBehaviour
     public void GainHealth(float amount)
     {
         currentHealth += amount;
+        currentHealth = Mathf.Min(currentHealth, maxHealth);
         isAlive = currentHealth > 0;
     }
 
