@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.Networking;
 
 [RequireComponent(typeof(Player_Network))]
-[RequireComponent(typeof(NetworkTransform))]
 public class WeaponManager : NetworkBehaviour
 {
     public GameObject weaponHolder;
