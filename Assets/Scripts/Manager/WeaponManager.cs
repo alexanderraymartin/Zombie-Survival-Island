@@ -21,11 +21,8 @@ public class WeaponManager : NetworkBehaviour
     public void PickUpWallGun(GameObject wallGun)
     {
         Debug.Log("Attempting to pick up wall gun");
-        GameObject gunType = wallGun.GetComponent<WallGun>().gunType;
-
-        GameObject instance = Instantiate(gunType);
+        GameObject instance = Instantiate(wallGun.GetComponent<WallGun>().gunType);
         CmdSpawnWeapon(instance);
-        EquipWeapon(instance);
     }
 
     public GameObject GetActiveWeapon()
@@ -110,6 +107,8 @@ public class WeaponManager : NetworkBehaviour
     void CmdSpawnWeapon(GameObject weapon)
     {
         NetworkServer.Spawn(weapon);
+        EquipWeaponHelper(weapon);
+        RpcEquipWeapon(weapon);
     }
 
     [Command]
