@@ -20,9 +20,7 @@ public class WeaponManager : NetworkBehaviour
     /*************************** Public Functions ***************************/
     public void PickUpWallGun(GameObject wallGun)
     {
-        Debug.Log("Attempting to pick up wall gun");
-        GameObject instance = Instantiate(wallGun.GetComponent<WallGun>().gunType);
-        CmdSpawnWeapon(instance);
+        CmdPickUpWallGun(wallGun);
     }
 
     public GameObject GetActiveWeapon()
@@ -104,11 +102,11 @@ public class WeaponManager : NetworkBehaviour
 
     /*************************** Cmd Functions ***************************/
     [Command]
-    void CmdSpawnWeapon(GameObject weapon)
+    void CmdPickUpWallGun(GameObject wallGun)
     {
-        NetworkServer.Spawn(weapon);
-        EquipWeaponHelper(weapon);
-        RpcEquipWeapon(weapon);
+        GameObject instance = Instantiate(wallGun.GetComponent<WallGun>().gunType);
+        NetworkServer.Spawn(instance);
+        RpcEquipWeapon(instance);
     }
 
     [Command]
@@ -196,11 +194,7 @@ public class WeaponManager : NetworkBehaviour
     [ClientRpc]
     void RpcEquipWeapon(GameObject weapon)
     {
-        if (isLocalPlayer)
-        {
-            // Don't run on client who called function
-            return;
-        }
+        // Run on all clients
         EquipWeaponHelper(weapon);
     }
 

@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4492981637705510}
   - component: {fileID: 114750867368288598}
   - component: {fileID: 65085972243640528}
+  - component: {fileID: 114386355600386406}
   m_Layer: 0
   m_Name: WallGun_M4-Carbine
   m_TagString: WallGun
@@ -126,6 +127,38 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &114386355600386406
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1485832497868102}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: 870353891bb340e2b2a9c8707e7419ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 118
+    i1: 247
+    i2: 160
+    i3: 173
+    i4: 117
+    i5: 195
+    i6: 18
+    i7: 180
+    i8: 75
+    i9: 198
+    i10: 132
+    i11: 209
+    i12: 73
+    i13: 128
+    i14: 69
+    i15: 86
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0
 --- !u!114 &114750867368288598
 MonoBehaviour:
   m_ObjectHideFlags: 1

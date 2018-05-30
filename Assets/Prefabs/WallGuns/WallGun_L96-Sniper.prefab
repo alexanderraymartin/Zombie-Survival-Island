@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4643740341094776}
   - component: {fileID: 114732920093434642}
   - component: {fileID: 65462602185494730}
+  - component: {fileID: 114697958189972744}
   m_Layer: 0
   m_Name: WallGun_L96-Sniper
   m_TagString: WallGun
@@ -126,6 +127,38 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &114697958189972744
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1024375669107612}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: 870353891bb340e2b2a9c8707e7419ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 16
+    i1: 30
+    i2: 145
+    i3: 195
+    i4: 232
+    i5: 28
+    i6: 159
+    i7: 244
+    i8: 40
+    i9: 217
+    i10: 215
+    i11: 176
+    i12: 187
+    i13: 30
+    i14: 214
+    i15: 146
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0
 --- !u!114 &114732920093434642
 MonoBehaviour:
   m_ObjectHideFlags: 1

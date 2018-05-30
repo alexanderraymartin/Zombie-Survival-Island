@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4552436344013274}
   - component: {fileID: 114289102594716112}
   - component: {fileID: 65480935044947790}
+  - component: {fileID: 114730810355654598}
   m_Layer: 0
   m_Name: WallGun_AK-47
   m_TagString: WallGun
@@ -138,3 +139,35 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gunType: {fileID: 1643736623542640, guid: d78334f7dbc999045bc9b3bf89503c2e, type: 2}
+--- !u!114 &114730810355654598
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1303057022380738}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: 870353891bb340e2b2a9c8707e7419ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 216
+    i1: 236
+    i2: 78
+    i3: 222
+    i4: 31
+    i5: 140
+    i6: 228
+    i7: 20
+    i8: 203
+    i9: 5
+    i10: 96
+    i11: 10
+    i12: 77
+    i13: 130
+    i14: 132
+    i15: 194
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0

@@ -38,6 +38,7 @@ GameObject:
   - component: {fileID: 4509523450882898}
   - component: {fileID: 114269931807917216}
   - component: {fileID: 65460208342340132}
+  - component: {fileID: 114233617817534780}
   m_Layer: 0
   m_Name: WallGun_Pistol
   m_TagString: WallGun
@@ -126,6 +127,38 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &114233617817534780
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1635094887247418}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: 870353891bb340e2b2a9c8707e7419ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 93
+    i1: 210
+    i2: 41
+    i3: 125
+    i4: 119
+    i5: 27
+    i6: 141
+    i7: 68
+    i8: 41
+    i9: 50
+    i10: 204
+    i11: 225
+    i12: 141
+    i13: 96
+    i14: 49
+    i15: 78
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0
 --- !u!114 &114269931807917216
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -38,6 +38,7 @@ GameObject:
   - component: {fileID: 4908994497180894}
   - component: {fileID: 114801763231495530}
   - component: {fileID: 65511745409973006}
+  - component: {fileID: 114555758049521076}
   m_Layer: 0
   m_Name: WallGun_Shotgun
   m_TagString: WallGun
@@ -126,6 +127,38 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &114555758049521076
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1990209504166112}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: 870353891bb340e2b2a9c8707e7419ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 235
+    i1: 93
+    i2: 115
+    i3: 11
+    i4: 225
+    i5: 170
+    i6: 199
+    i7: 36
+    i8: 185
+    i9: 106
+    i10: 192
+    i11: 236
+    i12: 157
+    i13: 221
+    i14: 72
+    i15: 254
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0
 --- !u!114 &114801763231495530
 MonoBehaviour:
   m_ObjectHideFlags: 1
