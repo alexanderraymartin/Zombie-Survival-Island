@@ -231,19 +231,25 @@ public class Player_Network : NetworkBehaviour
 
             if (objHit == null)
             {
+                Debug.Log("Object hit was null");
                 return;
             }
 
             switch (objHit.tag)
             {
-                case "Gun":
-                    GameObject gun = weaponManager.GetActiveWeapon();
-                    if (gun != null)
-                    {
-                        weaponManager.SetAmmo(gun, gun.GetComponent<Gun>().clipAmmo, gun.GetComponent<Gun>().reserveAmmo);
-                    }
-                    weaponManager.EquipWeapon(objHit);
+                case "WallGun":
+                    weaponManager.PickUpWallGun(objHit);   
                     break;
+                case "Gun":
+                    {
+                        GameObject gun = weaponManager.GetActiveWeapon();
+                        if (gun != null)
+                        {
+                            weaponManager.SetAmmo(gun, gun.GetComponent<Gun>().clipAmmo, gun.GetComponent<Gun>().reserveAmmo);
+                        }
+                        weaponManager.EquipWeapon(objHit);
+                        break;
+                    }
                 case "Gateway":
                     CmdOpenGateway(objHit);
                     break;

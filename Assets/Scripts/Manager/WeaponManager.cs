@@ -19,11 +19,45 @@ public class WeaponManager : NetworkBehaviour
     }
 
     /*************************** Public Functions ***************************/
+    public void PickUpWallGun(GameObject gun)
+    {
+        Debug.Log("Attempting to pick up wall gun");
+        GameObject primaryGun = GetActiveWeapon();  
+        
+        GameObject gunType = gun.GetComponent<WallGun>().gunType;
+
+        if (primaryGun == gunType)
+        {
+            Debug.Log("Same Gun");
+        }
+        else {
+            Debug.Log("Not Same");
+        }
+        gunType = Instantiate(gunType);
+        NetworkServer.Spawn(gunType);
+        EquipWeapon(gunType);
+    }
+
     public GameObject GetActiveWeapon()
     {
         if (weaponHolder.transform.childCount != 0)
         {
             return weaponHolder.transform.GetChild(currentWeaponIndex).gameObject;
+        }
+        return null;
+    }
+
+    public GameObject GetSecondaryWeapon()
+    {
+        int secondaryWeaponIndex = 1;
+        if (weaponHolder.transform.childCount == 2)
+        {
+            if (currentWeaponIndex >= weaponHolder.transform.childCount - 1)
+            {
+                secondaryWeaponIndex = 0;
+            }
+            
+            return weaponHolder.transform.GetChild(secondaryWeaponIndex).gameObject;
         }
         return null;
     }

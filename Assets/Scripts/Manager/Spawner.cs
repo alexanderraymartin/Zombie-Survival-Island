@@ -94,10 +94,11 @@ public class Spawner : NetworkBehaviour
         }
     }
 
-    void SpawnEntity(Vector3 position, GameObject prefab)
+    GameObject SpawnEntity(Vector3 position, GameObject prefab)
     {
         GameObject instance = Instantiate(prefab, position, Quaternion.identity);
         instance.name = instance.name + position;
         NetworkServer.Spawn(instance);
+        return instance;
     }
 }
