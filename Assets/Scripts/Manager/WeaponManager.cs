@@ -26,13 +26,6 @@ public class WeaponManager : NetworkBehaviour
         
         GameObject gunType = gun.GetComponent<WallGun>().gunType;
 
-        if (primaryGun == gunType)
-        {
-            Debug.Log("Same Gun");
-        }
-        else {
-            Debug.Log("Not Same");
-        }
         gunType = Instantiate(gunType);
         NetworkServer.Spawn(gunType);
         EquipWeapon(gunType);
