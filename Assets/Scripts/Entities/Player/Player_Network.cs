@@ -4,9 +4,10 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityStandardAssets.Characters.FirstPerson;
 
-[RequireComponent(typeof(Health))]
+[RequireComponent(typeof(NetworkTransform))]
 [RequireComponent(typeof(WeaponManager))]
 [RequireComponent(typeof(SoundManager))]
+[RequireComponent(typeof(Health))]
 public class Player_Network : NetworkBehaviour
 {
     public GameObject firstPersonCharacter;
@@ -18,6 +19,8 @@ public class Player_Network : NetworkBehaviour
     public WeaponManager weaponManager;
     [HideInInspector]
     public SoundManager soundManager;
+    [HideInInspector]
+    public Health health;
 
     private int playerColorID;
     private bool hasDied;
@@ -27,6 +30,7 @@ public class Player_Network : NetworkBehaviour
     {
         weaponManager = GetComponent<WeaponManager>();
         soundManager = GetComponent<SoundManager>();
+        health = GetComponent<Health>();
     }
 
     public override void OnStartLocalPlayer()
@@ -79,7 +83,7 @@ public class Player_Network : NetworkBehaviour
     [Command]
     void CmdTakeDamage(int connectionId, float damage)
     {
-        GetComponent<Health>().TakeDamage(damage);
+        health.TakeDamage(damage);
     }
 
     [Command]
@@ -154,7 +158,7 @@ public class Player_Network : NetworkBehaviour
     {
         hasDied = false;
         transform.SetPositionAndRotation(spawnPosition, Quaternion.identity);
-        GetComponent<Health>().Revive();
+        health.Revive();
     }
 
     GameObject GetItemFromRayCast()
@@ -172,7 +176,7 @@ public class Player_Network : NetworkBehaviour
 
     void CheckIfAlive()
     {
-        if (!GetComponent<Health>().isAlive && !hasDied)
+        if (!health.isAlive && !hasDied)
         {
             CmdPlayerDeath();
         }
@@ -206,7 +210,7 @@ public class Player_Network : NetworkBehaviour
 
     void HandleInput()
     {
-        if (!GetComponent<Health>().isAlive)
+        if (!health.isAlive)
         {
             return;
         }
