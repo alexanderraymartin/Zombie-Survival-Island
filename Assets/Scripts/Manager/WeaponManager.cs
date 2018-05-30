@@ -18,16 +18,14 @@ public class WeaponManager : NetworkBehaviour
     }
 
     /*************************** Public Functions ***************************/
-    public void PickUpWallGun(GameObject gun)
+    public void PickUpWallGun(GameObject wallGun)
     {
         Debug.Log("Attempting to pick up wall gun");
-        GameObject primaryGun = GetActiveWeapon();  
-        
-        GameObject gunType = gun.GetComponent<WallGun>().gunType;
+        GameObject gunType = wallGun.GetComponent<WallGun>().gunType;
 
-        gunType = Instantiate(gunType);
-        NetworkServer.Spawn(gunType);
-        EquipWeapon(gunType);
+        GameObject instance = Instantiate(gunType);
+        CmdSpawnWeapon(instance);
+        EquipWeapon(instance);
     }
 
     public GameObject GetActiveWeapon()
@@ -48,7 +46,7 @@ public class WeaponManager : NetworkBehaviour
             {
                 secondaryWeaponIndex = 0;
             }
-            
+
             return weaponHolder.transform.GetChild(secondaryWeaponIndex).gameObject;
         }
         return null;
@@ -60,9 +58,10 @@ public class WeaponManager : NetworkBehaviour
         CmdReloadWeapon();
     }
 
-    public void SetAmmo(GameObject gun, int clipAmmo, int reserveAmmo)
+    public void SetAmmo(GameObject weapon, int clipAmmo, int reserveAmmo)
     {
-        CmdSetAmmo(gun, clipAmmo, reserveAmmo);
+        SetAmmoHelper(weapon, clipAmmo, reserveAmmo);
+        CmdSetAmmo(weapon, clipAmmo, reserveAmmo);
     }
 
     public void DealDamage(GameObject enemy, float damage)
@@ -78,12 +77,18 @@ public class WeaponManager : NetworkBehaviour
 
     public void EquipWeapon(GameObject weapon)
     {
+        CmdSetAmmo(weapon, weapon.GetComponent<Gun>().clipAmmo, weapon.GetComponent<Gun>().reserveAmmo);
         EquipWeaponHelper(weapon);
         CmdEquipWeapon(weapon);
     }
 
     public void UnequipWeapon()
     {
+        GameObject weapon = GetActiveWeapon();
+        if (weapon != null)
+        {
+            CmdSetAmmo(weapon, weapon.GetComponent<Gun>().clipAmmo, weapon.GetComponent<Gun>().reserveAmmo);
+        }
         UnequipWeaponHelper();
         CmdUnequipWeapon();
     }
@@ -102,16 +107,21 @@ public class WeaponManager : NetworkBehaviour
 
     /*************************** Cmd Functions ***************************/
     [Command]
+    void CmdSpawnWeapon(GameObject weapon)
+    {
+        NetworkServer.Spawn(weapon);
+    }
+
+    [Command]
     void CmdReloadWeapon()
     {
         RpcReloadWeapon();
     }
 
     [Command]
-    void CmdSetAmmo(GameObject gun, int clipAmmo, int reserveAmmo)
+    void CmdSetAmmo(GameObject weapon, int clipAmmo, int reserveAmmo)
     {
-        gun.GetComponent<Gun>().clipAmmo = clipAmmo;
-        gun.GetComponent<Gun>().reserveAmmo = reserveAmmo;
+        RpcSetAmmo(weapon, clipAmmo, reserveAmmo);
     }
 
     [Command]
@@ -160,6 +170,17 @@ public class WeaponManager : NetworkBehaviour
             return;
         }
         ReloadWeaponHelper();
+    }
+
+    [ClientRpc]
+    void RpcSetAmmo(GameObject weapon, int clipAmmo, int reserveAmmo)
+    {
+        if (isLocalPlayer)
+        {
+            // Don't run on client who called function
+            return;
+        }
+        SetAmmoHelper(weapon, clipAmmo, reserveAmmo);
     }
 
     [ClientRpc]
@@ -239,6 +260,12 @@ public class WeaponManager : NetworkBehaviour
         }
     }
 
+    void SetAmmoHelper(GameObject weapon, int clipAmmo, int reserveAmmo)
+    {
+        weapon.GetComponent<Gun>().clipAmmo = clipAmmo;
+        weapon.GetComponent<Gun>().reserveAmmo = reserveAmmo;
+    }
+
     void ChangeWeaponHelper()
     {
         if (weaponHolder.transform.childCount > 1)
@@ -290,6 +317,7 @@ public class WeaponManager : NetworkBehaviour
         {
             return;
         }
+
         weapon.transform.SetParent(null);
         weapon.GetComponent<Gun>().cam = null;
         weapon.GetComponent<Rigidbody>().isKinematic = false;

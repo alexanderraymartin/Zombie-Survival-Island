@@ -242,15 +242,10 @@ public class Player_Network : NetworkBehaviour
             switch (objHit.tag)
             {
                 case "WallGun":
-                    weaponManager.PickUpWallGun(objHit);   
+                    weaponManager.PickUpWallGun(objHit);
                     break;
                 case "Gun":
                     {
-                        GameObject gun = weaponManager.GetActiveWeapon();
-                        if (gun != null)
-                        {
-                            weaponManager.SetAmmo(gun, gun.GetComponent<Gun>().clipAmmo, gun.GetComponent<Gun>().reserveAmmo);
-                        }
                         weaponManager.EquipWeapon(objHit);
                         break;
                     }
@@ -265,7 +260,6 @@ public class Player_Network : NetworkBehaviour
             GameObject gun = weaponManager.GetActiveWeapon();
             if (gun != null)
             {
-                weaponManager.SetAmmo(gun, gun.GetComponent<Gun>().clipAmmo, gun.GetComponent<Gun>().reserveAmmo);
                 weaponManager.UnequipWeapon();
             }
         }
