@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityStandardAssets.Characters.FirstPerson;
+using UnityStandardAssets.CrossPlatformInput;
 
 [RequireComponent(typeof(Health))]
 [RequireComponent(typeof(WeaponManager))]
 [RequireComponent(typeof(SoundManager))]
+[RequireComponent(typeof(Player_Ability))]
 public class Player_Network : NetworkBehaviour
 {
     public GameObject firstPersonCharacter;
@@ -18,15 +20,20 @@ public class Player_Network : NetworkBehaviour
     public WeaponManager weaponManager;
     [HideInInspector]
     public SoundManager soundManager;
+    [HideInInspector]
+    public Player_Ability playerAbility;
 
     private int playerColorID;
     private bool hasDied;
+
 
     /*************************** Init Functions ***************************/
     void Awake()
     {
         weaponManager = GetComponent<WeaponManager>();
         soundManager = GetComponent<SoundManager>();
+
+        playerAbility = GetComponent<Player_Ability>();
     }
 
     public override void OnStartLocalPlayer()
@@ -258,6 +265,26 @@ public class Player_Network : NetworkBehaviour
                 weaponManager.SetAmmo(gun, gun.GetComponent<Gun>().clipAmmo, gun.GetComponent<Gun>().reserveAmmo);
                 weaponManager.UnequipWeapon();
             }
+        }
+
+        else if (Input.GetButtonDown("Fire2"))
+        {
+            playerAbility.Teleport();
+            // Read input
+            //float horizontal = CrossPlatformInputManager.GetAxis("Horizontal");
+            //float vertical = CrossPlatformInputManager.GetAxis("Vertical");
+
+            //Vector2 direction = new Vector2(horizontal, vertical);
+
+            //// normalize input if it exceeds 1 in combined length:
+            //if (direction.sqrMagnitude > 1)
+            //{
+            //    direction.Normalize();
+            //}
+
+            //Vector3 desiredMove = transform.forward * direction.y + transform.right * direction.x;
+
+            //characterController.Move(desiredMove * 5);
         }
     }
 }
