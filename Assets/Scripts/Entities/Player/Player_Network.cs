@@ -222,6 +222,17 @@ public class Player_Network : NetworkBehaviour
         {
             weaponManager.ReloadWeapon();
         }
+        // Attempt to Aim
+        if (Input.GetMouseButton(1))
+        {
+            Debug.Log("Aiming");
+            weaponManager.AimDownSights();
+        }
+        // Attempt to return to hip fire
+        if (Input.GetMouseButtonUp(1))
+        {
+            weaponManager.ReturnToHipFire();
+        }
         // Attempt to cycle through weapons
         if (Input.GetButtonDown("Change Weapon"))
         {

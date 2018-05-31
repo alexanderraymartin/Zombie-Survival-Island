@@ -18,6 +18,23 @@ public class WeaponManager : NetworkBehaviour
     }
 
     /*************************** Public Functions ***************************/
+    public void AimDownSights()
+    {
+        GameObject weapon = GetActiveWeapon();
+        if (weapon != null)
+        {
+            weapon.GetComponent<Gun>().AimDownSights();
+        }
+    }
+
+    public void ReturnToHipFire()
+    {
+        GameObject weapon = GetActiveWeapon();
+        if (weapon != null)
+        {
+            GetActiveWeapon().GetComponent<Gun>().AimHipFire();
+        }
+    }
     public void PickUpWallGun(GameObject wallGun)
     {
         CmdPickUpWallGun(wallGun);
