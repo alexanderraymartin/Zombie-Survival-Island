@@ -157,7 +157,6 @@ public class Gun : NetworkBehaviour
     {
         if (!isAiming)
         {
-            Debug.Log("AimingDownSights");
             isAiming = true;
             StartCoroutine(AimDownSightsHelper());
         }
@@ -173,7 +172,6 @@ public class Gun : NetworkBehaviour
     {
         while (isAiming && transform.localPosition != sightFireLoc)
         {
-            Debug.Log("In Here");
             transform.localPosition = Vector3.Lerp(transform.localPosition, sightFireLoc, aimSpeed * Time.deltaTime);
             yield return null;
         }
