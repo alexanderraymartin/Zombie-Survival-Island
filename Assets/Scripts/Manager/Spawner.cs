@@ -80,7 +80,7 @@ public class Spawner : NetworkBehaviour
             {
                 Debug.Log("Respawning player: " + players[i].name);
                 // TODO: add respawn points
-                players[i].GetComponent<Player_Network>().PlayerRespawn(new Vector3(-90.0f, 2.0f, 70.0f));
+                players[i].GetComponent<Player_Network>().PlayerRespawn(new Vector3(-325f, 100f, 10.0f));
             }
         }
     }
@@ -90,7 +90,7 @@ public class Spawner : NetworkBehaviour
         yield return new WaitForSeconds(downtime);
         for (int i = 0; i < maxZombies; i++)
         {
-            SpawnEntity(new Vector3(-40, 0, 70), zombiePrefab);
+            SpawnEntity(new Vector3(-255, 52, -5), zombiePrefab);
             yield return new WaitForSeconds(betweenSpawnsTime);
         }
     }
