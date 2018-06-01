@@ -16,6 +16,11 @@ public class Gun : NetworkBehaviour
     public float bulletPenetration; // 0 - 100
     public float reloadTime;
 
+    public Vector3 hipFireLoc;
+    public Vector3 sightFireLoc;
+    public int aimSpeed;
+    private bool isAiming = false; 
+
     [SyncVar]
     public int clipMaxAmmo;
     [SyncVar]
@@ -146,5 +151,29 @@ public class Gun : NetworkBehaviour
             return true;
         }
         return false;
+    }
+
+    public void AimDownSights()
+    {
+        if (!isAiming)
+        {
+            isAiming = true;
+            StartCoroutine(AimDownSightsHelper());
+        }
+    }
+
+    public void AimHipFire()
+    {
+        transform.localPosition = hipFireLoc;
+        isAiming = false;
+    }
+
+    IEnumerator AimDownSightsHelper()
+    {
+        while (isAiming && transform.localPosition != sightFireLoc)
+        {
+            transform.localPosition = Vector3.Lerp(transform.localPosition, sightFireLoc, aimSpeed * Time.deltaTime);
+            yield return null;
+        }
     }
 }
