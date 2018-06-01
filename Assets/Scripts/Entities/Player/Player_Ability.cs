@@ -28,14 +28,14 @@ public class Player_Ability : MonoBehaviour {
 
     void Update()
     {
-        if (teleporting)
-        {
-            timeRemaining -= Time.deltaTime;
-            if (timeRemaining > 0.0f)
-            {
+        //if (teleporting)
+        //{
+        //    timeRemaining -= Time.deltaTime;
+        //    if (timeRemaining > 0.0f)
+        //    {
                 
-            }
-        }
+        //    }
+        //}
     }
 
     public void Teleport()
@@ -56,8 +56,8 @@ public class Player_Ability : MonoBehaviour {
 
         characterController.Move(desiredMove * 5);
 
-        teleporting = true;
-        timeRemaining = teleportTime;
+        //teleporting = true;
+        //timeRemaining = teleportTime;
     }
 
     /*************************** Public Functions ***************************/

@@ -1333,6 +1333,7 @@ GameObject:
   - component: {fileID: 114286803182274046}
   - component: {fileID: 114380797349940560}
   - component: {fileID: 114456086977543798}
+  - component: {fileID: 114595089281219990}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -3529,7 +3530,7 @@ MonoBehaviour:
   m_RunSpeed: 7
   m_RunstepLenghten: 0.7
   m_JumpSpeed: 8
-  m_StickToGroundForce: 10
+  m_StickToGroundForce: 1
   m_GravityMultiplier: 2
   m_MouseLook:
     XSensitivity: 2
@@ -3734,6 +3735,7 @@ MonoBehaviour:
   fpsCam: {fileID: 20517752726960712}
   weaponManager: {fileID: 114174255922811968}
   soundManager: {fileID: 0}
+  playerAbility: {fileID: 0}
 --- !u!114 &114456086977543798
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3760,6 +3762,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fpsController: {fileID: 114064303187481814}
+--- !u!114 &114595089281219990
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1785911747235186}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f68a64a69acbf3418184ed9f46fc79d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114624643334853114
 MonoBehaviour:
   m_ObjectHideFlags: 1
