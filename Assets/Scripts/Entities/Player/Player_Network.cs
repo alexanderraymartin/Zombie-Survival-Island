@@ -5,10 +5,11 @@ using UnityEngine.Networking;
 using UnityStandardAssets.Characters.FirstPerson;
 using UnityStandardAssets.CrossPlatformInput;
 
-[RequireComponent(typeof(Health))]
+[RequireComponent(typeof(NetworkTransform))]
 [RequireComponent(typeof(WeaponManager))]
 [RequireComponent(typeof(SoundManager))]
 [RequireComponent(typeof(Player_Ability))]
+[RequireComponent(typeof(Health))]
 public class Player_Network : NetworkBehaviour
 {
     public GameObject firstPersonCharacter;
@@ -22,6 +23,7 @@ public class Player_Network : NetworkBehaviour
     public SoundManager soundManager;
     [HideInInspector]
     public Player_Ability playerAbility;
+    public Health health;
 
     private int playerColorID;
     private bool hasDied;
@@ -34,6 +36,7 @@ public class Player_Network : NetworkBehaviour
         soundManager = GetComponent<SoundManager>();
 
         playerAbility = GetComponent<Player_Ability>();
+        health = GetComponent<Health>();
     }
 
     public override void OnStartLocalPlayer()
@@ -86,7 +89,7 @@ public class Player_Network : NetworkBehaviour
     [Command]
     void CmdTakeDamage(int connectionId, float damage)
     {
-        GetComponent<Health>().TakeDamage(damage);
+        health.TakeDamage(damage);
     }
 
     [Command]
@@ -161,7 +164,7 @@ public class Player_Network : NetworkBehaviour
     {
         hasDied = false;
         transform.SetPositionAndRotation(spawnPosition, Quaternion.identity);
-        GetComponent<Health>().Revive();
+        health.Revive();
     }
 
     GameObject GetItemFromRayCast()
@@ -179,7 +182,7 @@ public class Player_Network : NetworkBehaviour
 
     void CheckIfAlive()
     {
-        if (!GetComponent<Health>().isAlive && !hasDied)
+        if (!health.isAlive && !hasDied)
         {
             CmdPlayerDeath();
         }
@@ -213,7 +216,7 @@ public class Player_Network : NetworkBehaviour
 
     void HandleInput()
     {
-        if (!GetComponent<Health>().isAlive)
+        if (!health.isAlive)
         {
             return;
         }
@@ -224,6 +227,17 @@ public class Player_Network : NetworkBehaviour
         if (Input.GetButtonDown("Reload"))
         {
             weaponManager.ReloadWeapon();
+        }
+        // Attempt to Aim
+        if (Input.GetMouseButton(1))
+        {
+            Debug.Log("Aiming");
+            weaponManager.AimDownSights();
+        }
+        // Attempt to return to hip fire
+        if (Input.GetMouseButtonUp(1))
+        {
+            weaponManager.ReturnToHipFire();
         }
         // Attempt to cycle through weapons
         if (Input.GetButtonDown("Change Weapon"))
@@ -238,19 +252,20 @@ public class Player_Network : NetworkBehaviour
 
             if (objHit == null)
             {
+                Debug.Log("Object hit was null");
                 return;
             }
 
             switch (objHit.tag)
             {
-                case "Gun":
-                    GameObject gun = weaponManager.GetActiveWeapon();
-                    if (gun != null)
-                    {
-                        weaponManager.SetAmmo(gun, gun.GetComponent<Gun>().clipAmmo, gun.GetComponent<Gun>().reserveAmmo);
-                    }
-                    weaponManager.EquipWeapon(objHit);
+                case "WallGun":
+                    weaponManager.PickUpWallGun(objHit);
                     break;
+                case "Gun":
+                    {
+                        weaponManager.EquipWeapon(objHit);
+                        break;
+                    }
                 case "Gateway":
                     CmdOpenGateway(objHit);
                     break;
@@ -262,7 +277,6 @@ public class Player_Network : NetworkBehaviour
             GameObject gun = weaponManager.GetActiveWeapon();
             if (gun != null)
             {
-                weaponManager.SetAmmo(gun, gun.GetComponent<Gun>().clipAmmo, gun.GetComponent<Gun>().reserveAmmo);
                 weaponManager.UnequipWeapon();
             }
         }

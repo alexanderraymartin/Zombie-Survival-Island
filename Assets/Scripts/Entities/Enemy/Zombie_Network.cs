@@ -180,7 +180,6 @@ public class Zombie_Network : NetworkBehaviour
             Destroy(gameObject);
             GameObject spawner = GameObject.FindGameObjectWithTag("Spawner");
             spawner.GetComponent<Spawner>().zombiesAlive--;
-            Debug.Log("Zombies Alive: " + spawner.GetComponent<Spawner>().zombiesAlive);
         }
     }
 
