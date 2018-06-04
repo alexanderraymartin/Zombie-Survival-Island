@@ -232,7 +232,6 @@ public class Player_Network : NetworkBehaviour
         // Attempt to Aim
         if (Input.GetMouseButton(1))
         {
-            Debug.Log("Aiming");
             weaponManager.AimDownSights();
         }
         // Attempt to return to hip fire
