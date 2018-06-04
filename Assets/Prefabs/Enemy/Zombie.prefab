@@ -1390,7 +1390,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  damage: 25
+  damage: 35
   attackRadius: 2
   walkSpeed: 3
   RunSpeed: 6

@@ -3830,7 +3830,7 @@ MonoBehaviour:
   currentHealth: 100
   healthRegen: 10
   healthRegenTimerPerHit: 2
-  maxHealth: 0
+  maxHealth: 100
   isAlive: 0
 --- !u!114 &114798004975087412
 MonoBehaviour:
