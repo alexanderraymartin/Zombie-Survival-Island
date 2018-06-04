@@ -1399,6 +1399,7 @@ MonoBehaviour:
   despawnCastTime: 3
   attackCooldown: 1.5
   attackCastTime: 0.5
+  healthRate: 20
 --- !u!114 &114500186898182744
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1411,7 +1412,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentHealth: 100
-  maxHealth: 0
+  healthRegen: 0
+  healthRegenTimerPerHit: 0
+  maxHealth: 100
   isAlive: 0
 --- !u!114 &114576083895886986
 MonoBehaviour:
