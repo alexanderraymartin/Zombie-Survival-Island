@@ -24,11 +24,6 @@ public class Spawner : NetworkBehaviour
     public GameObject PistolPrefab;
     public GameObject ShotgunPrefab;
 
-    // Beach Zombie Spawn Points
-    public Transform[] beachZombieSpawns;
-    // Town Zombie Spawn Points
-    public Transform[] townZombieSpawns;
-
     [ServerCallback]
     void Start()
     {
