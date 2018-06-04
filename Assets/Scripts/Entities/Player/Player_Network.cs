@@ -78,6 +78,7 @@ public class Player_Network : NetworkBehaviour
 
     public void PlayerRespawn(Vector3 spawnPosition)
     {
+        health.Revive();
         CmdPlayerRespawn(spawnPosition);
     }
 
@@ -165,7 +166,6 @@ public class Player_Network : NetworkBehaviour
     {
         hasDied = false;
         transform.SetPositionAndRotation(spawnPosition, Quaternion.identity);
-        health.Revive();
     }
 
     GameObject GetItemFromRayCast()
@@ -287,7 +287,7 @@ public class Player_Network : NetworkBehaviour
     {
         GameObject[] enemySpawns = GameObject.FindGameObjectsWithTag("EnemySpawn");
         SortedList<float, Vector3> closestSpawns = new SortedList<float, Vector3>();
-        
+
         foreach (var spawn in enemySpawns)
         {
             float distance = Vector3.Distance(gameObject.transform.localPosition, spawn.transform.localPosition);
