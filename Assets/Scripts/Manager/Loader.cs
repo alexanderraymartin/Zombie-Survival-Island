@@ -10,10 +10,7 @@ public class Loader : NetworkBehaviour
     [ServerCallback]
     void Awake()
     {
-        if (GameManager.instance == null)
-        {
-            Instantiate(gameManager);
-        }
+        Instantiate(gameManager);
     }
 
 }

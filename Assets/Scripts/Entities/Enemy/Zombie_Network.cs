@@ -21,7 +21,7 @@ public class Zombie_Network : NetworkBehaviour
     public float despawnCastTime;
     public float attackCooldown;
     public float attackCastTime;
-    public float healthRate; 
+    public float healthRate;
 
     private float findTargetTimer;
     private float attackCooldownTimer;
@@ -47,7 +47,8 @@ public class Zombie_Network : NetworkBehaviour
         canAttack = true;
         isRunning = false;
 
-        health.maxHealth = health.maxHealth + (healthRate * (GameManager.instance.GetWave() - 1));
+        int wave = GameObject.FindGameObjectWithTag("Spawner").GetComponent<Spawner>().wave;
+        health.maxHealth = health.maxHealth + (healthRate * (wave - 1));
     }
 
     [ServerCallback]

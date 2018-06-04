@@ -2,15 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
-using UnityEngine.UI;
 
 public class Spawner : NetworkBehaviour
 {
-    public static Spawner instance = null;
     public int maxZombies = 0;
     public int downtime = 5;
     public int betweenSpawnsTime = 3;
+    [SyncVar]
     public int zombiesAlive = 0;
+    [SyncVar]
+    public int wave = 0;
 
     // Player
     public GameObject playerPrefab;
@@ -24,42 +25,17 @@ public class Spawner : NetworkBehaviour
     public GameObject ShotgunPrefab;
 
     [ServerCallback]
-    void Start()
-    {
-        if (instance == null)
-        {
-            instance = this;
-        }
-        else if (instance != this)
-        {
-            Destroy(gameObject);
-        }
-
-        SpawnEntity(new Vector3(-85, 0, 75), ak47Prefab);
-        SpawnEntity(new Vector3(-85, 0, 80), L96SniperRiflePrefab);
-        SpawnEntity(new Vector3(-85, 0, 85), M4CarbinePrefab);
-        SpawnEntity(new Vector3(-85, 0, 90), PistolPrefab);
-        SpawnEntity(new Vector3(-85, 0, 95), ShotgunPrefab);
-
-        SpawnEntity(new Vector3(-90, 0, 75), ak47Prefab);
-        SpawnEntity(new Vector3(-90, 0, 80), L96SniperRiflePrefab);
-        SpawnEntity(new Vector3(-90, 0, 85), M4CarbinePrefab);
-        SpawnEntity(new Vector3(-90, 0, 90), PistolPrefab);
-        SpawnEntity(new Vector3(-90, 0, 95), ShotgunPrefab);
-    }
-
-    [ServerCallback]
     void Update()
     {
         if (zombiesAlive == 0)
         {
-            int wave = GameManager.instance.IncrementWave();
-            SpawnNewWave(wave);
+            wave++;
+            SpawnNewWave();
         }
     }
 
     [ServerCallback]
-    void SpawnNewWave(int wave)
+    void SpawnNewWave()
     {
         maxZombies += (int)Mathf.Log(wave * 10, 2f);
         zombiesAlive = maxZombies;
@@ -69,6 +45,7 @@ public class Spawner : NetworkBehaviour
         StartCoroutine(SpawnWave());
     }
 
+    [ServerCallback]
     void RespawnPlayers()
     {
         GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
@@ -84,12 +61,14 @@ public class Spawner : NetworkBehaviour
         }
     }
 
+    [ServerCallback]
     IEnumerator SpawnWave()
     {
         GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
         Player_Network[] playerModels = new Player_Network[players.Length];
 
-        for (var playerIndx = 0; playerIndx < players.Length; playerIndx++) {
+        for (var playerIndx = 0; playerIndx < players.Length; playerIndx++)
+        {
             playerModels[playerIndx] = players[playerIndx].GetComponent<Player_Network>();
         }
 
@@ -105,6 +84,7 @@ public class Spawner : NetworkBehaviour
         }
     }
 
+    [ServerCallback]
     GameObject SpawnEntity(Vector3 position, GameObject prefab)
     {
         GameObject instance = Instantiate(prefab, position, Quaternion.identity);
@@ -113,7 +93,8 @@ public class Spawner : NetworkBehaviour
         return instance;
     }
 
-    private List<Vector3> GetAvailableEnemySpawnPoints(Player_Network[] players)
+    [ServerCallback]
+    List<Vector3> GetAvailableEnemySpawnPoints(Player_Network[] players)
     {
         List<Vector3> spawns = new List<Vector3>();
 
