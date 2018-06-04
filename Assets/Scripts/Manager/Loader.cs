@@ -6,7 +6,6 @@ using UnityEngine.Networking;
 public class Loader : NetworkBehaviour
 {
     public GameObject gameManager;
-    public GameObject spawner;
 
     [ServerCallback]
     void Awake()
@@ -14,10 +13,6 @@ public class Loader : NetworkBehaviour
         if (GameManager.instance == null)
         {
             Instantiate(gameManager);
-        }
-        if (Spawner.instance == null)
-        {
-            Instantiate(spawner);
         }
     }
 
