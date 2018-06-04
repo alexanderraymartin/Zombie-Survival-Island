@@ -8,6 +8,7 @@ public class GameManager : NetworkBehaviour
     public static GameManager instance = null;
 
     private const int maxPlayers = 6;
+    private int wave; 
 
     [HideInInspector]
     public List<int> playerColorIDs;
@@ -43,6 +44,7 @@ public class GameManager : NetworkBehaviour
     {
         Debug.Log("Game initializing");
         SetupPlayerColorIDs();
+        wave = 0;
     }
 
     void SetupPlayerColorIDs()
@@ -53,6 +55,18 @@ public class GameManager : NetworkBehaviour
         {
             playerColorIDs.Add(i);
         }
+    }
+
+    /*************************** Public Functions ***************************/
+    public int GetWave()
+    {
+        return wave;
+    }
+
+    public int IncrementWave()
+    {
+        wave += 1;
+        return wave;
     }
 
 }

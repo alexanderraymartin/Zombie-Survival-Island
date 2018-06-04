@@ -7,7 +7,6 @@ using UnityEngine.UI;
 public class Spawner : NetworkBehaviour
 {
     public static Spawner instance = null;
-    public int wave = 0;
     public int maxZombies = 0;
     public int downtime = 5;
     public int betweenSpawnsTime = 3;
@@ -54,14 +53,14 @@ public class Spawner : NetworkBehaviour
     {
         if (zombiesAlive == 0)
         {
-            incrementWave();
+            int wave = GameManager.instance.IncrementWave();
+            SpawnNewWave(wave);
         }
     }
 
     [ServerCallback]
-    void incrementWave()
+    void SpawnNewWave(int wave)
     {
-        wave = wave + 1;
         maxZombies += (int)Mathf.Log(wave * 10, 2f);
         zombiesAlive = maxZombies;
         Debug.Log("Starting Wave: " + wave);

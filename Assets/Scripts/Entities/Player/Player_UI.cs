@@ -45,7 +45,7 @@ public class Player_UI : NetworkBehaviour
         //onyl server will get this object, otherwise it is null
         GameObject spawner = GameObject.FindGameObjectWithTag("Spawner");
         if (spawner && frames > 500) {
-            int wave = spawner.GetComponent<Spawner>().wave;
+            int wave = GameManager.instance.GetWave();
             int remaining = spawner.GetComponent<Spawner>().zombiesAlive;
             //this check is to be more efficient, running the rpc every frame caused major lag
             if (wave > curWave || curRemaining > remaining)
