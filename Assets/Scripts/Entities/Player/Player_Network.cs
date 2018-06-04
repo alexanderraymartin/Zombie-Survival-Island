@@ -114,7 +114,7 @@ public class Player_Network : NetworkBehaviour
     [Command]
     void CmdSetPlayerModel()
     {
-        int id = GameManager.instance.GetNextPlayerColorID();
+        int id = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>().GetNextPlayerColorID();
         playerColorID = id;
         RpcSetPlayerModel(id);
     }
