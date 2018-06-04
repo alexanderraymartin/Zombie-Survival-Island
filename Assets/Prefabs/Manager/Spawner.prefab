@@ -84,11 +84,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52f0f13fe69053b4391cfc2aed909b50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wave: 0
   maxZombies: 0
   downtime: 10
-  betweenSpawnsTime: 3
+  betweenSpawnsTime: 1
   zombiesAlive: 0
+  wave: 0
   playerPrefab: {fileID: 1785911747235186, guid: e4c67f56983980b4d8ce164fc863abb1,
     type: 2}
   zombiePrefab: {fileID: 1738034817906532, guid: a47e386d387117444aaf58f8776af047,
@@ -102,5 +102,3 @@ MonoBehaviour:
     type: 2}
   ShotgunPrefab: {fileID: 1939069594581930, guid: 74ffd197f5548f54d90bc5b51cf34973,
     type: 2}
-  beachZombieSpawns: []
-  townZombieSpawns: []
