@@ -25,6 +25,10 @@ public class Player_Network : NetworkBehaviour
     private int playerColorID;
     private bool hasDied;
 
+    // Closest Enemy Spawn Points
+    public Vector3[] closestSpawnPoints;
+    public int numSpawnPoints;
+
     /*************************** Init Functions ***************************/
     void Awake()
     {
@@ -46,6 +50,9 @@ public class Player_Network : NetworkBehaviour
     void Start()
     {
         SetPlayerModel();
+
+        // Start updating the spawn points every second
+        InvokeRepeating("UpdateSpawnPoints", 0.0f, 1.0f);
     }
 
     void Update()
@@ -274,5 +281,19 @@ public class Player_Network : NetworkBehaviour
                 weaponManager.UnequipWeapon();
             }
         }
+    }
+
+    private void UpdateSpawnPoints()
+    {
+        GameObject[] enemySpawns = GameObject.FindGameObjectsWithTag("EnemySpawn");
+        SortedList<float, Vector3> closestSpawns = new SortedList<float, Vector3>();
+        
+        foreach (var spawn in enemySpawns)
+        {
+            float distance = Vector3.Distance(gameObject.transform.localPosition, spawn.transform.localPosition);
+            closestSpawns.Add(distance, spawn.transform.localPosition);
+        }
+
+        closestSpawnPoints = new List<Vector3>(closestSpawns.Values).GetRange(0, numSpawnPoints).ToArray();
     }
 }

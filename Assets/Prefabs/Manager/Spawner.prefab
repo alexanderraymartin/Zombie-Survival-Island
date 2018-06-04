@@ -102,3 +102,5 @@ MonoBehaviour:
     type: 2}
   ShotgunPrefab: {fileID: 1939069594581930, guid: 74ffd197f5548f54d90bc5b51cf34973,
     type: 2}
+  beachZombieSpawns: []
+  townZombieSpawns: []

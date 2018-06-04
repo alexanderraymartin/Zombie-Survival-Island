@@ -10,6 +10,7 @@ TagManager:
   - Gateway
   - Spawner
   - WallGun
+  - EnemySpawn
   layers:
   - Default
   - TransparentFX

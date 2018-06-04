@@ -3735,6 +3735,8 @@ MonoBehaviour:
   weaponManager: {fileID: 114174255922811968}
   soundManager: {fileID: 0}
   health: {fileID: 0}
+  closestSpawnPoints: []
+  numSpawnPoints: 5
 --- !u!114 &114456086977543798
 MonoBehaviour:
   m_ObjectHideFlags: 1

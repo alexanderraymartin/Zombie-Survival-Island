@@ -87,10 +87,21 @@ public class Spawner : NetworkBehaviour
 
     IEnumerator SpawnWave()
     {
+        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+        Player_Network[] playerModels = new Player_Network[players.Length];
+
+        for (var playerIndx = 0; playerIndx < players.Length; playerIndx++) {
+            playerModels[playerIndx] = players[playerIndx].GetComponent<Player_Network>();
+        }
+
         yield return new WaitForSeconds(downtime);
         for (int i = 0; i < maxZombies; i++)
         {
-            SpawnEntity(new Vector3(-255, 52, -5), zombiePrefab);
+            List<Vector3> spawnPoints = GetAvailableEnemySpawnPoints(playerModels);
+            int index = Random.Range(0, spawnPoints.Count);
+            Vector3 spawnLoc = spawnPoints[index];
+
+            SpawnEntity(spawnLoc, zombiePrefab);
             yield return new WaitForSeconds(betweenSpawnsTime);
         }
     }
@@ -101,5 +112,17 @@ public class Spawner : NetworkBehaviour
         instance.name = instance.name + position;
         NetworkServer.Spawn(instance);
         return instance;
+    }
+
+    private List<Vector3> GetAvailableEnemySpawnPoints(Player_Network[] players)
+    {
+        List<Vector3> spawns = new List<Vector3>();
+
+        foreach (var player in players)
+        {
+            spawns.AddRange(player.closestSpawnPoints);
+        }
+
+        return spawns;
     }
 }
