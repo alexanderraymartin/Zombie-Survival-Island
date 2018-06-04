@@ -7,6 +7,7 @@ using UnityStandardAssets.Characters.FirstPerson;
 [RequireComponent(typeof(Health))]
 [RequireComponent(typeof(WeaponManager))]
 [RequireComponent(typeof(SoundManager))]
+[RequireComponent(typeof(StatsManager))]
 public class Player_Network : NetworkBehaviour
 {
     public GameObject firstPersonCharacter;
@@ -18,6 +19,8 @@ public class Player_Network : NetworkBehaviour
     public WeaponManager weaponManager;
     [HideInInspector]
     public SoundManager soundManager;
+    [HideInInspector]
+    public StatsManager statsManager;
 
     private int playerColorID;
     private bool hasDied;
@@ -27,6 +30,7 @@ public class Player_Network : NetworkBehaviour
     {
         weaponManager = GetComponent<WeaponManager>();
         soundManager = GetComponent<SoundManager>();
+        statsManager = GetComponent<StatsManager>();
     }
 
     public override void OnStartLocalPlayer()

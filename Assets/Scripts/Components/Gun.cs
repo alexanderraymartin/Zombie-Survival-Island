@@ -7,6 +7,9 @@ using UnityEngine.Networking;
 [RequireComponent(typeof(WeaponGraphics))]
 public class Gun : NetworkBehaviour
 {
+    [HideInInspector]
+    public int currencyGainOnHit = 10;
+
     public int reloadingSoundIndex;
     public int shootingSoundIndex;
     public bool isAuto;
@@ -97,8 +100,11 @@ public class Gun : NetworkBehaviour
             {
                 float calculatedDamage = damage * (Mathf.Pow(bulletPenetration / 100, i));
                 gunOwner.weaponManager.DealDamage(hits[i].transform.gameObject, calculatedDamage);
+                gunOwner.statsManager.AddCurrency(currencyGainOnHit);
+
                 Debug.Log(hits[i].transform.name + "hit for " + calculatedDamage);
                 Debug.Log(hits[i].transform.gameObject.GetComponent<Health>().currentHealth);
+                Debug.Log("Player Currency: " + gunOwner.statsManager.currency);
             }
         }
 
