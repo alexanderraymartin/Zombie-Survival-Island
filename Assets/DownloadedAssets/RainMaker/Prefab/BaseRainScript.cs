@@ -81,7 +81,6 @@ namespace DigitalRuby.RainMaker
             if (cam == null)
             {
                 cam = Camera.main;
-                Debug.Log("Camera null");
                 return;
             }
 
