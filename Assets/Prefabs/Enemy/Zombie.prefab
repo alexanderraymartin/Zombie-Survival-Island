@@ -1448,7 +1448,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_TransformSyncMode: 3
   m_SendInterval: 0.06666667
-  m_SyncRotationAxis: 0
+  m_SyncRotationAxis: 4
   m_RotationSyncCompression: 2
   m_SyncSpin: 0
   m_MovementTheshold: 0.001

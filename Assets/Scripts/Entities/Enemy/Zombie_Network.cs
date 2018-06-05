@@ -52,27 +52,8 @@ public class Zombie_Network : NetworkBehaviour
         health.maxHealth = health.maxHealth + (healthRate * (wave - 1));
     }
 
-    void Update()
-    {
-        ServerUpdate();
-        ClientUpdate();
-    }
-
-    [ClientCallback]
-    void ClientUpdate()
-    {
-        if (target == null || !target.GetComponent<Health>().isAlive)
-        {
-            return;
-        }
-
-        // Face the target
-        FaceLocation(target.transform.position);
-
-    }
-
     [ServerCallback]
-    void ServerUpdate()
+    void Update()
     {
         if (health.isAlive)
         {
@@ -84,6 +65,9 @@ public class Zombie_Network : NetworkBehaviour
                 Stop();
                 return;
             }
+
+            // Face the target
+            FaceLocation(target.transform.position);
 
             // Update attack timer
             if (attackCooldownTimer == 0)
