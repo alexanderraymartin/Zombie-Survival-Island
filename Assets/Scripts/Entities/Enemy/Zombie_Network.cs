@@ -54,8 +54,8 @@ public class Zombie_Network : NetworkBehaviour
 
     void Update()
     {
-        ClientUpdate();
         ServerUpdate();
+        ClientUpdate();
     }
 
     [ClientCallback]
@@ -84,7 +84,7 @@ public class Zombie_Network : NetworkBehaviour
                 Stop();
                 return;
             }
-            
+
             // Update attack timer
             if (attackCooldownTimer == 0)
             {
