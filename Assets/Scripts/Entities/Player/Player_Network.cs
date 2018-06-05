@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityStandardAssets.Characters.FirstPerson;
 
-[RequireComponent(typeof(NetworkTransform))]
 [RequireComponent(typeof(WeaponManager))]
 [RequireComponent(typeof(SoundManager))]
 [RequireComponent(typeof(Health))]

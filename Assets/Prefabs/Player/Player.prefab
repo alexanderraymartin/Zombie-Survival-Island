@@ -1321,7 +1321,6 @@ GameObject:
   - component: {fileID: 114064303187481814}
   - component: {fileID: 54892001340170516}
   - component: {fileID: 82840586253764000}
-  - component: {fileID: 114624643334853114}
   - component: {fileID: 114135142946658336}
   - component: {fileID: 114585683164256948}
   - component: {fileID: 95210266821935696}
@@ -1334,6 +1333,7 @@ GameObject:
   - component: {fileID: 114286803182274046}
   - component: {fileID: 114380797349940560}
   - component: {fileID: 114456086977543798}
+  - component: {fileID: 114476137146825416}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -3764,6 +3764,47 @@ MonoBehaviour:
   healthBarCanvas: {fileID: 1878840711323558, guid: 0124ad0c5bc88684694e50e8f66da96a,
     type: 2}
   position: {x: 0, y: 1.85, z: 0}
+--- !u!114 &114476137146825416
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1785911747235186}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9de747ec6d608d4b984ba2628a309b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interpolationBackTime: 0.1
+  extrapolationTimeLimit: 0.3
+  extrapolationDistanceLimit: 0.3
+  sendPositionThreshold: 0.001
+  sendRotationThreshold: 0.001
+  sendScaleThreshold: 0.001
+  sendVelocityThreshold: 0.001
+  sendAngularVelocityThreshold: 0.001
+  receivedPositionThreshold: 0
+  receivedRotationThreshold: 0
+  positionSnapThreshold: 8
+  rotationSnapThreshold: 60
+  scaleSnapThreshold: 3
+  positionLerpSpeed: 0.2
+  rotationLerpSpeed: 0.2
+  scaleLerpSpeed: 0.2
+  syncPosition: 0
+  syncRotation: 1
+  syncScale: 7
+  syncVelocity: 7
+  syncAngularVelocity: 7
+  isPositionCompressed: 1
+  isRotationCompressed: 1
+  isScaleCompressed: 1
+  isVelocityCompressed: 1
+  isAngularVelocityCompressed: 1
+  whereToUpdateTransform: 1
+  sendRate: 14
+  networkChannel: 1
+  childObjectToSync: {fileID: 0}
 --- !u!114 &114585683164256948
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3776,27 +3817,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fpsController: {fileID: 114064303187481814}
---- !u!114 &114624643334853114
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1785911747235186}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -1768714887, guid: 870353891bb340e2b2a9c8707e7419ba, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_TransformSyncMode: 4
-  m_SendInterval: 0.06666667
-  m_SyncRotationAxis: 4
-  m_RotationSyncCompression: 2
-  m_SyncSpin: 0
-  m_MovementTheshold: 0.001
-  m_VelocityThreshold: 0.0001
-  m_SnapThreshold: 5
-  m_InterpolateRotation: 1
-  m_InterpolateMovement: 1
 --- !u!114 &114696754392853794
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -414,7 +414,7 @@ namespace Smooth
 
             if (!ob)
             {
-                Debug.LogWarning("Could not find target for network state message.");
+                //Debug.LogWarning("Could not find target for network state message.");
                 return;
             }
 
@@ -442,7 +442,7 @@ namespace Smooth
 
             if (!smoothSync)
             {
-                Debug.LogWarning("Could not find target for network state message.");
+                //Debug.LogWarning("Could not find target for network state message.");
                 return;
             }
 
