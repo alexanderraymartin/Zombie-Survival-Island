@@ -9,7 +9,6 @@ using UnityEngine.AI;
 [RequireComponent(typeof(Animate))]
 public class Zombie_Network : NetworkBehaviour
 {
-    [SyncVar]
     public GameObject target;
 
     public float damage;
