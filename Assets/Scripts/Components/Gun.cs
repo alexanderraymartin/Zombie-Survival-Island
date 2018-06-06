@@ -100,7 +100,13 @@ public class Gun : NetworkBehaviour
             gunOwner.weaponManager.HitEffect(hits[i].point, hits[i].normal);
             if (hits[i].transform.gameObject.tag == "Enemy")
             {
-                float calculatedDamage = damage * (Mathf.Pow(bulletPenetration / 100, i));
+                //75% damge for a body shot
+                float headshotMult = 0.75f;
+                if (hits[i].collider.GetType() == typeof(BoxCollider))
+                {
+                    headshotMult = 1;
+                }
+                float calculatedDamage = damage * headshotMult * (Mathf.Pow(bulletPenetration / 100, i));
                 gunOwner.weaponManager.DealDamage(hits[i].transform.gameObject, calculatedDamage);
                 Debug.Log(hits[i].transform.name + "hit for " + calculatedDamage);
                 Debug.Log(hits[i].transform.gameObject.GetComponent<Health>().currentHealth);
