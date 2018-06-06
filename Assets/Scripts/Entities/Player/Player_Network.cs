@@ -38,7 +38,7 @@ public class Player_Network : NetworkBehaviour
 
     public override void OnStartLocalPlayer()
     {
-        GetComponent<FirstPersonController>().enabled = true;
+        GetComponent<Player_Controller>().enabled = true;
         firstPersonCharacter.GetComponent<Camera>().enabled = true;
         firstPersonCharacter.GetComponent<AudioListener>().enabled = true;
         firstPersonCharacter.GetComponent<FlareLayer>().enabled = true;
