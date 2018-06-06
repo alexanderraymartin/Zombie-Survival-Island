@@ -505,11 +505,11 @@ GameObject:
   - component: {fileID: 54474743663524674}
   - component: {fileID: 136076518505444068}
   - component: {fileID: 114254718115083480}
-  - component: {fileID: 114894285676275342}
   - component: {fileID: 114576083895886986}
   - component: {fileID: 114500186898182744}
   - component: {fileID: 114221971906688854}
   - component: {fileID: 114037537163216874}
+  - component: {fileID: 114266202421974230}
   m_Layer: 0
   m_Name: Zombie
   m_TagString: Enemy
@@ -1378,6 +1378,47 @@ MonoBehaviour:
     i15: 71
   m_ServerOnly: 0
   m_LocalPlayerAuthority: 0
+--- !u!114 &114266202421974230
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1738034817906532}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9de747ec6d608d4b984ba2628a309b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interpolationBackTime: 0.1
+  extrapolationTimeLimit: 0.3
+  extrapolationDistanceLimit: 0.3
+  sendPositionThreshold: 0.001
+  sendRotationThreshold: 0.001
+  sendScaleThreshold: 0.001
+  sendVelocityThreshold: 0.001
+  sendAngularVelocityThreshold: 0.001
+  receivedPositionThreshold: 0
+  receivedRotationThreshold: 0
+  positionSnapThreshold: 8
+  rotationSnapThreshold: 60
+  scaleSnapThreshold: 3
+  positionLerpSpeed: 0.2
+  rotationLerpSpeed: 0.2
+  scaleLerpSpeed: 0.2
+  syncPosition: 0
+  syncRotation: 1
+  syncScale: 7
+  syncVelocity: 7
+  syncAngularVelocity: 7
+  isPositionCompressed: 1
+  isRotationCompressed: 1
+  isScaleCompressed: 1
+  isVelocityCompressed: 1
+  isAngularVelocityCompressed: 1
+  whereToUpdateTransform: 1
+  sendRate: 14
+  networkChannel: 1
+  childObjectToSync: {fileID: 0}
 --- !u!114 &114456925421028938
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1392,7 +1433,7 @@ MonoBehaviour:
   target: {fileID: 0}
   damage: 35
   attackRadius: 2
-  walkSpeed: 3
+  walkSpeed: 2.5
   RunSpeed: 6
   rotationSpeed: 20
   findTargetCooldown: 1
@@ -1435,27 +1476,6 @@ MonoBehaviour:
   param3: 
   param4: 
   param5: 
---- !u!114 &114894285676275342
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1738034817906532}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -1768714887, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_TransformSyncMode: 3
-  m_SendInterval: 0.06666667
-  m_SyncRotationAxis: 7
-  m_RotationSyncCompression: 0
-  m_SyncSpin: 0
-  m_MovementTheshold: 0.001
-  m_VelocityThreshold: 0.0001
-  m_SnapThreshold: 5
-  m_InterpolateRotation: 1
-  m_InterpolateMovement: 1
 --- !u!136 &136076518505444068
 CapsuleCollider:
   m_ObjectHideFlags: 1

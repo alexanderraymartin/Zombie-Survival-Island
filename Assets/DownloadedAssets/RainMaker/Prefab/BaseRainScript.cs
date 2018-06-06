@@ -15,7 +15,7 @@ namespace DigitalRuby.RainMaker
     public class BaseRainScript : MonoBehaviour
     {
         [Tooltip("Camera the rain should hover over, defaults to main camera")]
-        public Camera Camera;
+        public Camera cam;
 
         [Tooltip("Whether rain should follow the camera. If false, rain must be moved manually and will not follow the camera.")]
         public bool FollowCamera = true;
@@ -78,14 +78,20 @@ namespace DigitalRuby.RainMaker
 
         private void UpdateWind()
         {
+            if (cam == null)
+            {
+                cam = Camera.main;
+                return;
+            }
+
             if (EnableWind && WindZone != null)
             {
                 WindZone.gameObject.SetActive(true);
                 if (FollowCamera)
                 {
-                    WindZone.transform.position = Camera.transform.position;
+                    WindZone.transform.position = cam.transform.position;
                 }
-                if (!Camera.orthographic)
+                if (!cam.orthographic)
                 {
                     WindZone.transform.Translate(0.0f, WindZone.radius, 0.0f);
                 }
@@ -93,7 +99,7 @@ namespace DigitalRuby.RainMaker
                 {
                     WindZone.windMain = UnityEngine.Random.Range(WindSpeedRange.x, WindSpeedRange.y);
                     WindZone.windTurbulence = UnityEngine.Random.Range(WindSpeedRange.x, WindSpeedRange.y);
-                    if (Camera.orthographic)
+                    if (cam.orthographic)
                     {
                         int val = UnityEngine.Random.Range(0, 2);
                         WindZone.transform.rotation = Quaternion.Euler(0.0f, (val == 0 ? 90.0f : -90.0f), 0.0f);
@@ -220,9 +226,9 @@ namespace DigitalRuby.RainMaker
 
 #endif
 
-            if (Camera == null)
+            if (cam == null)
             {
-                Camera = Camera.main;
+                cam = Camera.main;
             }
 
             audioSourceRainLight = new LoopingAudioSource(this, RainSoundLight);

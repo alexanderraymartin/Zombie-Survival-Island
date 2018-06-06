@@ -21,6 +21,12 @@ namespace DigitalRuby.RainMaker
 
         private void UpdateRain()
         {
+            if (cam == null)
+            {
+                cam = Camera.main;
+                return;
+            }
+
             // keep rain and mist above the player
             if (RainFallParticleSystem != null)
             {
@@ -28,14 +34,14 @@ namespace DigitalRuby.RainMaker
                 {
                     var s = RainFallParticleSystem.shape;
                     s.shapeType = ParticleSystemShapeType.ConeVolume;
-                    RainFallParticleSystem.transform.position = Camera.transform.position;
+                    RainFallParticleSystem.transform.position = cam.transform.position;
                     RainFallParticleSystem.transform.Translate(0.0f, RainHeight, RainForwardOffset);
-                    RainFallParticleSystem.transform.rotation = Quaternion.Euler(0.0f, Camera.transform.rotation.eulerAngles.y, 0.0f);
+                    RainFallParticleSystem.transform.rotation = Quaternion.Euler(0.0f, cam.transform.rotation.eulerAngles.y, 0.0f);
                     if (RainMistParticleSystem != null)
                     {
                         var s2 = RainMistParticleSystem.shape;
                         s2.shapeType = ParticleSystemShapeType.HemisphereShell;
-                        Vector3 pos = Camera.transform.position;
+                        Vector3 pos = cam.transform.position;
                         pos.y += RainMistHeight;
                         RainMistParticleSystem.transform.position = pos;
                     }
