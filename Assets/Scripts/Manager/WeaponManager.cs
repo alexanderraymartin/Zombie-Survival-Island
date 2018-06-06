@@ -11,6 +11,9 @@ public class WeaponManager : NetworkBehaviour
 
     private int currentWeaponIndex = -1;
 
+    [HideInInspector]
+    public int currencyGainOnKill = 100;
+
     /*************************** Init Functions ***************************/
     void Awake()
     {
@@ -142,6 +145,13 @@ public class WeaponManager : NetworkBehaviour
     void CmdDealDamage(GameObject enemy, float damage)
     {
         enemy.GetComponent<Health>().TakeDamage(damage);
+
+        if (!enemy.GetComponent<Health>().isAlive)
+        {
+            gameObject.GetComponent<Player_Network>().statsManager.AddCurrencyServer(currencyGainOnKill);
+            gameObject.GetComponent<Player_Network>().statsManager.AddKillCountServer();
+            //Debug.Log("Player killCount: " + gameObject.GetComponent<Player_Network>().statsManager.killCount);
+        }
     }
 
     [Command]
