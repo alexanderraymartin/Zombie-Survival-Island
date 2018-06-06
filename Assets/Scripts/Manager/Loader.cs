@@ -11,14 +11,11 @@ public class Loader : NetworkBehaviour
     [ServerCallback]
     void Awake()
     {
-        if (GameManager.instance == null)
-        {
-            Instantiate(gameManager);
-        }
-        if (Spawner.instance == null)
-        {
-            Instantiate(spawner);
-        }
+        GameObject gameManagerInstance = Instantiate(gameManager);
+        NetworkServer.Spawn(gameManagerInstance);
+
+        GameObject spawnerInstance = Instantiate(spawner);
+        NetworkServer.Spawn(spawnerInstance);
     }
 
 }

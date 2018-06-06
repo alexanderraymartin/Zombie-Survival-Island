@@ -6,7 +6,7 @@ using UnityStandardAssets.Characters.FirstPerson;
 
 public class Player_ToggleCursor : NetworkBehaviour
 {
-    public FirstPersonController fpsController;
+    public Player_Controller fpsController;
 
     // Update is called once per frame
     void Update()

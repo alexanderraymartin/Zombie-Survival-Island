@@ -6,6 +6,7 @@ using UnityEngine.Networking;
 public class Health : NetworkBehaviour
 {
     [SyncVar]
+    [HideInInspector]
     public float currentHealth;
 
     [SyncVar]
@@ -15,7 +16,6 @@ public class Health : NetworkBehaviour
     public float healthRegenTimerPerHit;
 
     [SyncVar]
-    [HideInInspector]
     public float maxHealth;
 
     [SyncVar]
@@ -31,7 +31,7 @@ public class Health : NetworkBehaviour
     void Start()
     {
         isAlive = true;
-        maxHealth = currentHealth;
+        currentHealth = maxHealth;
     }
 
     void Update()
