@@ -12,6 +12,8 @@ public class Player_UI : NetworkBehaviour
     private GameObject crossHair;
     private GameObject ammoBackground;
     private GameObject ammoText;
+    private GameObject currencyBackground;
+    private GameObject currencyText;
 
     void Start()
     {
@@ -25,6 +27,8 @@ public class Player_UI : NetworkBehaviour
         crossHair = instance.transform.Find("Crosshair").gameObject;
         ammoBackground = instance.transform.Find("AmmoBackground").gameObject;
         ammoText = ammoBackground.transform.Find("AmmoText").gameObject;
+        currencyBackground = instance.transform.Find("CurrencyBackground").gameObject;
+        currencyText = currencyBackground.transform.Find("CurrencyText").gameObject;
     }
 
     void Update()
@@ -36,6 +40,7 @@ public class Player_UI : NetworkBehaviour
 
         SetAmmoText();
         SetWaveText();
+        SetCurrencyText();
     }
 
     void SetAmmoText()
@@ -68,5 +73,12 @@ public class Player_UI : NetworkBehaviour
 
         tempWaveText.GetComponent<Text>().text = "Wave: " + wave;
         tempRemainingText.GetComponent<Text>().text = "Remaining: " + remaining;
+    }
+
+    void SetCurrencyText()
+    {
+        int currency = GetComponent<StatsManager>().currency;
+
+        currencyText.GetComponent<Text>().text = "$" + currency.ToString();
     }
 }

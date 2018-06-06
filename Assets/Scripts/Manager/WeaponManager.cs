@@ -148,7 +148,9 @@ public class WeaponManager : NetworkBehaviour
 
         if(!enemy.GetComponent<Health>().isAlive)
         {
-            weaponHolder.GetComponent<Player_Network>().statsManager.AddCurrencyServer(currencyGainOnKill);
+            gameObject.GetComponent<Player_Network>().statsManager.AddCurrencyServer(currencyGainOnKill);
+            gameObject.GetComponent<Player_Network>().statsManager.AddKillCountServer();
+            //Debug.Log("Player killCount: " + gameObject.GetComponent<Player_Network>().statsManager.killCount);
         }
     }
 
