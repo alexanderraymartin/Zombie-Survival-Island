@@ -7,6 +7,9 @@ using UnityEngine.Networking;
 [RequireComponent(typeof(WeaponGraphics))]
 public class Gun : NetworkBehaviour
 {
+    [HideInInspector]
+    public int currencyGainOnHit = 10;
+
     public int reloadingSoundIndex;
     public int shootingSoundIndex;
     public bool isAuto;
@@ -85,6 +88,10 @@ public class Gun : NetworkBehaviour
         // Decrease clip ammo by 1 bullet
         clipAmmo -= 1;
 
+        // Increment shots fired by 1 bullet
+        gunOwner.statsManager.AddShotsFired();
+        Debug.Log("Shots Fired: " + gunOwner.statsManager.shotsFired);
+
         // Play shooting sound
         gunOwner.soundManager.PlaySound(shootingSoundIndex, transform.position, 0.15f);
 
@@ -98,20 +105,34 @@ public class Gun : NetworkBehaviour
         for (int i = 0; i < hits.Length; i++)
         {
             gunOwner.weaponManager.HitEffect(hits[i].point, hits[i].normal);
-            if (hits[i].transform.gameObject.tag == "Enemy")
+            if (hits[i].transform.gameObject.tag == "Enemy" && hits[i].transform.gameObject.GetComponent<Health>().isAlive)
             {
+                // shots hit only counts the first hit and not any piercing hits afterwards
+                if (i == 0)
+                {
+                    gunOwner.statsManager.AddShotsHit();
+                    Debug.Log("Shots Hit: " + gunOwner.statsManager.shotsHit);
+                }
                 //75% damge for a body shot
                 float headshotMult = 0.75f;
                 if (hits[i].collider == (hits[i].transform.GetComponent<Zombie_Network>().headShotBoxCollider))
                 {
                     headshotMult = 1;
+                    gunOwner.statsManager.AddHeadshots();
+                    //Debug.Log("Player Headshots: " + gunOwner.statsManager.headshots);
                 }
                 float calculatedDamage = damage * headshotMult * (Mathf.Pow(bulletPenetration / 100, i));
                 gunOwner.weaponManager.DealDamage(hits[i].transform.gameObject, calculatedDamage);
-                Debug.Log(hits[i].transform.name + "hit for " + calculatedDamage);
-                Debug.Log(hits[i].transform.gameObject.GetComponent<Health>().currentHealth);
+                gunOwner.statsManager.AddCurrency(currencyGainOnHit);
+
+                //Debug.Log(hits[i].transform.name + "hit for " + calculatedDamage);
+                //Debug.Log(hits[i].transform.gameObject.GetComponent<Health>().currentHealth);
+                //Debug.Log("Player Currency: " + gunOwner.statsManager.currency);
             }
         }
+        // calculate accuracy
+        gunOwner.statsManager.CalculateAccuracy();
+        Debug.Log("Player Accuracy: " + gunOwner.statsManager.accuracy);
 
         CheckForReload();
     }

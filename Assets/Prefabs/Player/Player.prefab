@@ -1331,6 +1331,7 @@ GameObject:
   - component: {fileID: 114718753514751162}
   - component: {fileID: 114174255922811968}
   - component: {fileID: 114286803182274046}
+  - component: {fileID: 114204427675910204}
   - component: {fileID: 114380797349940560}
   - component: {fileID: 114456086977543798}
   - component: {fileID: 114450219837417296}
@@ -3559,6 +3560,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponHolder: {fileID: 1798332243346810}
   maxWeapons: 2
+  currencyGainOnKill: 100
+--- !u!114 &114204427675910204
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1785911747235186}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 237a6848292c2b0498a35a06f5469fc6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currency: 0
+  killCount: 0
 --- !u!114 &114286803182274046
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3624,50 +3639,6 @@ MonoBehaviour:
   fpsCam: {fileID: 20517752726960712}
   weaponManager: {fileID: 114174255922811968}
   soundManager: {fileID: 0}
-  health: {fileID: 0}
-  closestSpawnPoints: []
-  numSpawnPoints: 5
---- !u!114 &114450219837417296
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1785911747235186}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e9de747ec6d608d4b984ba2628a309b8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  interpolationBackTime: 0.1
-  extrapolationTimeLimit: 0.3
-  extrapolationDistanceLimit: 0.3
-  sendPositionThreshold: 0.001
-  sendRotationThreshold: 0.001
-  sendScaleThreshold: 0.001
-  sendVelocityThreshold: 0.001
-  sendAngularVelocityThreshold: 0.001
-  receivedPositionThreshold: 0
-  receivedRotationThreshold: 0
-  positionSnapThreshold: 8
-  rotationSnapThreshold: 60
-  scaleSnapThreshold: 3
-  positionLerpSpeed: 0.2
-  rotationLerpSpeed: 0.2
-  scaleLerpSpeed: 0.2
-  syncPosition: 0
-  syncRotation: 0
-  syncScale: 7
-  syncVelocity: 7
-  syncAngularVelocity: 7
-  isPositionCompressed: 1
-  isRotationCompressed: 1
-  isScaleCompressed: 1
-  isVelocityCompressed: 1
-  isAngularVelocityCompressed: 1
-  whereToUpdateTransform: 1
-  sendRate: 14
-  networkChannel: 1
-  childObjectToSync: {fileID: 0}
 --- !u!114 &114456086977543798
 MonoBehaviour:
   m_ObjectHideFlags: 1
