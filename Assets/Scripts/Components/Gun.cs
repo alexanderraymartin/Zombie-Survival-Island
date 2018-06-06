@@ -102,7 +102,7 @@ public class Gun : NetworkBehaviour
             {
                 //75% damge for a body shot
                 float headshotMult = 0.75f;
-                if (hits[i].collider.GetType() == typeof(BoxCollider))
+                if (hits[i].collider == (hits[i].transform.GetComponent<Zombie_Network>().headShotBoxCollider))
                 {
                     headshotMult = 1;
                 }
