@@ -5,8 +5,6 @@ using UnityEngine.Networking;
 
 public class GameManager : NetworkBehaviour
 {
-    public static GameManager instance = null;
-
     private const int maxPlayers = 6;
 
     [HideInInspector]
@@ -15,7 +13,7 @@ public class GameManager : NetworkBehaviour
     public int GetNextPlayerColorID()
     {
         // Just to be safe - return first colorID if out of colorIDs
-        if(playerColorIDs.Count == 0)
+        if (playerColorIDs.Count == 0)
         {
             return 0;
         }
@@ -27,24 +25,17 @@ public class GameManager : NetworkBehaviour
     [ServerCallback]
     void Awake()
     {
-        if (instance == null)
-        {
-            instance = this;
-        }
-        else if (instance != this)
-        {
-            Destroy(gameObject);
-        }
-        
         InitGame();
     }
 
+    [ServerCallback]
     void InitGame()
     {
         Debug.Log("Game initializing");
         SetupPlayerColorIDs();
     }
 
+    [ServerCallback]
     void SetupPlayerColorIDs()
     {
         playerColorIDs = new List<int>();

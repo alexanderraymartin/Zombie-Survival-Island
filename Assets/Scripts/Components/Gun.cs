@@ -19,6 +19,11 @@ public class Gun : NetworkBehaviour
     public float bulletPenetration; // 0 - 100
     public float reloadTime;
 
+    public Vector3 hipFireLoc;
+    public Vector3 sightFireLoc;
+    public int aimSpeed;
+    private bool isAiming = false; 
+
     [SyncVar]
     public int clipMaxAmmo;
     [SyncVar]
@@ -98,7 +103,13 @@ public class Gun : NetworkBehaviour
             gunOwner.weaponManager.HitEffect(hits[i].point, hits[i].normal);
             if (hits[i].transform.gameObject.tag == "Enemy")
             {
-                float calculatedDamage = damage * (Mathf.Pow(bulletPenetration / 100, i));
+                //75% damge for a body shot
+                float headshotMult = 0.75f;
+                if (hits[i].collider == (hits[i].transform.GetComponent<Zombie_Network>().headShotBoxCollider))
+                {
+                    headshotMult = 1;
+                }
+                float calculatedDamage = damage * headshotMult * (Mathf.Pow(bulletPenetration / 100, i));
                 gunOwner.weaponManager.DealDamage(hits[i].transform.gameObject, calculatedDamage);
                 gunOwner.statsManager.AddCurrency(currencyGainOnHit);
 
@@ -152,5 +163,29 @@ public class Gun : NetworkBehaviour
             return true;
         }
         return false;
+    }
+
+    public void AimDownSights()
+    {
+        if (!isAiming)
+        {
+            isAiming = true;
+            StartCoroutine(AimDownSightsHelper());
+        }
+    }
+
+    public void AimHipFire()
+    {
+        transform.localPosition = hipFireLoc;
+        isAiming = false;
+    }
+
+    IEnumerator AimDownSightsHelper()
+    {
+        while (isAiming && transform.localPosition != sightFireLoc)
+        {
+            transform.localPosition = Vector3.Lerp(transform.localPosition, sightFireLoc, aimSpeed * Time.deltaTime);
+            yield return null;
+        }
     }
 }

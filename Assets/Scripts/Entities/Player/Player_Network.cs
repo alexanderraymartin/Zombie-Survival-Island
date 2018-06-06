@@ -4,10 +4,10 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityStandardAssets.Characters.FirstPerson;
 
-[RequireComponent(typeof(Health))]
 [RequireComponent(typeof(WeaponManager))]
 [RequireComponent(typeof(SoundManager))]
 [RequireComponent(typeof(StatsManager))]
+[RequireComponent(typeof(Health))]
 public class Player_Network : NetworkBehaviour
 {
     public GameObject firstPersonCharacter;
@@ -21,9 +21,14 @@ public class Player_Network : NetworkBehaviour
     public SoundManager soundManager;
     [HideInInspector]
     public StatsManager statsManager;
+    public Health health;
 
     private int playerColorID;
     private bool hasDied;
+
+    // Closest Enemy Spawn Points
+    public Vector3[] closestSpawnPoints;
+    public int numSpawnPoints;
 
     /*************************** Init Functions ***************************/
     void Awake()
@@ -31,11 +36,12 @@ public class Player_Network : NetworkBehaviour
         weaponManager = GetComponent<WeaponManager>();
         soundManager = GetComponent<SoundManager>();
         statsManager = GetComponent<StatsManager>();
+        health = GetComponent<Health>();
     }
 
     public override void OnStartLocalPlayer()
     {
-        GetComponent<FirstPersonController>().enabled = true;
+        GetComponent<Player_Controller>().enabled = true;
         firstPersonCharacter.GetComponent<Camera>().enabled = true;
         firstPersonCharacter.GetComponent<AudioListener>().enabled = true;
         firstPersonCharacter.GetComponent<FlareLayer>().enabled = true;
@@ -46,6 +52,9 @@ public class Player_Network : NetworkBehaviour
     void Start()
     {
         SetPlayerModel();
+
+        // Start updating the spawn points every second
+        InvokeRepeating("UpdateSpawnPoints", 0.0f, 1.0f);
     }
 
     void Update()
@@ -71,6 +80,7 @@ public class Player_Network : NetworkBehaviour
 
     public void PlayerRespawn(Vector3 spawnPosition)
     {
+        health.Revive();
         CmdPlayerRespawn(spawnPosition);
     }
 
@@ -83,7 +93,7 @@ public class Player_Network : NetworkBehaviour
     [Command]
     void CmdTakeDamage(int connectionId, float damage)
     {
-        GetComponent<Health>().TakeDamage(damage);
+        health.TakeDamage(damage);
     }
 
     [Command]
@@ -107,7 +117,7 @@ public class Player_Network : NetworkBehaviour
     [Command]
     void CmdSetPlayerModel()
     {
-        int id = GameManager.instance.GetNextPlayerColorID();
+        int id = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>().GetNextPlayerColorID();
         playerColorID = id;
         RpcSetPlayerModel(id);
     }
@@ -158,7 +168,6 @@ public class Player_Network : NetworkBehaviour
     {
         hasDied = false;
         transform.SetPositionAndRotation(spawnPosition, Quaternion.identity);
-        GetComponent<Health>().Revive();
     }
 
     GameObject GetItemFromRayCast()
@@ -176,7 +185,7 @@ public class Player_Network : NetworkBehaviour
 
     void CheckIfAlive()
     {
-        if (!GetComponent<Health>().isAlive && !hasDied)
+        if (!health.isAlive && !hasDied)
         {
             CmdPlayerDeath();
         }
@@ -210,7 +219,7 @@ public class Player_Network : NetworkBehaviour
 
     void HandleInput()
     {
-        if (!GetComponent<Health>().isAlive)
+        if (!health.isAlive)
         {
             return;
         }
@@ -221,6 +230,16 @@ public class Player_Network : NetworkBehaviour
         if (Input.GetButtonDown("Reload"))
         {
             weaponManager.ReloadWeapon();
+        }
+        // Attempt to Aim
+        if (Input.GetMouseButton(1))
+        {
+            weaponManager.AimDownSights();
+        }
+        // Attempt to return to hip fire
+        if (Input.GetMouseButtonUp(1))
+        {
+            weaponManager.ReturnToHipFire();
         }
         // Attempt to cycle through weapons
         if (Input.GetButtonDown("Change Weapon"))
@@ -235,19 +254,20 @@ public class Player_Network : NetworkBehaviour
 
             if (objHit == null)
             {
+                Debug.Log("Object hit was null");
                 return;
             }
 
             switch (objHit.tag)
             {
-                case "Gun":
-                    GameObject gun = weaponManager.GetActiveWeapon();
-                    if (gun != null)
-                    {
-                        weaponManager.SetAmmo(gun, gun.GetComponent<Gun>().clipAmmo, gun.GetComponent<Gun>().reserveAmmo);
-                    }
-                    weaponManager.EquipWeapon(objHit);
+                case "WallGun":
+                    weaponManager.PickUpWallGun(objHit);
                     break;
+                case "Gun":
+                    {
+                        weaponManager.EquipWeapon(objHit);
+                        break;
+                    }
                 case "Gateway":
                     CmdOpenGateway(objHit);
                     break;
@@ -259,9 +279,22 @@ public class Player_Network : NetworkBehaviour
             GameObject gun = weaponManager.GetActiveWeapon();
             if (gun != null)
             {
-                weaponManager.SetAmmo(gun, gun.GetComponent<Gun>().clipAmmo, gun.GetComponent<Gun>().reserveAmmo);
                 weaponManager.UnequipWeapon();
             }
         }
+    }
+
+    private void UpdateSpawnPoints()
+    {
+        GameObject[] enemySpawns = GameObject.FindGameObjectsWithTag("EnemySpawn");
+        SortedList<float, Vector3> closestSpawns = new SortedList<float, Vector3>();
+
+        foreach (var spawn in enemySpawns)
+        {
+            float distance = Vector3.Distance(gameObject.transform.localPosition, spawn.transform.localPosition);
+            closestSpawns.Add(distance, spawn.transform.localPosition);
+        }
+
+        closestSpawnPoints = new List<Vector3>(closestSpawns.Values).GetRange(0, numSpawnPoints).ToArray();
     }
 }

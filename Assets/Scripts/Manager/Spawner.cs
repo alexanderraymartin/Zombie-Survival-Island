@@ -5,12 +5,13 @@ using UnityEngine.Networking;
 
 public class Spawner : NetworkBehaviour
 {
-    public static Spawner instance = null;
-    public int wave = 0;
     public int maxZombies = 0;
     public int downtime = 5;
     public int betweenSpawnsTime = 3;
+    [SyncVar]
     public int zombiesAlive = 0;
+    [SyncVar]
+    public int wave = 0;
 
     // Player
     public GameObject playerPrefab;
@@ -24,43 +25,18 @@ public class Spawner : NetworkBehaviour
     public GameObject ShotgunPrefab;
 
     [ServerCallback]
-    void Start()
-    {
-        if (instance == null)
-        {
-            instance = this;
-        }
-        else if (instance != this)
-        {
-            Destroy(gameObject);
-        }
-
-        SpawnEntity(new Vector3(-85, 0, 75), ak47Prefab);
-        SpawnEntity(new Vector3(-85, 0, 80), L96SniperRiflePrefab);
-        SpawnEntity(new Vector3(-85, 0, 85), M4CarbinePrefab);
-        SpawnEntity(new Vector3(-85, 0, 90), PistolPrefab);
-        SpawnEntity(new Vector3(-85, 0, 95), ShotgunPrefab);
-
-        SpawnEntity(new Vector3(-90, 0, 75), ak47Prefab);
-        SpawnEntity(new Vector3(-90, 0, 80), L96SniperRiflePrefab);
-        SpawnEntity(new Vector3(-90, 0, 85), M4CarbinePrefab);
-        SpawnEntity(new Vector3(-90, 0, 90), PistolPrefab);
-        SpawnEntity(new Vector3(-90, 0, 95), ShotgunPrefab);
-    }
-
-    [ServerCallback]
     void Update()
     {
         if (zombiesAlive == 0)
         {
-            incrementWave();
+            wave++;
+            SpawnNewWave();
         }
     }
 
     [ServerCallback]
-    void incrementWave()
+    void SpawnNewWave()
     {
-        wave = wave + 1;
         maxZombies += (int)Mathf.Log(wave * 10, 2f);
         zombiesAlive = maxZombies;
         Debug.Log("Starting Wave: " + wave);
@@ -69,6 +45,7 @@ public class Spawner : NetworkBehaviour
         StartCoroutine(SpawnWave());
     }
 
+    [ServerCallback]
     void RespawnPlayers()
     {
         GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
@@ -79,25 +56,53 @@ public class Spawner : NetworkBehaviour
             {
                 Debug.Log("Respawning player: " + players[i].name);
                 // TODO: add respawn points
-                players[i].GetComponent<Player_Network>().PlayerRespawn(new Vector3(-90.0f, 2.0f, 70.0f));
+                players[i].GetComponent<Player_Network>().PlayerRespawn(new Vector3(-325f, 100f, 10.0f));
             }
         }
     }
 
+    [ServerCallback]
     IEnumerator SpawnWave()
     {
+        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+        Player_Network[] playerModels = new Player_Network[players.Length];
+
+        for (var playerIndx = 0; playerIndx < players.Length; playerIndx++)
+        {
+            playerModels[playerIndx] = players[playerIndx].GetComponent<Player_Network>();
+        }
+
         yield return new WaitForSeconds(downtime);
         for (int i = 0; i < maxZombies; i++)
         {
-            SpawnEntity(new Vector3(-40, 0, 70), zombiePrefab);
+            List<Vector3> spawnPoints = GetAvailableEnemySpawnPoints(playerModels);
+            int index = Random.Range(0, spawnPoints.Count);
+            Vector3 spawnLoc = spawnPoints[index];
+
+            SpawnEntity(spawnLoc, zombiePrefab);
             yield return new WaitForSeconds(betweenSpawnsTime);
         }
     }
 
-    void SpawnEntity(Vector3 position, GameObject prefab)
+    [ServerCallback]
+    GameObject SpawnEntity(Vector3 position, GameObject prefab)
     {
         GameObject instance = Instantiate(prefab, position, Quaternion.identity);
         instance.name = instance.name + position;
         NetworkServer.Spawn(instance);
+        return instance;
+    }
+
+    [ServerCallback]
+    List<Vector3> GetAvailableEnemySpawnPoints(Player_Network[] players)
+    {
+        List<Vector3> spawns = new List<Vector3>();
+
+        foreach (var player in players)
+        {
+            spawns.AddRange(player.closestSpawnPoints);
+        }
+
+        return spawns;
     }
 }

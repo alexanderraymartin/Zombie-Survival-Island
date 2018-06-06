@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
+[RequireComponent(typeof(Player_Network))]
 public class SoundManager : NetworkBehaviour
 {
     public AudioClip[] sounds;

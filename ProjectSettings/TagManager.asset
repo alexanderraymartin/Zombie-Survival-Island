@@ -9,6 +9,9 @@ TagManager:
   - Gun
   - Gateway
   - Spawner
+  - WallGun
+  - EnemySpawn
+  - GameManager
   layers:
   - Default
   - TransparentFX

@@ -21,7 +21,7 @@ public class Player_UI : NetworkBehaviour
         }
 
         GameObject instance = Instantiate(UI);
-        
+
         crossHair = instance.transform.Find("Crosshair").gameObject;
         ammoBackground = instance.transform.Find("AmmoBackground").gameObject;
         ammoText = ammoBackground.transform.Find("AmmoText").gameObject;
@@ -35,6 +35,7 @@ public class Player_UI : NetworkBehaviour
         }
 
         SetAmmoText();
+        SetWaveText();
     }
 
     void SetAmmoText()
@@ -52,5 +53,20 @@ public class Player_UI : NetworkBehaviour
         }
 
         ammoText.GetComponent<Text>().text = ammo;
+    }
+
+    void SetWaveText()
+    {
+        GameObject tempUI = GameObject.FindGameObjectWithTag("UI");
+        GameObject tempWaveBackground = tempUI.transform.Find("WaveBackground").gameObject;
+        GameObject tempWaveText = tempWaveBackground.transform.Find("WaveText").gameObject;
+        GameObject tempRemainingText = tempWaveBackground.transform.Find("RemainingText").gameObject;
+        GameObject spawner = GameObject.FindGameObjectWithTag("Spawner");
+
+        int wave = spawner.GetComponent<Spawner>().wave;
+        int remaining = spawner.GetComponent<Spawner>().zombiesAlive;
+
+        tempWaveText.GetComponent<Text>().text = "Wave: " + wave;
+        tempRemainingText.GetComponent<Text>().text = "Remaining: " + remaining;
     }
 }

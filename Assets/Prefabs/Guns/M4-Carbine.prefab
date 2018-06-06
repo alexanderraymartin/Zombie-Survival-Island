@@ -294,14 +294,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   reloadingSoundIndex: 0
   shootingSoundIndex: 1
-  rateOfFire: 15
   isAuto: 1
+  rateOfFire: 15
   damage: 25
   range: 500
   bulletPenetration: 80
   reloadTime: 2
+  hipFireLoc: {x: 0, y: 0, z: 0}
+  sightFireLoc: {x: -0.1, y: 0.078, z: -0.2}
+  aimSpeed: 20
   clipMaxAmmo: 25
   reserveMaxAmmo: 100
+  clipAmmo: 0
+  reserveAmmo: 0
+  isReloading: 0
   cam: {fileID: 0}
   gunOwner: {fileID: 0}
 --- !u!198 &198296551744620842
