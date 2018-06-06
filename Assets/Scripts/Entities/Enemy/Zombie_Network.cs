@@ -11,6 +11,8 @@ public class Zombie_Network : NetworkBehaviour
 {
     public GameObject target;
 
+    public CapsuleCollider headShotBoxCollider;
+
     public float damage;
     public float attackRadius;
     public float walkSpeed;
