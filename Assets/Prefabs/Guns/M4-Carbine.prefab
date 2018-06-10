@@ -292,6 +292,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7c24bb2c53a3a14c9190ca0977c5aea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  firstPersonCharacter: {fileID: 0}
+  currencyGainOnHit: 10
   reloadingSoundIndex: 0
   shootingSoundIndex: 1
   isAuto: 1
@@ -300,6 +302,10 @@ MonoBehaviour:
   range: 500
   bulletPenetration: 80
   reloadTime: 2
+  maxRecoil_x: -20
+  recoilSpeed: 10
+  recoilDelta: 0.1
+  sidewaysRecoil: 20
   hipFireLoc: {x: 0, y: 0, z: 0}
   sightFireLoc: {x: -0.1, y: 0.078, z: -0.2}
   aimSpeed: 20

@@ -7,6 +7,7 @@ using UnityEngine.Networking;
 [RequireComponent(typeof(WeaponGraphics))]
 public class Gun : NetworkBehaviour
 {
+    public GameObject firstPersonCharacter;
     [HideInInspector]
     public int currencyGainOnHit = 10;
 
@@ -18,11 +19,15 @@ public class Gun : NetworkBehaviour
     public float range;
     public float bulletPenetration; // 0 - 100
     public float reloadTime;
+    public float maxRecoil_x;
+    public float recoilSpeed;
+    public float recoilDelta;
+    public float sidewaysRecoil;
 
     public Vector3 hipFireLoc;
     public Vector3 sightFireLoc;
     public int aimSpeed;
-    private bool isAiming = false; 
+    private bool isAiming = false;
 
     [SyncVar]
     public int clipMaxAmmo;
@@ -49,12 +54,20 @@ public class Gun : NetworkBehaviour
     [HideInInspector]
     public Player_Network gunOwner;
 
+    private Camera playerCamera;
+    private Transform playerTransform;
+    private float recoil = 0.0f;
+
+
+    Quaternion beforeRecoil;
+    Quaternion nextRecoil;
 
     [ServerCallback]
     void Awake()
     {
         clipAmmo = clipMaxAmmo;
         reserveAmmo = reserveMaxAmmo;
+
     }
 
     void OnEnable()
@@ -69,6 +82,10 @@ public class Gun : NetworkBehaviour
         {
             return;
         }
+
+        //playerCamera = gunOwner.transform.Find("FirstPersonCharacter").GetComponent<Camera>();
+        playerCamera = Camera.main;
+
 
         // Limit rate of fire
         if (Time.time >= nextTimeToFire)
@@ -94,6 +111,7 @@ public class Gun : NetworkBehaviour
 
         // Play shooting sound
         gunOwner.soundManager.PlaySound(shootingSoundIndex, transform.position, 0.15f);
+
 
         // Show muzzle flash
         gunOwner.weaponManager.MuzzleFlash();
@@ -138,7 +156,40 @@ public class Gun : NetworkBehaviour
         gunOwner.statsManager.CalculateAccuracy();
         Debug.Log("Player Accuracy: " + gunOwner.statsManager.accuracy);
 
+        if (recoil < 0)
+        {
+            recoil = recoilDelta;
+            beforeRecoil = playerCamera.transform.localRotation;
+        }
+        else
+        {
+            recoil += recoilDelta;
+        }
+        nextRecoil = beforeRecoil * Quaternion.Euler(0, Random.value * sidewaysRecoil - sidewaysRecoil / 2, 0);
+
         CheckForReload();
+    }
+
+    public void Update()
+    {
+        playerCamera = Camera.main;
+
+        if (recoil > 0)
+        {
+            //var maxRecoil = nextRecoil * Quaternion.Euler(maxRecoil_x, 0, 0);
+            var maxRecoil = nextRecoil * Quaternion.Euler(maxRecoil_x, 0, 0);
+
+            // Dampen towards the target rotation
+            playerCamera.transform.localRotation = Quaternion.Slerp(playerCamera.transform.localRotation, maxRecoil, Time.deltaTime * recoilSpeed / 6);
+        }
+        else if (recoil > -recoilDelta * 3)
+        {
+            var minRecoil = playerCamera.transform.localRotation;
+            // Dampen towards the target rotation
+            playerCamera.transform.localRotation = Quaternion.Slerp(playerCamera.transform.localRotation, beforeRecoil, Time.deltaTime * recoilSpeed / 2);
+        }
+
+        recoil -= Time.deltaTime;
     }
 
     public IEnumerator Reload()
