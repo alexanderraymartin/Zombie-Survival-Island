@@ -6,6 +6,7 @@ using UnityStandardAssets.Characters.FirstPerson;
 
 [RequireComponent(typeof(WeaponManager))]
 [RequireComponent(typeof(SoundManager))]
+[RequireComponent(typeof(StatsManager))]
 [RequireComponent(typeof(Health))]
 public class Player_Network : NetworkBehaviour
 {
@@ -18,6 +19,8 @@ public class Player_Network : NetworkBehaviour
     public WeaponManager weaponManager;
     [HideInInspector]
     public SoundManager soundManager;
+    [HideInInspector]
+    public StatsManager statsManager;
     [HideInInspector]
     public Health health;
 
@@ -33,6 +36,7 @@ public class Player_Network : NetworkBehaviour
     {
         weaponManager = GetComponent<WeaponManager>();
         soundManager = GetComponent<SoundManager>();
+        statsManager = GetComponent<StatsManager>();
         health = GetComponent<Health>();
     }
 
@@ -65,9 +69,9 @@ public class Player_Network : NetworkBehaviour
     }
 
     /*************************** Public Functions ***************************/
-    public void TakeDamage(int connectionId, float damage)
+    public void TakeDamage(int connectionId, float damage, GameObject damageDealer)
     {
-        CmdTakeDamage(connectionId, damage);
+        CmdTakeDamage(connectionId, damage, damageDealer);
     }
 
     public void PlayerDeath()
@@ -88,9 +92,9 @@ public class Player_Network : NetworkBehaviour
 
     /*************************** Cmd Functions ***************************/
     [Command]
-    void CmdTakeDamage(int connectionId, float damage)
+    void CmdTakeDamage(int connectionId, float damage, GameObject damageDealer)
     {
-        health.TakeDamage(damage);
+        health.TakeDamage(damage, damageDealer);
     }
 
     [Command]

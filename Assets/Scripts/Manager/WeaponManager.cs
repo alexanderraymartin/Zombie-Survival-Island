@@ -11,6 +11,9 @@ public class WeaponManager : NetworkBehaviour
 
     private int currentWeaponIndex = -1;
 
+    [HideInInspector]
+    public int currencyGainOnKill = 100;
+
     /*************************** Init Functions ***************************/
     void Awake()
     {
@@ -141,7 +144,7 @@ public class WeaponManager : NetworkBehaviour
     [Command]
     void CmdDealDamage(GameObject enemy, float damage)
     {
-        enemy.GetComponent<Health>().TakeDamage(damage);
+        enemy.GetComponent<Health>().TakeDamage(damage, gameObject);
     }
 
     [Command]
