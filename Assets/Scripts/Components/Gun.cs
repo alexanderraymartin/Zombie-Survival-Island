@@ -107,7 +107,7 @@ public class Gun : NetworkBehaviour
             gunOwner.weaponManager.HitEffect(hits[i].point, hits[i].normal);
             if (hits[i].transform.gameObject.tag == "Enemy" && hits[i].transform.gameObject.GetComponent<Health>().isAlive)
             {
-                // shots hit only counts the first hit and not any piercing hits afterwards
+                // Count the first hit and not any piercing hits afterwards
                 if (i == 0)
                 {
                     gunOwner.statsManager.AddShotsHit();
@@ -119,16 +119,19 @@ public class Gun : NetworkBehaviour
                 if (hits[i].collider == (hits[i].transform.GetComponent<Zombie_Network>().headShotBoxCollider))
                 {
                     headshotMult = 1;
-                    gunOwner.statsManager.AddHeadshots();
-                    //Debug.Log("Player Headshots: " + gunOwner.statsManager.headshots);
+
+                    if (i == 0)
+                    {
+                        gunOwner.statsManager.AddHeadshots();
+                        Debug.Log("Player Headshots: " + gunOwner.statsManager.headshots);
+                    }
+                    
                 }
                 float calculatedDamage = damage * headshotMult * (Mathf.Pow(bulletPenetration / 100, i));
                 gunOwner.weaponManager.DealDamage(hits[i].transform.gameObject, calculatedDamage);
-                gunOwner.statsManager.AddCurrency(currencyGainOnHit);
 
-                //Debug.Log(hits[i].transform.name + "hit for " + calculatedDamage);
-                //Debug.Log(hits[i].transform.gameObject.GetComponent<Health>().currentHealth);
-                //Debug.Log("Player Currency: " + gunOwner.statsManager.currency);
+                Debug.Log(hits[i].transform.name + "hit for " + calculatedDamage);
+                Debug.Log(hits[i].transform.gameObject.GetComponent<Health>().currentHealth);
             }
         }
         // calculate accuracy

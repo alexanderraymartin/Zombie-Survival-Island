@@ -144,14 +144,7 @@ public class WeaponManager : NetworkBehaviour
     [Command]
     void CmdDealDamage(GameObject enemy, float damage)
     {
-        enemy.GetComponent<Health>().TakeDamage(damage);
-
-        if (!enemy.GetComponent<Health>().isAlive)
-        {
-            gameObject.GetComponent<Player_Network>().statsManager.AddCurrencyServer(currencyGainOnKill);
-            gameObject.GetComponent<Player_Network>().statsManager.AddKillCountServer();
-            //Debug.Log("Player killCount: " + gameObject.GetComponent<Player_Network>().statsManager.killCount);
-        }
+        enemy.GetComponent<Health>().TakeDamage(damage, gameObject);
     }
 
     [Command]

@@ -69,9 +69,9 @@ public class Player_Network : NetworkBehaviour
     }
 
     /*************************** Public Functions ***************************/
-    public void TakeDamage(int connectionId, float damage)
+    public void TakeDamage(int connectionId, float damage, GameObject damageDealer)
     {
-        CmdTakeDamage(connectionId, damage);
+        CmdTakeDamage(connectionId, damage, damageDealer);
     }
 
     public void PlayerDeath()
@@ -92,9 +92,9 @@ public class Player_Network : NetworkBehaviour
 
     /*************************** Cmd Functions ***************************/
     [Command]
-    void CmdTakeDamage(int connectionId, float damage)
+    void CmdTakeDamage(int connectionId, float damage, GameObject damageDealer)
     {
-        health.TakeDamage(damage);
+        health.TakeDamage(damage, damageDealer);
     }
 
     [Command]
