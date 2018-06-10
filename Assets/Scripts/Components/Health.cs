@@ -101,12 +101,14 @@ public class Health : NetworkBehaviour
     public void CmdTakeDamage(float damage, GameObject damageDealer)
     {
         currentHealth -= damage;
-        isAlive = currentHealth > 0;
         healthRegenTimer += healthRegenTimerPerHit;
 
-        if(damageDealer.transform.tag == "Player")
+        if (damageDealer.transform.tag == "Player" && isAlive)
         {
-            if(currentHealth < 0)
+            damageDealer.GetComponent<Player_Network>().statsManager.AddCurrency(currencyGainOnHit);
+            Debug.Log("Currency: " + damageDealer.GetComponent<Player_Network>().statsManager.currency);
+
+            if (currentHealth < 0)
             {
                 damageDealer.GetComponent<Player_Network>().statsManager.AddCurrency(currencyGainOnKill);
                 Debug.Log("Currency: " + damageDealer.GetComponent<Player_Network>().statsManager.currency);
@@ -114,11 +116,7 @@ public class Health : NetworkBehaviour
                 damageDealer.GetComponent<Player_Network>().statsManager.AddKillCount();
                 Debug.Log("Player killCount: " + damageDealer.GetComponent<Player_Network>().statsManager.killCount);
             }
-            else
-            {
-                damageDealer.GetComponent<Player_Network>().statsManager.AddCurrency(currencyGainOnHit);
-                Debug.Log("Currency: " + damageDealer.GetComponent<Player_Network>().statsManager.currency);  
-            }
         }
+        isAlive = currentHealth > 0;
     }
 }
