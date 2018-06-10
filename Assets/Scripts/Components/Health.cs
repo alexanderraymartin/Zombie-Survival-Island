@@ -27,6 +27,12 @@ public class Health : NetworkBehaviour
 
     private float healthRegenTickTimer = 0;
 
+    [HideInInspector]
+    public int currencyGainOnKill = 100;
+
+    [HideInInspector]
+    public int currencyGainOnHit = 10;
+
     /*************************** Init Functions ***************************/
     void Start()
     {
@@ -70,9 +76,9 @@ public class Health : NetworkBehaviour
         CmdGainHealth();
     }
 
-    public void TakeDamage(float damage)
+    public void TakeDamage(float damage, GameObject damageDealer)
     {
-        CmdTakeDamage(damage);
+        CmdTakeDamage(damage, damageDealer);
     }
 
     /*************************** Cmd Functions ***************************/
@@ -92,10 +98,25 @@ public class Health : NetworkBehaviour
     }
 
     [Command]
-    public void CmdTakeDamage(float damage)
+    public void CmdTakeDamage(float damage, GameObject damageDealer)
     {
         currentHealth -= damage;
-        isAlive = currentHealth > 0;
         healthRegenTimer += healthRegenTimerPerHit;
+
+        if (damageDealer.transform.tag == "Player" && isAlive)
+        {
+            damageDealer.GetComponent<Player_Network>().statsManager.AddCurrency(currencyGainOnHit);
+            Debug.Log("Currency: " + damageDealer.GetComponent<Player_Network>().statsManager.currency);
+
+            if (currentHealth < 0)
+            {
+                damageDealer.GetComponent<Player_Network>().statsManager.AddCurrency(currencyGainOnKill);
+                Debug.Log("Currency: " + damageDealer.GetComponent<Player_Network>().statsManager.currency);
+
+                damageDealer.GetComponent<Player_Network>().statsManager.AddKillCount();
+                Debug.Log("Player killCount: " + damageDealer.GetComponent<Player_Network>().statsManager.killCount);
+            }
+        }
+        isAlive = currentHealth > 0;
     }
 }
