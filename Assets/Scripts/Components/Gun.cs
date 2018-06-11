@@ -176,7 +176,7 @@ public class Gun : NetworkBehaviour
             return;
         }
 
-        playerCamera = Camera.main;
+        playerCamera = gunOwner.fpsCam;
 
         if (recoil > 0)
         {
@@ -271,7 +271,7 @@ public class Gun : NetworkBehaviour
             StartCoroutine(AimHipFireHelper());
         }
     }
-
+    
     IEnumerator AimHipFireHelper()
     {
         while (!isAiming && transform.localPosition != hipFireLoc)
