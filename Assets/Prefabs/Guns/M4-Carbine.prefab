@@ -309,7 +309,7 @@ MonoBehaviour:
   recoilDelta: 0.1
   sidewaysRecoil: 20
   hipFireLoc: {x: 0, y: 0, z: 0}
-  sightFireLoc: {x: -0.1, y: 0.09, z: -0.2}
+  sightFireLoc: {x: -0.1, y: -0.025, z: 0.05}
   aimSpeed: 20
   clipMaxAmmo: 25
   reserveMaxAmmo: 100
