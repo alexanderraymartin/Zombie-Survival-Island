@@ -45,6 +45,7 @@ public class Player_Network : NetworkBehaviour
     {
         GetComponent<Player_Controller>().enabled = true;
         firstPersonCharacter.GetComponent<Camera>().enabled = true;
+        weaponCamera.SetActive(true);
         firstPersonCharacter.GetComponent<AudioListener>().enabled = true;
         firstPersonCharacter.GetComponent<FlareLayer>().enabled = true;
         CmdSetPlayerModel();
