@@ -368,7 +368,7 @@ public class WeaponManager : NetworkBehaviour
                 instance = Instantiate(weapon.GetComponent<Gun>().gameObject.GetComponent<WeaponGraphics>().hitEffectPrefab, position, Quaternion.LookRotation(normal));
             }
 
-            Destroy(instance, 2f);
+            Destroy(instance, 5f);
         }
     }
 
