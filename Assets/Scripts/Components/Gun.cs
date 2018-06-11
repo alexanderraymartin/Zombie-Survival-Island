@@ -174,18 +174,25 @@ public class Gun : NetworkBehaviour
     {
         playerCamera = Camera.main;
 
+
+
         if (recoil > 0)
         {
-            //var maxRecoil = nextRecoil * Quaternion.Euler(maxRecoil_x, 0, 0);
-            var maxRecoil = nextRecoil * Quaternion.Euler(maxRecoil_x, 0, 0);
+            if (isAiming)
+            {
+                var maxRecoil = nextRecoil * Quaternion.Euler(maxRecoil_x, 0, 0);
+                playerCamera.transform.localRotation = Quaternion.Slerp(playerCamera.transform.localRotation, maxRecoil, Time.deltaTime * recoilSpeed / 14);
+            }
+            else
+            {
+                var maxRecoil = nextRecoil * Quaternion.Euler(maxRecoil_x, 0, 0);
+                playerCamera.transform.localRotation = Quaternion.Slerp(playerCamera.transform.localRotation, maxRecoil, Time.deltaTime * recoilSpeed / 4);
+            }
 
-            // Dampen towards the target rotation
-            playerCamera.transform.localRotation = Quaternion.Slerp(playerCamera.transform.localRotation, maxRecoil, Time.deltaTime * recoilSpeed / 6);
         }
         else if (recoil > -recoilDelta * 3)
         {
             var minRecoil = playerCamera.transform.localRotation;
-            // Dampen towards the target rotation
             playerCamera.transform.localRotation = Quaternion.Slerp(playerCamera.transform.localRotation, beforeRecoil, Time.deltaTime * recoilSpeed / 2);
         }
 
