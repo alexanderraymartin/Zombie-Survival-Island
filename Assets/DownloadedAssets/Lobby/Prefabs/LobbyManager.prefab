@@ -3210,7 +3210,7 @@ MonoBehaviour:
   - {fileID: 1526401654730166, guid: a11c1440af039cc468aae6cce4beab3c, type: 2}
   - {fileID: 1301948243246986, guid: 7efc53bce7426a744b93941ce5d9d5a7, type: 2}
   - {fileID: 1785911747235186, guid: e4c67f56983980b4d8ce164fc863abb1, type: 2}
-  - {fileID: 1738034817906532, guid: a47e386d387117444aaf58f8776af047, type: 2}
+  - {fileID: 1139811038210138, guid: 6dd5560929f87194dac435a6d996aa67, type: 2}
   - {fileID: 1643736623542640, guid: d78334f7dbc999045bc9b3bf89503c2e, type: 2}
   - {fileID: 1811732089280252, guid: 0285e33a3f37b104ea9de41355ab6832, type: 2}
   - {fileID: 1689326312062168, guid: f7b6b35b6c0899e41951a95621356936, type: 2}
@@ -5816,5 +5816,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lobbyClip: {fileID: 8300000, guid: 987b9122418fdfe45be572350bb38034, type: 3}
   gameClip: {fileID: 8300000, guid: e6947a1c020060c4baf657263a581b13, type: 3}
-  lobbyVolume: 0.5
-  gameVolume: 0.3
+  lobbyVolume: 0.75
+  gameVolume: 0.2
