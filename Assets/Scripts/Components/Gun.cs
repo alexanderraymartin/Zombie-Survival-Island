@@ -61,13 +61,13 @@ public class Gun : NetworkBehaviour
 
     Quaternion beforeRecoil;
     Quaternion nextRecoil;
+    Vector3 origGunPos;
 
     [ServerCallback]
     void Awake()
     {
         clipAmmo = clipMaxAmmo;
         reserveAmmo = reserveMaxAmmo;
-
     }
 
     void OnEnable()
@@ -166,7 +166,6 @@ public class Gun : NetworkBehaviour
             recoil += recoilDelta;
         }
         nextRecoil = beforeRecoil * Quaternion.Euler(0, Random.value * sidewaysRecoil - sidewaysRecoil / 2, 0);
-
         CheckForReload();
     }
 
@@ -174,26 +173,34 @@ public class Gun : NetworkBehaviour
     {
         playerCamera = Camera.main;
 
-
-
         if (recoil > 0)
         {
             if (isAiming)
             {
                 var maxRecoil = nextRecoil * Quaternion.Euler(maxRecoil_x, 0, 0);
                 playerCamera.transform.localRotation = Quaternion.Slerp(playerCamera.transform.localRotation, maxRecoil, Time.deltaTime * recoilSpeed / 14);
+                transform.localPosition = Vector3.Slerp(transform.localPosition, sightFireLoc + new Vector3(0, 0, -.075f), Time.deltaTime * recoilSpeed / 4);
             }
             else
             {
                 var maxRecoil = nextRecoil * Quaternion.Euler(maxRecoil_x, 0, 0);
                 playerCamera.transform.localRotation = Quaternion.Slerp(playerCamera.transform.localRotation, maxRecoil, Time.deltaTime * recoilSpeed / 4);
+                transform.localPosition = Vector3.Slerp(transform.localPosition, new Vector3(0, 0, -.3f), Time.deltaTime * recoilSpeed);
             }
-
         }
         else if (recoil > -recoilDelta * 3)
         {
             var minRecoil = playerCamera.transform.localRotation;
             playerCamera.transform.localRotation = Quaternion.Slerp(playerCamera.transform.localRotation, beforeRecoil, Time.deltaTime * recoilSpeed / 2);
+
+            if (isAiming)
+            {
+                transform.localPosition = Vector3.Slerp(transform.localPosition, sightFireLoc, Time.deltaTime * recoilSpeed / 2);
+            }
+            else
+            {
+                transform.localPosition = Vector3.Slerp(transform.localPosition, new Vector3(0, 0, 0), Time.deltaTime * recoilSpeed / 2);
+            }
         }
 
         recoil -= Time.deltaTime;
