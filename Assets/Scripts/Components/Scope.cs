@@ -7,20 +7,14 @@ public class Scope : MonoBehaviour
 {
     public GameObject scopeCanvas;
 
-    public bool isScoped;
+    public float scopedFOV = 15.0f;
+    private float normalFOV = 60.0f;
 
-    private Player_Network gunOwner;
-    private GameObject weaponCamera;
+    [HideInInspector]
+    public bool isScoped;
 
     void Update()
     {
-        gunOwner = GetComponent<Gun>().gunOwner;
-
-        if (gunOwner != null)
-        {
-            weaponCamera = gunOwner.weaponCamera;
-        }
-
         if (!isScoped)
         {
             ScopeOut();
@@ -31,20 +25,29 @@ public class Scope : MonoBehaviour
     {
         isScoped = false;
         scopeCanvas.SetActive(false);
-        if (weaponCamera != null)
+
+        Player_Network gunOwner = GetComponent<Gun>().gunOwner;
+
+        if (gunOwner != null)
         {
-            weaponCamera.SetActive(true);
+            gunOwner.weaponCamera.SetActive(true);
+            gunOwner.firstPersonCharacter.GetComponent<Camera>().fieldOfView = normalFOV;
         }
     }
 
     public IEnumerator ScopeIn()
     {
         isScoped = true;
-        yield return new WaitForSeconds(0.20f);
+        yield return new WaitForSeconds(0.15f);
         scopeCanvas.SetActive(true);
-        if (weaponCamera != null)
+
+        Player_Network gunOwner = GetComponent<Gun>().gunOwner;
+
+        if (gunOwner != null)
         {
-            weaponCamera.SetActive(false);
+            gunOwner.weaponCamera.SetActive(false);
+            normalFOV = GetComponent<Gun>().gunOwner.firstPersonCharacter.GetComponent<Camera>().fieldOfView;
+            gunOwner.firstPersonCharacter.GetComponent<Camera>().fieldOfView = scopedFOV;
         }
     }
 }
