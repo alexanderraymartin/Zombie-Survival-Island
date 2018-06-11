@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4915192756804856}
   - component: {fileID: 198407968983821558}
   - component: {fileID: 199228120487627526}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Smoke
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -41,7 +41,7 @@ GameObject:
   - component: {fileID: 114748679169831242}
   - component: {fileID: 54343831297556346}
   - component: {fileID: 65868038540487142}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: M4-Carbine
   m_TagString: Gun
   m_Icon: {fileID: 0}
@@ -58,7 +58,7 @@ GameObject:
   - component: {fileID: 4663232055183640}
   - component: {fileID: 33305460949188944}
   - component: {fileID: 23675482708385740}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: GFX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -75,7 +75,7 @@ GameObject:
   - component: {fileID: 4149561106730332}
   - component: {fileID: 198296551744620842}
   - component: {fileID: 199254947305924040}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: MuzzleFlash
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -90,7 +90,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4865957454339752}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: FirePoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}

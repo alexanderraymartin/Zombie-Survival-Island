@@ -58,7 +58,6 @@ public class Gun : NetworkBehaviour
     private Transform playerTransform;
     private float recoil = 0.0f;
 
-
     Quaternion beforeRecoil;
     Quaternion nextRecoil;
     Vector3 origGunPos;
@@ -170,9 +169,14 @@ public class Gun : NetworkBehaviour
         CheckForReload();
     }
 
-    public void Update()
+    void Update()
     {
-        playerCamera = Camera.main;
+        if (gunOwner == null)
+        {
+            return;
+        }
+
+        playerCamera = gunOwner.fpsCam;
 
         if (recoil > 0)
         {
@@ -267,7 +271,7 @@ public class Gun : NetworkBehaviour
             StartCoroutine(AimHipFireHelper());
         }
     }
-
+    
     IEnumerator AimHipFireHelper()
     {
         while (!isAiming && transform.localPosition != hipFireLoc)
