@@ -2,10 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
+
+using UnityEngine.UI;
 
 public class GameManager : NetworkBehaviour
 {
     private const int maxPlayers = 6;
+
+    private bool isGameOver = false;
 
     [HideInInspector]
     public List<int> playerColorIDs;
@@ -44,6 +49,40 @@ public class GameManager : NetworkBehaviour
         {
             playerColorIDs.Add(i);
         }
+    }
+
+    void Update()
+    {
+        if (isGameOver) {
+            return; 
+        }
+
+        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+
+        foreach (var player in players)
+        {
+            if (!player.GetComponent<Player_Network>().hasDied)
+            {
+                return;
+            }
+        }
+
+        isGameOver = true;
+
+        StartCoroutine(EndGame());
+        
+    }
+
+    private IEnumerator EndGame()
+    {
+        GameObject imageGameObject = GameObject.FindGameObjectWithTag("Fade");
+        Image image = imageGameObject.GetComponent<Image>();
+        Animator animator = image.GetComponent<Animator>();
+        animator.gameObject.SetActive(true);
+        animator.SetBool("fade", true);
+        yield return new WaitUntil(() => image.color.a == 1);
+        SceneManager.LoadScene("EndGame");
+        
     }
 
 }
