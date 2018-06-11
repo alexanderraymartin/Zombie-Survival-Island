@@ -67,11 +67,12 @@ public class Spawner : NetworkBehaviour
         GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
         Player_Network[] playerModels = new Player_Network[players.Length];
 
-        for (var playerIndx = 0; playerIndx < players.Length; playerIndx++)
+        for (var playerIndex = 0; playerIndex < players.Length; playerIndex++)
         {
-            playerModels[playerIndx] = players[playerIndx].GetComponent<Player_Network>();
+            playerModels[playerIndex] = players[playerIndex].GetComponent<Player_Network>();
         }
 
+        GameObject.Find("LobbyManager").GetComponent<MusicManager>().PlayNewRoundMusic(downtime);
         yield return new WaitForSeconds(downtime);
         for (int i = 0; i < maxZombies; i++)
         {
