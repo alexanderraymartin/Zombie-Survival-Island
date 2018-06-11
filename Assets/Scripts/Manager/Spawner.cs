@@ -72,7 +72,7 @@ public class Spawner : NetworkBehaviour
             playerModels[playerIndex] = players[playerIndex].GetComponent<Player_Network>();
         }
 
-        GameObject.Find("LobbyManager").GetComponent<MusicManager>().PlayNewRoundMusic(downtime);
+        RpcPlayRoundMusic();
         yield return new WaitForSeconds(downtime);
         for (int i = 0; i < maxZombies; i++)
         {
@@ -105,5 +105,11 @@ public class Spawner : NetworkBehaviour
         }
 
         return spawns;
+    }
+
+    [ClientRpc]
+    void RpcPlayRoundMusic()
+    {
+        GameObject.Find("LobbyManager").GetComponent<MusicManager>().PlayNewRoundMusic(downtime);
     }
 }
