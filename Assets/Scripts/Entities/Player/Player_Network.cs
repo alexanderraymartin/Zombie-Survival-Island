@@ -236,11 +236,31 @@ public class Player_Network : NetworkBehaviour
         if (Input.GetMouseButton(1))
         {
             weaponManager.AimDownSights();
+
+            GameObject weapon = weaponManager.GetActiveWeapon();
+            if (weapon != null)
+            {
+                Scope scope = weapon.GetComponent<Scope>();
+                if (scope != null && !scope.isScoped)
+                {
+                    StartCoroutine(scope.ScopeIn());
+                }
+            }
         }
         // Attempt to return to hip fire
         if (Input.GetMouseButtonUp(1))
         {
             weaponManager.ReturnToHipFire();
+
+            GameObject weapon = weaponManager.GetActiveWeapon();
+            if (weapon != null)
+            {
+                Scope scope = weapon.GetComponent<Scope>();
+                if (scope != null)
+                {
+                    scope.ScopeOut();
+                }
+            }
         }
         // Attempt to cycle through weapons
         if (Input.GetButtonDown("Change Weapon"))

@@ -58,7 +58,6 @@ public class Gun : NetworkBehaviour
     private Transform playerTransform;
     private float recoil = 0.0f;
 
-
     Quaternion beforeRecoil;
     Quaternion nextRecoil;
     Vector3 origGunPos;
