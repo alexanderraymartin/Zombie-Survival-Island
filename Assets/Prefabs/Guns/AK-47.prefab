@@ -258,7 +258,7 @@ MonoBehaviour:
   reloadTime: 2
   maxRecoil_x: -20
   recoilSpeed: 10
-  recoilDelta: 0.15
+  recoilDelta: 0.12
   sidewaysRecoil: 20
   hipFireLoc: {x: 0, y: 0, z: 0}
   sightFireLoc: {x: -0.1, y: 0.11, z: 0}

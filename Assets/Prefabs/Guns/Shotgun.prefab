@@ -270,9 +270,9 @@ MonoBehaviour:
   range: 20
   bulletPenetration: 50
   reloadTime: 2
-  maxRecoil_x: -30
-  recoilSpeed: 30
-  recoilDelta: 0.1
+  maxRecoil_x: -40
+  recoilSpeed: 25
+  recoilDelta: 0.13
   sidewaysRecoil: 20
   hipFireLoc: {x: 0, y: 0, z: 0}
   sightFireLoc: {x: -0.1, y: 0.1, z: 0}
