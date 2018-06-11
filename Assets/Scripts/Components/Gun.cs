@@ -169,7 +169,7 @@ public class Gun : NetworkBehaviour
         CheckForReload();
     }
 
-    public void Update()
+    void Update()
     {
         if (gunOwner == null)
         {
