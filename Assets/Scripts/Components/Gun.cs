@@ -122,7 +122,8 @@ public class Gun : NetworkBehaviour
 
         for (int i = 0; i < hits.Length; i++)
         {
-            gunOwner.weaponManager.HitEffect(hits[i].point, hits[i].normal);
+            gunOwner.weaponManager.HitEffect(hits[i].point, hits[i].normal, hits[i].transform.gameObject.tag == "Enemy");
+
             if (hits[i].transform.gameObject.tag == "Enemy" && hits[i].transform.gameObject.GetComponent<Health>().isAlive)
             {
                 // Count the first hit and not any piercing hits afterwards

@@ -316,6 +316,8 @@ MonoBehaviour:
   muzzleFlash: {fileID: 198778562069758460}
   hitEffectPrefab: {fileID: 1336243386231610, guid: c636ab2ed8e8fe24a8bac70eca840f49,
     type: 2}
+  bloodEffectPrefab: {fileID: 1174785008341844, guid: 207839b89c306874385a8f5ff56983a1,
+    type: 2}
 --- !u!198 &198423093543285364
 ParticleSystem:
   m_ObjectHideFlags: 1
