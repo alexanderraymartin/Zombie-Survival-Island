@@ -11,6 +11,7 @@ using UnityStandardAssets.Characters.FirstPerson;
 public class Player_Network : NetworkBehaviour
 {
     public GameObject firstPersonCharacter;
+    public GameObject weaponCamera;
     public GameObject[] characterModels;
     public int pickupRange;
     public Camera fpsCam;

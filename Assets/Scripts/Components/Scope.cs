@@ -9,8 +9,18 @@ public class Scope : MonoBehaviour
 
     public bool isScoped;
 
+    private Player_Network gunOwner;
+    private GameObject weaponCamera;
+
     void Update()
     {
+        gunOwner = GetComponent<Gun>().gunOwner;
+
+        if (gunOwner != null)
+        {
+            weaponCamera = gunOwner.weaponCamera;
+        }
+
         if (!isScoped)
         {
             ScopeOut();
@@ -21,6 +31,10 @@ public class Scope : MonoBehaviour
     {
         isScoped = false;
         scopeCanvas.SetActive(false);
+        if (weaponCamera != null)
+        {
+            weaponCamera.SetActive(true);
+        }
     }
 
     public IEnumerator ScopeIn()
@@ -28,5 +42,9 @@ public class Scope : MonoBehaviour
         isScoped = true;
         yield return new WaitForSeconds(0.20f);
         scopeCanvas.SetActive(true);
+        if (weaponCamera != null)
+        {
+            weaponCamera.SetActive(false);
+        }
     }
 }
