@@ -3590,7 +3590,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 559e5ae613f5d2c4b84599420e7be598, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  UI: {fileID: 1506990863239236, guid: 0547dcb28e2794d419d27387c6ff7a04, type: 2}
+  UI: {fileID: 1566261094278608, guid: 0547dcb28e2794d419d27387c6ff7a04, type: 2}
 --- !u!114 &114381406460382346
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3645,6 +3645,7 @@ MonoBehaviour:
   soundManager: {fileID: 0}
   statsManager: {fileID: 0}
   health: {fileID: 0}
+  hasDied: 0
   closestSpawnPoints: []
   numSpawnPoints: 5
 --- !u!114 &114450219837417296

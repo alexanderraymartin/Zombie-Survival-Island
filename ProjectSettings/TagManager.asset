@@ -12,6 +12,8 @@ TagManager:
   - WallGun
   - EnemySpawn
   - GameManager
+  - FadeImage
+  - Fade
   layers:
   - Default
   - TransparentFX

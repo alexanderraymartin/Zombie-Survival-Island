@@ -25,7 +25,7 @@ public class Player_Network : NetworkBehaviour
     public Health health;
 
     private int playerColorID;
-    private bool hasDied;
+    public bool hasDied;
 
     // Closest Enemy Spawn Points
     public Vector3[] closestSpawnPoints;
