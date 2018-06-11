@@ -281,6 +281,8 @@ MonoBehaviour:
   muzzleFlash: {fileID: 198296551744620842}
   hitEffectPrefab: {fileID: 1336243386231610, guid: c636ab2ed8e8fe24a8bac70eca840f49,
     type: 2}
+  bloodEffectPrefab: {fileID: 1174785008341844, guid: 207839b89c306874385a8f5ff56983a1,
+    type: 2}
 --- !u!114 &114748679169831242
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -307,7 +309,7 @@ MonoBehaviour:
   recoilDelta: 0.1
   sidewaysRecoil: 20
   hipFireLoc: {x: 0, y: 0, z: 0}
-  sightFireLoc: {x: -0.1, y: 0.078, z: -0.2}
+  sightFireLoc: {x: -0.1, y: -0.025, z: 0.05}
   aimSpeed: 20
   clipMaxAmmo: 25
   reserveMaxAmmo: 100

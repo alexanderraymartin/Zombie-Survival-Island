@@ -114,10 +114,10 @@ public class WeaponManager : NetworkBehaviour
         CmdMuzzleFlash();
     }
 
-    public void HitEffect(Vector3 position, Vector3 normal)
+    public void HitEffect(Vector3 position, Vector3 normal, bool zombieHit)
     {
-        HitEffectHelper(position, normal);
-        CmdHitEffect(position, normal);
+        HitEffectHelper(position, normal, zombieHit);
+        CmdHitEffect(position, normal, zombieHit);
     }
 
     /*************************** Cmd Functions ***************************/
@@ -172,9 +172,9 @@ public class WeaponManager : NetworkBehaviour
     }
 
     [Command]
-    void CmdHitEffect(Vector3 position, Vector3 normal)
+    void CmdHitEffect(Vector3 position, Vector3 normal, bool zombieHit)
     {
-        RpcHitEffect(position, normal);
+        RpcHitEffect(position, normal, zombieHit);
     }
 
     /*************************** Rpc Functions ***************************/
@@ -241,14 +241,14 @@ public class WeaponManager : NetworkBehaviour
     }
 
     [ClientRpc]
-    void RpcHitEffect(Vector3 position, Vector3 normal)
+    void RpcHitEffect(Vector3 position, Vector3 normal, bool zombieHit)
     {
         if (isLocalPlayer)
         {
             // Don't run on client who called function
             return;
         }
-        HitEffectHelper(position, normal);
+        HitEffectHelper(position, normal, zombieHit);
     }
 
     [ClientRpc]
@@ -352,14 +352,23 @@ public class WeaponManager : NetworkBehaviour
         }
     }
 
-    void HitEffectHelper(Vector3 position, Vector3 normal)
+    void HitEffectHelper(Vector3 position, Vector3 normal, bool zombieHit)
     {
         // Replace with object pooling
         GameObject weapon = GetActiveWeapon();
         if (weapon != null)
         {
-            GameObject instance = Instantiate(weapon.GetComponent<Gun>().gameObject.GetComponent<WeaponGraphics>().hitEffectPrefab, position, Quaternion.LookRotation(normal));
-            Destroy(instance, 2f);
+            GameObject instance;
+            if (zombieHit)
+            {
+                instance = Instantiate(weapon.GetComponent<Gun>().gameObject.GetComponent<WeaponGraphics>().bloodEffectPrefab, position, Quaternion.LookRotation(normal));
+            }
+            else
+            {
+                instance = Instantiate(weapon.GetComponent<Gun>().gameObject.GetComponent<WeaponGraphics>().hitEffectPrefab, position, Quaternion.LookRotation(normal));
+            }
+
+            Destroy(instance, 5f);
         }
     }
 

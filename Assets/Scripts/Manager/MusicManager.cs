@@ -15,37 +15,53 @@ public class MusicManager : MonoBehaviour
     private LobbyManager lobbyManager;
 
     private bool isInGame;
-    // Use this for initialization
+
+    public void PlayNewRoundMusic(float duration)
+    {
+        PlayMusic(gameVolume, gameClip, duration, false);
+    }
+
     void Start()
     {
         lobbyManager = GetComponent<LobbyManager>();
         source = GetComponent<AudioSource>();
-        source.volume = lobbyVolume;
-        source.clip = lobbyClip;
-        source.loop = true;
-        source.Play();
         isInGame = false;
+
+        PlayMusic(lobbyVolume, lobbyClip, 0.0f, true);
     }
 
-    // Update is called once per frame
     void Update()
     {
-
         if (lobbyManager.topPanel.isInGame && !isInGame)
         {
-            source.Stop();
-            source.volume = gameVolume;
-            source.clip = gameClip;
-            source.Play();
+            PlayNewRoundMusic(5.0f);
             isInGame = true;
         }
         else if (!lobbyManager.topPanel.isInGame && isInGame)
         {
-            source.Stop();
-            source.volume = lobbyVolume;
-            source.clip = lobbyClip;
-            source.Play();
+            PlayMusic(lobbyVolume, lobbyClip, 0.0f, true);
             isInGame = false;
         }
+    }
+
+    void PlayMusic(float volume, AudioClip clip, float duration, bool loop)
+    {
+        source = GetComponent<AudioSource>();
+        source.Stop();
+        source.volume = volume;
+        source.clip = clip;
+        source.loop = loop;
+        source.time = 0.0f;
+        source.Play();
+        if (!loop)
+        {
+            StartCoroutine(StopMusic(duration));
+        }
+    }
+
+    IEnumerator StopMusic(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        source.Stop();
     }
 }

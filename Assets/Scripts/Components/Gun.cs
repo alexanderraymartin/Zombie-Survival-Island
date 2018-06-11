@@ -122,7 +122,8 @@ public class Gun : NetworkBehaviour
 
         for (int i = 0; i < hits.Length; i++)
         {
-            gunOwner.weaponManager.HitEffect(hits[i].point, hits[i].normal);
+            gunOwner.weaponManager.HitEffect(hits[i].point, hits[i].normal, hits[i].transform.gameObject.tag == "Enemy");
+
             if (hits[i].transform.gameObject.tag == "Enemy" && hits[i].transform.gameObject.GetComponent<Health>().isAlive)
             {
                 // Count the first hit and not any piercing hits afterwards
@@ -132,7 +133,7 @@ public class Gun : NetworkBehaviour
                     Debug.Log("Shots Hit: " + gunOwner.statsManager.shotsHit);
                 }
 
-                //75% damge for a body shot
+                // 75% damage for a body shot
                 float headshotMult = 0.75f;
                 if (hits[i].collider == (hits[i].transform.GetComponent<Zombie_Network>().headShotBoxCollider))
                 {
@@ -143,7 +144,7 @@ public class Gun : NetworkBehaviour
                         gunOwner.statsManager.AddHeadshots();
                         Debug.Log("Player Headshots: " + gunOwner.statsManager.headshots);
                     }
-                    
+
                 }
                 float calculatedDamage = damage * headshotMult * (Mathf.Pow(bulletPenetration / 100, i));
                 gunOwner.weaponManager.DealDamage(hits[i].transform.gameObject, calculatedDamage);
@@ -260,15 +261,27 @@ public class Gun : NetworkBehaviour
 
     public void AimHipFire()
     {
-        transform.localPosition = hipFireLoc;
-        isAiming = false;
+        if (isAiming)
+        {
+            isAiming = false;
+            StartCoroutine(AimHipFireHelper());
+        }
+    }
+
+    IEnumerator AimHipFireHelper()
+    {
+        while (!isAiming && transform.localPosition != hipFireLoc)
+        {
+            transform.localPosition = Vector3.Slerp(transform.localPosition, hipFireLoc, aimSpeed * Time.deltaTime);
+            yield return null;
+        }
     }
 
     IEnumerator AimDownSightsHelper()
     {
         while (isAiming && transform.localPosition != sightFireLoc)
         {
-            transform.localPosition = Vector3.Lerp(transform.localPosition, sightFireLoc, aimSpeed * Time.deltaTime);
+            transform.localPosition = Vector3.Slerp(transform.localPosition, sightFireLoc, aimSpeed * Time.deltaTime);
             yield return null;
         }
     }
