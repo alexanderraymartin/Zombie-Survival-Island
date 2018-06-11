@@ -271,12 +271,15 @@ public class Gun : NetworkBehaviour
             StartCoroutine(AimHipFireHelper());
         }
     }
-    
+
     IEnumerator AimHipFireHelper()
     {
         while (!isAiming && transform.localPosition != hipFireLoc)
         {
-            transform.localPosition = Vector3.Slerp(transform.localPosition, hipFireLoc, aimSpeed * Time.deltaTime);
+            if (transform.parent != null)
+            {
+                transform.localPosition = Vector3.Slerp(transform.localPosition, hipFireLoc, aimSpeed * Time.deltaTime);
+            }
             yield return null;
         }
     }
@@ -285,7 +288,10 @@ public class Gun : NetworkBehaviour
     {
         while (isAiming && transform.localPosition != sightFireLoc)
         {
-            transform.localPosition = Vector3.Slerp(transform.localPosition, sightFireLoc, aimSpeed * Time.deltaTime);
+            if (transform.parent != null)
+            {
+                transform.localPosition = Vector3.Slerp(transform.localPosition, sightFireLoc, aimSpeed * Time.deltaTime);
+            }
             yield return null;
         }
     }
