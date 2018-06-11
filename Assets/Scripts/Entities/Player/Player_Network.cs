@@ -236,22 +236,26 @@ public class Player_Network : NetworkBehaviour
         // Attempt to Aim
         if (Input.GetMouseButton(1))
         {
+            weaponManager.AimDownSights();
             ScopeRifle();
         }
         // Attempt to return to hip fire
         if (Input.GetMouseButtonUp(1))
         {
+            weaponManager.ReturnToHipFire();
             UpscopeRifle();
         }
         // Attempt to cycle through weapons
         if (Input.GetButtonDown("Change Weapon"))
         {
+            weaponManager.ReturnToHipFire();
             UpscopeRifle();
             weaponManager.ChangeWeapon();
         }
         // Attempt to pick up a weapon
         else if (Input.GetButtonDown("Interact"))
         {
+            weaponManager.ReturnToHipFire();
             UpscopeRifle();
             Debug.Log("Attempting to pickup...");
             GameObject objHit = GetItemFromRayCast();
@@ -280,6 +284,7 @@ public class Player_Network : NetworkBehaviour
         // Attempt to drop a weapon
         else if (Input.GetButtonDown("Drop Item"))
         {
+            weaponManager.ReturnToHipFire();
             GameObject gun = weaponManager.GetActiveWeapon();
             if (gun != null)
             {
@@ -294,8 +299,6 @@ public class Player_Network : NetworkBehaviour
         GameObject weapon = weaponManager.GetActiveWeapon();
         if (weapon != null)
         {
-            weaponManager.AimDownSights();
-
             Scope scope = weapon.GetComponent<Scope>();
             if (scope != null && !scope.isScoped)
             {
@@ -309,8 +312,6 @@ public class Player_Network : NetworkBehaviour
         GameObject weapon = weaponManager.GetActiveWeapon();
         if (weapon != null)
         {
-            weaponManager.ReturnToHipFire();
-
             Scope scope = weapon.GetComponent<Scope>();
             if (scope != null)
             {

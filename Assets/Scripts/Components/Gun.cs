@@ -171,6 +171,11 @@ public class Gun : NetworkBehaviour
 
     public void Update()
     {
+        if (gunOwner == null)
+        {
+            return;
+        }
+
         playerCamera = Camera.main;
 
         if (recoil > 0)
