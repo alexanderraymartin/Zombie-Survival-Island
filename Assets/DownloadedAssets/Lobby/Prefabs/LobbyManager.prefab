@@ -5817,4 +5817,4 @@ MonoBehaviour:
   lobbyClip: {fileID: 8300000, guid: 987b9122418fdfe45be572350bb38034, type: 3}
   gameClip: {fileID: 8300000, guid: e6947a1c020060c4baf657263a581b13, type: 3}
   lobbyVolume: 0.7
-  gameVolume: 0.2
+  gameVolume: 0.35

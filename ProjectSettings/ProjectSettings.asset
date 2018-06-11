@@ -627,9 +627,9 @@ PlayerSettings:
     UNet: 0
   facebookSdkVersion: 7.9.4
   apiCompatibilityLevel: 2
-  cloudProjectId: a6dd8e5b-7066-4bf7-a7d0-6cf69548875c
-  projectName: Zombie-Survival-Island
-  organizationId: alexanderraymartin
+  cloudProjectId: 
+  projectName: 
+  organizationId: 
   cloudEnabled: 0
   enableNativePlatformBackendsForNewInputSystem: 0
   disableOldInputManagerSupport: 0
