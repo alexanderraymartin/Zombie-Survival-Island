@@ -34,8 +34,11 @@ public class Scope : MonoBehaviour
     {
         isScoped = false;
         scopeCanvas.SetActive(false);
-        gunOwner.weaponCamera.SetActive(true);
-        gunOwner.firstPersonCharacter.GetComponent<Camera>().fieldOfView = normalFOV;
+        if (gunOwner != null)
+        {
+            gunOwner.weaponCamera.SetActive(true);
+            gunOwner.firstPersonCharacter.GetComponent<Camera>().fieldOfView = normalFOV;
+        }
 
     }
 
@@ -44,8 +47,12 @@ public class Scope : MonoBehaviour
         isScoped = true;
         yield return new WaitForSeconds(0.15f);
         scopeCanvas.SetActive(true);
-        gunOwner.weaponCamera.SetActive(false);
-        normalFOV = GetComponent<Gun>().gunOwner.firstPersonCharacter.GetComponent<Camera>().fieldOfView;
-        gunOwner.firstPersonCharacter.GetComponent<Camera>().fieldOfView = scopedFOV;
+
+        if (gunOwner != null)
+        {
+            gunOwner.weaponCamera.SetActive(false);
+            normalFOV = GetComponent<Gun>().gunOwner.firstPersonCharacter.GetComponent<Camera>().fieldOfView;
+            gunOwner.firstPersonCharacter.GetComponent<Camera>().fieldOfView = scopedFOV;
+        }
     }
 }
