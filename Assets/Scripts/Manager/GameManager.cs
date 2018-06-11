@@ -75,7 +75,7 @@ public class GameManager : NetworkBehaviour
 
     private IEnumerator EndGame()
     {
-        GameObject imageGameObject = GameObject.FindGameObjectWithTag("FadeImage");
+        GameObject imageGameObject = GameObject.FindGameObjectWithTag("Fade");
         Image image = imageGameObject.GetComponent<Image>();
         Animator animator = image.GetComponent<Animator>();
         animator.gameObject.SetActive(true);
